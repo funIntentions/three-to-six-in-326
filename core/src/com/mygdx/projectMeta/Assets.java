@@ -111,4 +111,20 @@ public class Assets
 
         map = new TmxMapLoader().load("apartment.tmx");
     }
+
+    public static void dispose()
+    {
+        map.dispose();
+        playerTexture.dispose();
+        toiletTexture.dispose();
+        walkingTexture.dispose();
+        couchTexture.dispose();
+        toiletTexture.dispose();
+        tvTexture.dispose();
+        bathtubTexture.dispose();
+
+        slipperStepsSound.dispose();
+        bathtubDrainingSound.dispose();
+        bathtubRunningSound.dispose();
+    }
 }

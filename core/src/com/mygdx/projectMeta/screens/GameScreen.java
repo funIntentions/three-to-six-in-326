@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.projectMeta.Assets;
 import com.mygdx.projectMeta.GameWorld;
 import com.mygdx.projectMeta.PhysicsEngine;
 import com.mygdx.projectMeta.systems.*;
@@ -19,7 +20,6 @@ import com.mygdx.projectMeta.utils.Constants;
  */
 public class GameScreen implements Screen {
 
-    //public static GameStage stage;
     private GameWorld gameWorld;
     private PhysicsEngine physicsEngine;
     private Engine gameEngine;
@@ -27,11 +27,7 @@ public class GameScreen implements Screen {
 
     public GameScreen() {
 
-        //ProjectMeta.assets.load("images/marsAttacks/torso.png", Texture.class);
-        //ProjectMeta.assets.finishLoading();
-
         setupSpriteBatch();
-        //stage = new GameStage();
 
         physicsEngine = new PhysicsEngine();
         gameEngine = new Engine();
@@ -108,8 +104,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        //ProjectMeta.assets.unload("skins/uiskin.json");
-        //ProjectMeta.assets.unload("icons/icons.atlas");
-        //stage.dispose();
+        Assets.dispose();
     }
 }
