@@ -6,10 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.projectMeta.components.AnimationComponent;
-
-import java.util.ArrayList;
 
 /**
  * Created by Dan on 7/18/2015.

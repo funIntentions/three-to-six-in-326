@@ -7,7 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
-import com.mygdx.projectMeta.components.MovementComponent;
+import com.mygdx.projectMeta.components.InputComponent;
 import com.mygdx.projectMeta.components.PhysicsComponent;
 import com.mygdx.projectMeta.components.PlayerComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
@@ -19,24 +19,24 @@ public class PlayerMovementSystem extends IteratingSystem {
     public float bodyAngle;
 
     private ComponentMapper<TransformComponent> tm;
-    private ComponentMapper<MovementComponent> mm;
+    private ComponentMapper<InputComponent> mm;
     private ComponentMapper<PhysicsComponent> pm;
 
     public PlayerMovementSystem() {
-        super(Family.getFor(TransformComponent.class, MovementComponent.class, PhysicsComponent.class, PlayerComponent.class));
+        super(Family.getFor(TransformComponent.class, InputComponent.class, PhysicsComponent.class, PlayerComponent.class));
 
         desiredAngle = 0;
         bodyAngle = 0;
 
         tm = ComponentMapper.getFor(TransformComponent.class);
-        mm = ComponentMapper.getFor(MovementComponent.class);
+        mm = ComponentMapper.getFor(InputComponent.class);
         pm = ComponentMapper.getFor(PhysicsComponent.class);
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         TransformComponent positionComponent = tm.get(entity);
-        MovementComponent movementComponent = mm.get(entity);
+        InputComponent inputComponent = mm.get(entity);
         PhysicsComponent physicsComponent = pm.get(entity);
 
         Vector2 currentVelocity = physicsComponent.body.getLinearVelocity();
@@ -49,19 +49,19 @@ public class PlayerMovementSystem extends IteratingSystem {
         }
 
         Vector2 movement = new Vector2();
-        if ((movementComponent.movementInput & Constants.FORWARD) != 0) {
+        if ((inputComponent.movementInput & Constants.FORWARD) != 0) {
             movement.add(getFacingDirection());
         }
 
-        if ((movementComponent.movementInput & Constants.BACKWARD) != 0) {
+        if ((inputComponent.movementInput & Constants.BACKWARD) != 0) {
             movement.add(getFacingDirection().scl(-1));
         }
 
-        if ((movementComponent.movementInput & Constants.LEFT) != 0) {
+        if ((inputComponent.movementInput & Constants.LEFT) != 0) {
             movement.add(getRightDirection().scl(-1));
         }
 
-        if ((movementComponent.movementInput & Constants.RIGHT) != 0) {
+        if ((inputComponent.movementInput & Constants.RIGHT) != 0) {
             movement.add(getRightDirection());
         }
 
@@ -73,8 +73,8 @@ public class PlayerMovementSystem extends IteratingSystem {
         // face this
         {
             Vector2 toTarget = new Vector2(
-                    movementComponent.faceThis.x - physicsComponent.body.getPosition().x,
-                    movementComponent.faceThis.y - physicsComponent.body.getPosition().y);
+                    inputComponent.faceThis.x - physicsComponent.body.getPosition().x,
+                    inputComponent.faceThis.y - physicsComponent.body.getPosition().y);
             desiredAngle = (float) Math.atan2(-toTarget.x, toTarget.y);
         }
 

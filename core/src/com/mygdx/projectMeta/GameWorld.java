@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
 import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.systems.RenderingSystem;
-import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.WorldUtils;
 
 /**
@@ -40,7 +39,7 @@ public class GameWorld
 
         TextureComponent textureComponent = new TextureComponent();
         TransformComponent transformComponent = new TransformComponent();
-        MovementComponent movementComponent = new MovementComponent();
+        InputComponent inputComponent = new InputComponent();
         PhysicsComponent physicsComponent = new PhysicsComponent();
         AnimationComponent animationComponent = new AnimationComponent();
         StateComponent stateComponent = new StateComponent();
@@ -55,7 +54,7 @@ public class GameWorld
 
         entity.add(textureComponent);
         entity.add(transformComponent);
-        entity.add(movementComponent);
+        entity.add(inputComponent);
         entity.add(physicsComponent);
         entity.add(animationComponent);
         entity.add(stateComponent);

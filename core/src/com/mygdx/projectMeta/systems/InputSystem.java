@@ -10,7 +10,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.projectMeta.components.MovementComponent;
+import com.mygdx.projectMeta.components.InputComponent;
 import com.mygdx.projectMeta.utils.Constants;
 
 /**
@@ -22,12 +22,12 @@ public class InputSystem extends IteratingSystem
     private Vector2 faceThis = new Vector2(0,0);
     private Camera camera = null;
 
-    private ComponentMapper<MovementComponent> mm;
+    private ComponentMapper<InputComponent> mm;
 
     public InputSystem() {
-        super(Family.getFor(MovementComponent.class));
+        super(Family.getFor(InputComponent.class));
 
-        mm = ComponentMapper.getFor(MovementComponent.class);
+        mm = ComponentMapper.getFor(InputComponent.class);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode) {
@@ -92,10 +92,10 @@ public class InputSystem extends IteratingSystem
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-        MovementComponent movementComponent = mm.get(entity);
+        InputComponent inputComponent = mm.get(entity);
 
-        movementComponent.faceThis = faceThis;
-        movementComponent.movementInput = movementInput;
+        inputComponent.faceThis = faceThis;
+        inputComponent.movementInput = movementInput;
     }
 
     public void startMoving(int input)
