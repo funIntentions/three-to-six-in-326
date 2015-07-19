@@ -47,8 +47,10 @@ public class TriggerSystem extends IteratingSystem
 
             if (triggerComponent.triggered && triggerComponent.actionTextEntity != null)
             {
-                StateComponent stateComponent = stateMapper.get(triggerComponent.actionTextEntity);
-                stateComponent.set(TextComponent.STATE_DISPLAYING);
+                TransformComponent textTransformComponent = transformMapper.get(triggerComponent.actionTextEntity);
+                StateComponent textStateComponent = stateMapper.get(triggerComponent.actionTextEntity);
+                textTransformComponent.position.set(pos2.x + 1, pos2.y, textTransformComponent.position.z);
+                textStateComponent.set(TextComponent.STATE_DISPLAYING);
             }
         }
     }

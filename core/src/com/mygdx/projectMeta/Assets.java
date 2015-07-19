@@ -67,10 +67,10 @@ public class Assets
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameter.size = 160;
+        parameter.size = 200;
         journalFont = generator.generateFont(parameter);
-        journalFont.setColor(Color.BLACK);
         journalFont.setScale(0.1f);
+        journalFont.setColor(Color.DARK_GRAY);
         journalFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         generator.dispose();
 

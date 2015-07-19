@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     public GameScreen() {
 
         setupSpriteBatch();
+        textBatch = new SpriteBatch();
 
         physicsEngine = new PhysicsEngine();
         gameEngine = new Engine();
@@ -68,10 +69,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         update(delta);
-        //stage.draw();
-        //stage.act(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-        }
     }
 
     public void update(float delta)
