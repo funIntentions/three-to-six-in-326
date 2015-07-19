@@ -18,6 +18,7 @@ import com.mygdx.projectMeta.utils.Constants;
  */
 public class InputSystem extends IteratingSystem
 {
+    private boolean actionPressed;
     private int movementInput = 0;
     private Vector2 faceThis = new Vector2(0,0);
     private Camera camera = null;
@@ -32,20 +33,25 @@ public class InputSystem extends IteratingSystem
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode) {
 
-                if(keycode == Input.Keys.DOWN) {
+                if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
                     startMoving(Constants.BACKWARD);
                 }
 
-                if(keycode == Input.Keys.UP) {
+                if(keycode == Input.Keys.UP || keycode == Input.Keys.W) {
                     startMoving(Constants.FORWARD);
                 }
 
-                if (keycode == Input.Keys.LEFT) {
+                if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
                     startMoving(Constants.LEFT);
                 }
 
-                if (keycode == Input.Keys.RIGHT) {
+                if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
                     startMoving(Constants.RIGHT);
+                }
+
+                if (keycode == Input.Keys.E)
+                {
+                    actionPressed = true;
                 }
 
                 return super.keyDown(keycode);
@@ -53,20 +59,25 @@ public class InputSystem extends IteratingSystem
 
             public boolean keyUp(int keycode) {
 
-                if(keycode == Input.Keys.DOWN) {
+                if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
                     stopMoving(Constants.BACKWARD);
                 }
 
-                if(keycode == Input.Keys.UP) {
+                if(keycode == Input.Keys.UP || keycode == Input.Keys.W) {
                     stopMoving(Constants.FORWARD);
                 }
 
-                if (keycode == Input.Keys.LEFT) {
+                if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
                     stopMoving(Constants.LEFT);
                 }
 
-                if (keycode == Input.Keys.RIGHT) {
+                if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
                     stopMoving(Constants.RIGHT);
+                }
+
+                if (keycode == Input.Keys.E)
+                {
+                    actionPressed = false;
                 }
 
                 return super.keyUp(keycode);
@@ -96,6 +107,7 @@ public class InputSystem extends IteratingSystem
 
         inputComponent.faceThis = faceThis;
         inputComponent.movementInput = movementInput;
+        inputComponent.actionInput = actionPressed;
     }
 
     public void startMoving(int input)

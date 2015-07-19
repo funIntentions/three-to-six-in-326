@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
 import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.systems.RenderingSystem;
+import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.WorldUtils;
 
 /**
@@ -45,7 +46,7 @@ public class GameWorld
         StateComponent stateComponent = new StateComponent();
         PlayerComponent playerComponent = new PlayerComponent();
 
-        physicsComponent.body = WorldUtils.createRunner(world);
+        physicsComponent.body = WorldUtils.createPlayer(world);
         physicsComponent.userData = new RunnerUserData();
 
         stateComponent.set(PlayerComponent.STATE_STILL);
@@ -138,13 +139,43 @@ public class GameWorld
         PhysicsComponent physicsComponent = new PhysicsComponent();
         FurnitureComponent furnitureComponent = new FurnitureComponent();
 
-        physicsComponent.body = WorldUtils.createToilet(world);
+        physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.TOILET_X, Constants.TOILET_Y, Constants.TOILET_WIDTH, Constants.TOILET_HEIGHT);
         textureComponent.textureRegion = Assets.toilet;
 
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
         entity.add(furnitureComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
+    private Entity createBathtub()
+    {
+        Entity entity = new Entity();
+
+        TextureComponent textureComponent = new TextureComponent();
+        TransformComponent transformComponent = new TransformComponent();
+        PhysicsComponent physicsComponent = new PhysicsComponent();
+        FurnitureComponent furnitureComponent = new FurnitureComponent();
+        BathtubComponent bathtubComponent = new BathtubComponent();
+        AnimationComponent animationComponent = new AnimationComponent();
+        StateComponent stateComponent = new StateComponent();
+
+        physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.BATHTUB_X, Constants.BATHTUB_Y, Constants.BATHTUB_WIDTH, Constants.BATHTUB_HEIGHT);
+        stateComponent.set(BathtubComponent.STATE_DRAINED);
+        animationComponent.animations.put(BathtubComponent.STATE_RUNNING, Assets.bathtubRunning);
+        animationComponent.animations.put(BathtubComponent.STATE_DRAINING, Assets.bathtubDraining);
+        animationComponent.animations.put(BathtubComponent.STATE_DRAINED, Assets.bathtubDrained);
+        animationComponent.animations.put(BathtubComponent.STATE_RAN, Assets.bathtubRan);
+
+        entity.add(transformComponent);
+        entity.add(physicsComponent);
+        entity.add(textureComponent);
+        entity.add(furnitureComponent);
+        entity.add(bathtubComponent);
 
         engine.addEntity(entity);
 

@@ -17,7 +17,7 @@ public class WorldUtils {
         return new World(Constants.WORLD_GRAVITY, true);
     }
 
-    public static Body createRunner (World world)
+    public static Body createPlayer (World world)
     {
         int segments = 8; //(the more the more precise shape is, but the more time it takes to do collision detection)
         float segment = (float)(2.0f * Math.PI / (float)segments);
@@ -97,21 +97,17 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createToilet (World world)
+    public static Body createStaticFurniture(World world, float x, float y, float width, float height)
     {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.TOILET_WIDTH, Constants.TOILET_HEIGHT);
+        shape.setAsBox(width, height);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(new Vector2(Constants.TOILET_X, Constants.TOILET_Y));
-        bodyDef.linearDamping = Constants.TOILET_DAMPING;
-        bodyDef.angularDamping = Constants.TOILET_DAMPING;
+        bodyDef.position.set(new Vector2(x, y));
         Body body = world.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = Constants.TOILET_DENSITY;
-        fixtureDef.friction = Constants.FRICTION_FORCE;
         body.createFixture(fixtureDef);
         body.resetMassData();
         body.setUserData(new RunnerUserData());

@@ -17,6 +17,10 @@ public class Assets
     public static TextureRegion couch;
     public static TextureRegion toilet;
     public static TextureRegion tv;
+    public static Animation bathtubDrained;
+    public static Animation bathtubRan;
+    public static Animation bathtubDraining;
+    public static Animation bathtubRunning;
     public static Animation playerWalking;
     public static Animation playerStill;
     public static Texture playerTexture;
@@ -24,6 +28,7 @@ public class Assets
     public static Texture couchTexture;
     public static Texture toiletTexture;
     public static Texture tvTexture;
+    public static Texture bathtubTexture;
 
     public static Texture loadTexture(String file)
     {
@@ -37,10 +42,13 @@ public class Assets
         toiletTexture = loadTexture("images/toilet.png");
         tvTexture = loadTexture("images/tv.png");
         walkingTexture = loadTexture("images/pjLegsSnug.png");
+        //bathtubTexture = loadTexture("images/bathtubFilling.png");
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
         tv = new TextureRegion(tvTexture, tvTexture.getWidth(), tvTexture.getHeight());
+
+        // Player
         playerTorso = new TextureRegion(playerTexture, playerTexture.getWidth(), playerTexture.getHeight());
         playerWalking = new Animation(0.18f,
                 new TextureRegion(walkingTexture, 112, 0, 28, 51),
@@ -52,9 +60,15 @@ public class Assets
                 new TextureRegion(walkingTexture, 28, 51, 28, 51),
                 new TextureRegion(walkingTexture, 56, 51, 28, 51),
                 new TextureRegion(walkingTexture, 84, 51, 28, 51));
-
         playerWalking.setPlayMode(Animation.PlayMode.LOOP);
         playerStill = new Animation(0.2f, new TextureRegion(walkingTexture, 112, 0, 28, 51));
+
+        // Bathtub
+        bathtubRunning = new Animation(1f); // TODO: get regions
+        bathtubDraining = new Animation(0.1f);
+        bathtubDrained = new Animation(0.1f);
+        bathtubRan = new Animation(0.1f);
+
         map = new TmxMapLoader().load("apartment.tmx");
     }
 }

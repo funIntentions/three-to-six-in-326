@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Component;
  */
 public class BathtubComponent extends Component {
     public static final int STATE_RUNNING = 0;
-    public static final int STATE_RUN = 1;
+    public static final int STATE_RAN = 1;
     public static final int STATE_DRAINING = 2;
+    public static final int STATE_DRAINED = 3;
 }
