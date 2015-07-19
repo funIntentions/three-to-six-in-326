@@ -65,10 +65,10 @@ public class Assets
 
         // Bathtub
         bathtubRunning = new Animation(1f,
-                new TextureRegion(bathtubTexture, 0, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 136, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 272, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 408, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 1, 135, 51),
                 new TextureRegion(bathtubTexture, 0, 52, 135, 51),
                 new TextureRegion(bathtubTexture, 136, 52, 135, 51),
                 new TextureRegion(bathtubTexture, 272, 52, 135, 51),
@@ -87,10 +87,10 @@ public class Assets
                 new TextureRegion(bathtubTexture, 272, 52, 135, 51),
                 new TextureRegion(bathtubTexture, 136, 52, 135, 51),
                 new TextureRegion(bathtubTexture, 0, 52, 135, 51),
-                new TextureRegion(bathtubTexture, 408, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 272, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 136, 0, 135, 51),
-                new TextureRegion(bathtubTexture, 0, 0, 135, 51));
+                new TextureRegion(bathtubTexture, 408, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 1, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 1, 135, 51));
 
         bathtubDrained = new Animation(0.1f, new TextureRegion(bathtubTexture, 0, 0, 135, 51));
         bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
