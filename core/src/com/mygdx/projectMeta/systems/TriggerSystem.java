@@ -40,7 +40,7 @@ public class TriggerSystem extends IteratingSystem
 
             float distance = Vector3.dst(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
 
-            triggerComponent.triggered = (distance >= triggerComponent.range);
+            triggerComponent.triggered = (distance <= triggerComponent.range);
         }
     }
 }

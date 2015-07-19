@@ -30,6 +30,7 @@ public class GameWorld
         createCouch();
         createTV();
         createToilet();
+        createBathtub(player);
 
         createCamera(player);
     }
@@ -152,7 +153,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createBathtub()
+    private Entity createBathtub(Entity triggerEntity)
     {
         Entity entity = new Entity();
 
@@ -163,7 +164,11 @@ public class GameWorld
         BathtubComponent bathtubComponent = new BathtubComponent();
         AnimationComponent animationComponent = new AnimationComponent();
         StateComponent stateComponent = new StateComponent();
+        TriggerComponent triggerComponent = new TriggerComponent();
+        InputComponent inputComponent = new InputComponent();
 
+        triggerComponent.range = 4;
+        triggerComponent.triggerer = triggerEntity;
         physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.BATHTUB_X, Constants.BATHTUB_Y, Constants.BATHTUB_WIDTH, Constants.BATHTUB_HEIGHT);
         stateComponent.set(BathtubComponent.STATE_DRAINED);
         animationComponent.animations.put(BathtubComponent.STATE_RUNNING, Assets.bathtubRunning);
@@ -176,6 +181,10 @@ public class GameWorld
         entity.add(textureComponent);
         entity.add(furnitureComponent);
         entity.add(bathtubComponent);
+        entity.add(animationComponent);
+        entity.add(stateComponent);
+        entity.add(triggerComponent);
+        entity.add(inputComponent);
 
         engine.addEntity(entity);
 

@@ -41,8 +41,8 @@ public class Assets
         couchTexture = loadTexture("images/couch.png");
         toiletTexture = loadTexture("images/toilet.png");
         tvTexture = loadTexture("images/tv.png");
-        walkingTexture = loadTexture("images/pjLegsSnug.png");
-        //bathtubTexture = loadTexture("images/bathtubFilling.png");
+        walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
+        bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
@@ -64,10 +64,36 @@ public class Assets
         playerStill = new Animation(0.2f, new TextureRegion(walkingTexture, 112, 0, 28, 51));
 
         // Bathtub
-        bathtubRunning = new Animation(1f); // TODO: get regions
-        bathtubDraining = new Animation(0.1f);
-        bathtubDrained = new Animation(0.1f);
-        bathtubRan = new Animation(0.1f);
+        bathtubRunning = new Animation(1f,
+                new TextureRegion(bathtubTexture, 0, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 103, 135, 51));
+
+        bathtubDraining = new Animation(1f,
+                new TextureRegion(bathtubTexture, 408, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 103, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 52, 135, 51),
+                new TextureRegion(bathtubTexture, 408, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 272, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 136, 0, 135, 51),
+                new TextureRegion(bathtubTexture, 0, 0, 135, 51));
+
+        bathtubDrained = new Animation(0.1f, new TextureRegion(bathtubTexture, 0, 0, 135, 51));
+        bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
 
         map = new TmxMapLoader().load("apartment.tmx");
     }

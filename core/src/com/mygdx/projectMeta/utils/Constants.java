@@ -19,10 +19,10 @@ public class Constants
 
     public static final float FRICTION_FORCE = 0.5f;
 
-    public static final float BATHTUB_X = 16;
-    public static final float BATHTUB_Y = 16;
-    public static final float BATHTUB_HEIGHT = 1.2f;
-    public static final float BATHTUB_WIDTH = 3.2f;
+    public static final float BATHTUB_X = 6;
+    public static final float BATHTUB_Y = 6;
+    public static final float BATHTUB_HEIGHT = 1.4f;
+    public static final float BATHTUB_WIDTH = 4f;
 
     public static final float COUCH_X = 16;
     public static final float COUCH_Y = 16;

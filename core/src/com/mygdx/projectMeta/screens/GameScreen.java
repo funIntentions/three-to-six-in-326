@@ -45,6 +45,8 @@ public class GameScreen implements Screen {
         gameEngine.addSystem(new PlayerSystem());
         gameEngine.addSystem(new TorsoMovementSystem());
         gameEngine.addSystem(new FurnitureMovementSystem());
+        gameEngine.addSystem(new TriggerSystem());
+        gameEngine.addSystem(new BathtubSystem());
 
         gameEngine.getSystem(InputSystem.class).setCamera(gameEngine.getSystem(RenderingSystem.class).getCamera());
 
