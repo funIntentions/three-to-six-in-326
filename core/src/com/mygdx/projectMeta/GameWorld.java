@@ -46,6 +46,7 @@ public class GameWorld
         AnimationComponent animationComponent = new AnimationComponent();
         StateComponent stateComponent = new StateComponent();
         PlayerComponent playerComponent = new PlayerComponent();
+        SoundComponent soundComponent = new SoundComponent();
 
         physicsComponent.body = WorldUtils.createPlayer(world);
         physicsComponent.userData = new RunnerUserData();
@@ -54,6 +55,8 @@ public class GameWorld
         animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerWalking);
         animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerStill);
 
+        soundComponent.sound = Assets.slipperStepsSound;
+
         entity.add(textureComponent);
         entity.add(transformComponent);
         entity.add(inputComponent);
@@ -61,6 +64,7 @@ public class GameWorld
         entity.add(animationComponent);
         entity.add(stateComponent);
         entity.add(playerComponent);
+        entity.add(soundComponent);
 
         engine.addEntity(entity);
 

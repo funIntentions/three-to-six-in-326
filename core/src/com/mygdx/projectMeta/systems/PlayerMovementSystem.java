@@ -41,6 +41,7 @@ public class PlayerMovementSystem extends IteratingSystem {
 
         Vector2 currentVelocity = physicsComponent.body.getLinearVelocity();
         float currentVelocitySqr = currentVelocity.len2();
+
         if (currentVelocitySqr > Constants.MAX_VELOCITY_SQR)
         {
             float factor = Constants.MAX_VELOCITY_SQR / currentVelocitySqr;

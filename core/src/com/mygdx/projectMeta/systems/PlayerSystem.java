@@ -4,10 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.projectMeta.components.InputComponent;
-import com.mygdx.projectMeta.components.PlayerComponent;
-import com.mygdx.projectMeta.components.StateComponent;
-import com.mygdx.projectMeta.components.TransformComponent;
+import com.badlogic.gdx.audio.Sound;
+import com.mygdx.projectMeta.components.*;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -18,17 +16,20 @@ public class PlayerSystem extends IteratingSystem {
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<InputComponent> mm;
+    private ComponentMapper<SoundComponent> soundMapper;
 
     public PlayerSystem() {
         super(Family.getFor(PlayerComponent.class,
                 StateComponent.class,
                 TransformComponent.class,
-                InputComponent.class));
+                InputComponent.class,
+                SoundComponent.class));
 
         pm = ComponentMapper.getFor(PlayerComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         mm = ComponentMapper.getFor(InputComponent.class);
+        soundMapper = ComponentMapper.getFor(SoundComponent.class);
     }
 
     @Override
@@ -36,16 +37,27 @@ public class PlayerSystem extends IteratingSystem {
         PlayerComponent playerComponent = pm.get(entity);
         StateComponent stateComponent = sm.get(entity);
         InputComponent inputComponent = mm.get(entity);
+        SoundComponent soundComponent = soundMapper.get(entity);
 
         if (stateComponent.get() == PlayerComponent.STATE_WALKING
                 && inputComponent.movementInput == 0)
         {
             stateComponent.set(PlayerComponent.STATE_STILL);
+
+            if (soundComponent.sound != null)
+            {
+                soundComponent.sound.stop();
+            }
         }
         else if (stateComponent.get() != PlayerComponent.STATE_WALKING
                 && inputComponent.movementInput != 0)
         {
             stateComponent.set(PlayerComponent.STATE_WALKING);
+
+            if (soundComponent.sound != null)
+            {
+                soundComponent.sound.loop();
+            }
         }
     }
 }

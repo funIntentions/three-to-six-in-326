@@ -1,6 +1,7 @@
 package com.mygdx.projectMeta;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -30,9 +31,16 @@ public class Assets
     public static Texture tvTexture;
     public static Texture bathtubTexture;
 
-    public static Texture loadTexture(String file)
+    public static Sound slipperStepsSound;
+
+    private static Texture loadTexture(String file)
     {
         return new Texture(Gdx.files.internal(file));
+    }
+
+    private static Sound loadSound(String file)
+    {
+        return Gdx.audio.newSound(Gdx.files.internal(file));
     }
 
     public static void load()
@@ -43,6 +51,8 @@ public class Assets
         tvTexture = loadTexture("images/tv.png");
         walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
+
+        slipperStepsSound = loadSound("sounds/slipper_steps.wav");
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
