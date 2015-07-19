@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="500" tileheight="500" nextobjectid="11">
+ <tileset firstgid="1" name="appartmentV2" tilewidth="500" tileheight="500">
+  <image source="images/appartmentV2.png" width="500" height="500"/>
+ </tileset>
+ <layer name="background" width="1" height="1">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgAAAACAAC
+  </data>
+ </layer>
+ <objectgroup name="physics">
+  <object id="10" x="6" y="6.33333">
+   <polyline points="0,0 375,-0.666667 487,103.667 487,488.333 266.333,487 266,280.667 238,280.667 238,288.333 258.333,288.667 258.333,487 -0.333333,486 -0.333333,287.333 192.667,287.667 192.667,280.667 143.333,279.667 143.917,169.917 126.667,170 126.417,178.542 136,178.667 135.333,279.667 0.333333,279 -0.333333,176.333 78.375,177.125 78.2917,168.75 0.333333,167.667 -0.333333,0.333333"/>
+  </object>
+ </objectgroup>
+</map>
