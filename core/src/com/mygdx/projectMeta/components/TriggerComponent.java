@@ -10,4 +10,5 @@ public class TriggerComponent extends Component {
     public float range = 0;
     public boolean triggered = false;
     public Entity triggerer = null;
+    public Entity actionTextEntity = null;
 }

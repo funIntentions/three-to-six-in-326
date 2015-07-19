@@ -1,5 +1,6 @@
 package com.mygdx.projectMeta.systems;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -16,6 +17,7 @@ public class TriggerSystem extends IteratingSystem
 {
     private ComponentMapper<TriggerComponent> triggerMapper;
     private ComponentMapper<TransformComponent> transformMapper;
+    private ComponentMapper<StateComponent> stateMapper;
 
     public TriggerSystem()
     {
@@ -24,6 +26,7 @@ public class TriggerSystem extends IteratingSystem
 
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
         triggerMapper = ComponentMapper.getFor(TriggerComponent.class);
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
     }
 
     public void processEntity(Entity entity, float deltaTime)
@@ -41,6 +44,12 @@ public class TriggerSystem extends IteratingSystem
             float distance = Vector3.dst(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
 
             triggerComponent.triggered = (distance <= triggerComponent.range);
+
+            if (triggerComponent.triggered && triggerComponent.actionTextEntity != null)
+            {
+                StateComponent stateComponent = stateMapper.get(triggerComponent.actionTextEntity);
+                stateComponent.set(TextComponent.STATE_DISPLAYING);
+            }
         }
     }
 }

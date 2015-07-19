@@ -1,5 +1,7 @@
 package com.mygdx.projectMeta.utils;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -8,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
 import com.mygdx.projectMeta.components.FurnitureComponent;
+import com.mygdx.projectMeta.components.TextComponent;
+import com.mygdx.projectMeta.components.TransformComponent;
 
 /**
  * Created by Dan on 4/22/2015.
@@ -115,5 +119,4 @@ public class WorldUtils {
 
         return body;
     }
-
 }

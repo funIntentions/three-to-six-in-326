@@ -2,11 +2,15 @@ package com.mygdx.projectMeta;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.mygdx.projectMeta.utils.Constants;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -14,16 +18,19 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 public class Assets
 {
     public static Map map;
+
     public static TextureRegion playerTorso;
     public static TextureRegion couch;
     public static TextureRegion toilet;
     public static TextureRegion tv;
+
     public static Animation bathtubDrained;
     public static Animation bathtubRan;
     public static Animation bathtubDraining;
     public static Animation bathtubRunning;
     public static Animation playerWalking;
     public static Animation playerStill;
+
     public static Texture playerTexture;
     public static Texture walkingTexture;
     public static Texture couchTexture;
@@ -34,6 +41,9 @@ public class Assets
     public static Sound slipperStepsSound;
     public static Sound bathtubRunningSound;
     public static Sound bathtubDrainingSound;
+
+    public static BitmapFont journalFont;
+    public static BitmapFont amaticFont;
 
     private static Texture loadTexture(String file)
     {
@@ -53,6 +63,20 @@ public class Assets
         tvTexture = loadTexture("images/tv.png");
         walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        parameter.size = 160;
+        journalFont = generator.generateFont(parameter);
+        journalFont.setColor(Color.BLACK);
+        journalFont.setScale(0.1f);
+        journalFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        generator.dispose();
+
+        FreeTypeFontGenerator generator1 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AmaticSC-Regular.ttf"));
+        amaticFont = generator1.generateFont(parameter);
+        generator1.dispose();
 
         slipperStepsSound = loadSound("sounds/slipperSteps.wav");
         bathtubRunningSound = loadSound("sounds/bathtubRunning.wav");
@@ -126,5 +150,8 @@ public class Assets
         slipperStepsSound.dispose();
         bathtubDrainingSound.dispose();
         bathtubRunningSound.dispose();
+
+        journalFont.dispose();
+        amaticFont.dispose();
     }
 }

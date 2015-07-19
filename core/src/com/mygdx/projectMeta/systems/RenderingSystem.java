@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.Assets;
+import com.mygdx.projectMeta.components.TextComponent;
 import com.mygdx.projectMeta.components.TextureComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
 import com.mygdx.projectMeta.utils.Constants;
@@ -108,6 +109,7 @@ public class RenderingSystem extends IteratingSystem {
                     transform.scale.x,
                     transform.scale.y,
                     MathUtils.radiansToDegrees * transform.rotation);
+
         }
 
         batch.end();

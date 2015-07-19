@@ -24,6 +24,7 @@ public class GameScreen implements Screen {
     private PhysicsEngine physicsEngine;
     private Engine gameEngine;
     private SpriteBatch batch;
+    private SpriteBatch textBatch;
 
     public GameScreen() {
 
@@ -33,6 +34,8 @@ public class GameScreen implements Screen {
         gameEngine = new Engine();
 
         gameEngine.addSystem(new RenderingSystem(batch, physicsEngine.getWorld()));
+        gameEngine.addSystem(new TextRenderingSystem(batch));
+        gameEngine.addSystem(new TextSystem());
         gameEngine.addSystem(new CameraSystem());
         gameEngine.addSystem(new InputSystem());
         gameEngine.addSystem(new PlayerMovementSystem());

@@ -2,12 +2,15 @@ package com.mygdx.projectMeta;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
 import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.systems.RenderingSystem;
 import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.WorldUtils;
+
+import javax.xml.soap.Text;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -25,12 +28,13 @@ public class GameWorld
 
     public void createWorld()
     {
+        Entity actionText = createActionTextEntity();
         Entity player = createPlayer();
         createPlayerTorso(player);
         createCouch();
         createTV();
         createToilet();
-        createBathtub(player);
+        createBathtub(player, actionText);
 
         createCamera(player);
     }
@@ -157,7 +161,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createBathtub(Entity triggerEntity)
+    private Entity createBathtub(Entity triggerEntity, Entity actionText)
     {
         Entity entity = new Entity();
 
@@ -174,6 +178,7 @@ public class GameWorld
 
         triggerComponent.range = 4;
         triggerComponent.triggerer = triggerEntity;
+        triggerComponent.actionTextEntity = actionText;
         physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.BATHTUB_X, Constants.BATHTUB_Y, Constants.BATHTUB_WIDTH, Constants.BATHTUB_HEIGHT);
         stateComponent.set(BathtubComponent.STATE_DRAINED);
         animationComponent.animations.put(BathtubComponent.STATE_RUNNING, Assets.bathtubRunning);
@@ -194,6 +199,29 @@ public class GameWorld
         entity.add(triggerComponent);
         entity.add(inputComponent);
         entity.add(soundComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
+    public Entity createActionTextEntity()
+    {
+        Entity entity = new Entity();
+
+        TransformComponent transformComponent = new TransformComponent();
+        TextComponent textComponent = new TextComponent();
+        StateComponent stateComponent = new StateComponent();
+
+        stateComponent.set(TextComponent.STATE_HIDDEN);
+        transformComponent.position.set(50, 50, 0);
+        textComponent.text = "Press E";
+        textComponent.font = Assets.journalFont;
+        textComponent.displayTime = 3;
+
+        entity.add(stateComponent);
+        entity.add(transformComponent);
+        entity.add(textComponent);
 
         engine.addEntity(entity);
 
