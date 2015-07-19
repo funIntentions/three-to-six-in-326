@@ -19,6 +19,7 @@ public class BathtubSystem extends IteratingSystem {
     private ComponentMapper<TriggerComponent> tm;
     private ComponentMapper<InputComponent> im;
     private ComponentMapper<AnimationComponent> am;
+    private ComponentMapper<SoundComponent> soundMapper;
 
     public BathtubSystem()
     {
@@ -26,12 +27,14 @@ public class BathtubSystem extends IteratingSystem {
                 StateComponent.class,
                 TriggerComponent.class,
                 InputComponent.class,
-                AnimationComponent.class));
+                AnimationComponent.class,
+                SoundComponent.class));
 
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TriggerComponent.class);
         im = ComponentMapper.getFor(InputComponent.class);
         am = ComponentMapper.getFor(AnimationComponent.class);
+        soundMapper = ComponentMapper.getFor(SoundComponent.class);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class BathtubSystem extends IteratingSystem {
         TriggerComponent triggerComponent = tm.get(entity);
         InputComponent inputComponent = im.get(entity);
         AnimationComponent animationComponent = am.get(entity);
+        SoundComponent soundComponent = soundMapper.get(entity);
 
         Animation animation = animationComponent.animations.get(stateComponent.get());
 
@@ -64,10 +68,20 @@ public class BathtubSystem extends IteratingSystem {
             if (stateComponent.get() == BathtubComponent.STATE_RAN)
             {
                 stateComponent.set(BathtubComponent.STATE_DRAINING);
+
+                if (!soundComponent.sound.isEmpty());
+                {
+                    soundComponent.sound.get(0).play();
+                }
             }
             else
             {
                 stateComponent.set(BathtubComponent.STATE_RUNNING);
+
+                if (!soundComponent.sound.isEmpty())
+                {
+                    soundComponent.sound.get(1).play();
+                }
             }
         }
     }

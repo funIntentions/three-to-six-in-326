@@ -55,7 +55,7 @@ public class GameWorld
         animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerWalking);
         animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerStill);
 
-        soundComponent.sound = Assets.slipperStepsSound;
+        soundComponent.sound.add(Assets.slipperStepsSound);
 
         entity.add(textureComponent);
         entity.add(transformComponent);
@@ -170,6 +170,7 @@ public class GameWorld
         StateComponent stateComponent = new StateComponent();
         TriggerComponent triggerComponent = new TriggerComponent();
         InputComponent inputComponent = new InputComponent();
+        SoundComponent soundComponent = new SoundComponent();
 
         triggerComponent.range = 4;
         triggerComponent.triggerer = triggerEntity;
@@ -180,6 +181,9 @@ public class GameWorld
         animationComponent.animations.put(BathtubComponent.STATE_DRAINED, Assets.bathtubDrained);
         animationComponent.animations.put(BathtubComponent.STATE_RAN, Assets.bathtubRan);
 
+        soundComponent.sound.add(Assets.bathtubDrainingSound);
+        soundComponent.sound.add(Assets.bathtubRunningSound);
+
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
@@ -189,6 +193,7 @@ public class GameWorld
         entity.add(stateComponent);
         entity.add(triggerComponent);
         entity.add(inputComponent);
+        entity.add(soundComponent);
 
         engine.addEntity(entity);
 

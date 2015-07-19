@@ -32,6 +32,8 @@ public class Assets
     public static Texture bathtubTexture;
 
     public static Sound slipperStepsSound;
+    public static Sound bathtubRunningSound;
+    public static Sound bathtubDrainingSound;
 
     private static Texture loadTexture(String file)
     {
@@ -52,7 +54,9 @@ public class Assets
         walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
 
-        slipperStepsSound = loadSound("sounds/slipper_steps.wav");
+        slipperStepsSound = loadSound("sounds/slipperSteps.wav");
+        bathtubRunningSound = loadSound("sounds/bathtubRunning.wav");
+        bathtubDrainingSound = loadSound("sounds/bathtubDraining.wav");
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());

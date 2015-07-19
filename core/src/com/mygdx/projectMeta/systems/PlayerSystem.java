@@ -44,9 +44,9 @@ public class PlayerSystem extends IteratingSystem {
         {
             stateComponent.set(PlayerComponent.STATE_STILL);
 
-            if (soundComponent.sound != null)
+            if (!soundComponent.sound.isEmpty())
             {
-                soundComponent.sound.stop();
+                soundComponent.sound.get(0).stop();
             }
         }
         else if (stateComponent.get() != PlayerComponent.STATE_WALKING
@@ -54,9 +54,9 @@ public class PlayerSystem extends IteratingSystem {
         {
             stateComponent.set(PlayerComponent.STATE_WALKING);
 
-            if (soundComponent.sound != null)
+            if (!soundComponent.sound.isEmpty())
             {
-                soundComponent.sound.loop();
+                soundComponent.sound.get(0).loop();
             }
         }
     }
