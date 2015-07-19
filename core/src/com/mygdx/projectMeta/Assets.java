@@ -46,16 +46,17 @@ public class Assets
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
         tv = new TextureRegion(tvTexture, tvTexture.getWidth(), tvTexture.getHeight());
         playerTorso = new TextureRegion(playerTexture, playerTexture.getWidth(), playerTexture.getHeight());
-        playerWalking = new Animation(0.24f,
-                new TextureRegion(walkingTexture, 0, 0, 28, 51),
-                new TextureRegion(walkingTexture, 28, 0, 28, 51),
-                new TextureRegion(walkingTexture, 56, 0, 28, 51),
-                new TextureRegion(walkingTexture, 84, 0, 28, 51),
+        playerWalking = new Animation(0.18f,
                 new TextureRegion(walkingTexture, 112, 0, 28, 51),
-                new TextureRegion(walkingTexture, 84, 51, 28, 51),
-                new TextureRegion(walkingTexture, 56, 51, 28, 51),
+                new TextureRegion(walkingTexture, 84, 0, 28, 51),
+                new TextureRegion(walkingTexture, 56, 0, 28, 51),
+                new TextureRegion(walkingTexture, 28, 0, 28, 51),
+                new TextureRegion(walkingTexture, 0, 0, 28, 51),
+                new TextureRegion(walkingTexture, 0, 51, 28, 51),
                 new TextureRegion(walkingTexture, 28, 51, 28, 51),
-                new TextureRegion(walkingTexture, 0, 51, 28, 51));
+                new TextureRegion(walkingTexture, 56, 51, 28, 51),
+                new TextureRegion(walkingTexture, 84, 51, 28, 51));
+
         playerWalking.setPlayMode(Animation.PlayMode.LOOP);
         playerStill = new Animation(0.2f, new TextureRegion(walkingTexture, 112, 0, 28, 51));
         map = new TmxMapLoader().load("apartment.tmx");
