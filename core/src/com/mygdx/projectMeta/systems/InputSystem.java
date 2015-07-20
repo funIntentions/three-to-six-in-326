@@ -82,17 +82,6 @@ public class InputSystem extends IteratingSystem
 
                 return super.keyUp(keycode);
             }
-
-            public boolean mouseMoved(int screenX, int screenY) {
-
-                // get world coordinate
-                Vector3 point = new Vector3();
-                camera.unproject(point.set(screenX, screenY, 0));
-
-                faceThis.set(point.x, point.y);
-
-                return super.mouseMoved(screenX, screenY);
-            }
         });
     }
 
@@ -104,6 +93,11 @@ public class InputSystem extends IteratingSystem
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         InputComponent inputComponent = mm.get(entity);
+
+        Vector3 point = new Vector3();
+        camera.unproject(point.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+        faceThis.set(point.x, point.y);
 
         inputComponent.faceThis = faceThis;
         inputComponent.movementInput = movementInput;
