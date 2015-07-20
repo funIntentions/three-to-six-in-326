@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.projectMeta.components.AnimationComponent;
-import com.mygdx.projectMeta.components.StateComponent;
-import com.mygdx.projectMeta.components.TorsoComponent;
-import com.mygdx.projectMeta.components.TransformComponent;
+import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.utils.Constants;
 
 /**
@@ -16,18 +16,21 @@ import com.mygdx.projectMeta.utils.Constants;
  */
 public class TorsoSystem extends IteratingSystem
 {
-
+    private int previousState;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<TorsoComponent> cm;
     private ComponentMapper<StateComponent> stateMapper;
+    private ComponentMapper<AnimationComponent> animationMapper;
 
     public TorsoSystem()
     {
-        super(Family.getFor(TorsoComponent.class, TransformComponent.class, StateComponent.class));
+        super(Family.getFor(TorsoComponent.class, TransformComponent.class, StateComponent.class, AnimationComponent.class));
 
         tm = ComponentMapper.getFor(TransformComponent.class);
         cm = ComponentMapper.getFor(TorsoComponent.class);
         stateMapper = ComponentMapper.getFor(StateComponent.class);
+        animationMapper = ComponentMapper.getFor(AnimationComponent.class);
+        previousState = PlayerComponent.STATE_STILL;
     }
 
     @Override
@@ -36,15 +39,29 @@ public class TorsoSystem extends IteratingSystem
         TransformComponent positionComponent = tm.get(entity);
         TorsoComponent torsoComponent = cm.get(entity);
         StateComponent stateComponent = stateMapper.get(entity);
+        AnimationComponent animationComponent = animationMapper.get(entity);
 
+        Animation animation = animationComponent.animations.get(stateComponent.get());
         Entity target = torsoComponent.target;
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)
+                && stateComponent.get() != PlayerComponent.STATE_GRAB)
+        {
+            previousState = stateComponent.get();
+            stateComponent.set(PlayerComponent.STATE_GRAB);
+        }
+        else if (stateComponent.get() == PlayerComponent.STATE_GRAB
+                && animation.getAnimationDuration() <= stateComponent.time)
+        {
+            stateComponent.set(previousState);
+        }
 
         if (tm.has(target))
         {
             TransformComponent targetPositionComponent = tm.get(target);
             StateComponent targetStateComponent = stateMapper.get(target);
 
-            if (stateComponent.get() != targetStateComponent.get())
+            if (stateComponent.get() != targetStateComponent.get() && stateComponent.get() != PlayerComponent.STATE_GRAB)
                 stateComponent.set(targetStateComponent.get());
 
             float totalRotation = targetPositionComponent.desiredRotation - positionComponent.rotation;

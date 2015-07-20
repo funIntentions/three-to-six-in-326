@@ -92,6 +92,7 @@ public class GameWorld
         stateComponent.set(PlayerComponent.STATE_STILL);
         animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerTorsoWalking);
         animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerTorsoIdle);
+        animationComponent.animations.put(PlayerComponent.STATE_GRAB, Assets.playerGrabbing);
 
         entity.add(torsoComponent);
         entity.add(textureComponent);

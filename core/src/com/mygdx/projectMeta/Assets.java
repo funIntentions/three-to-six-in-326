@@ -31,6 +31,7 @@ public class Assets
     public static Animation playerTorsoWalking;
     public static Animation playerLegsIdle;
     public static Animation playerTorsoIdle;
+    public static Animation playerGrabbing;
     public static Animation tvChannelStatic;
 
     public static Texture playerTexture;
@@ -102,6 +103,13 @@ public class Assets
         tvChannelStatic.setPlayMode(Animation.PlayMode.LOOP);
 
         // Player
+
+        playerGrabbing = new Animation(0.1f,
+                new TextureRegion(grabTexture, 0, 0, 41, 30),
+                new TextureRegion(grabTexture, 41, 0, 41, 30),
+                new TextureRegion(grabTexture, 82, 0, 41, 30),
+                new TextureRegion(grabTexture, 123, 0, 41, 30));
+
         playerLegsWalking = new Animation(0.14f,
                 new TextureRegion(legsWalkingTexture, 112, 0, 28, 51),
                 new TextureRegion(legsWalkingTexture, 84, 0, 28, 51),
