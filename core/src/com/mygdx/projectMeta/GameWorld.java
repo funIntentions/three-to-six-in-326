@@ -56,8 +56,8 @@ public class GameWorld
         physicsComponent.userData = new RunnerUserData();
 
         stateComponent.set(PlayerComponent.STATE_STILL);
-        animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerWalking);
-        animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerStill);
+        animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerLegsWalking);
+        animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerLegsIdle);
 
         soundComponent.sound.add(Assets.slipperStepsSound);
 
@@ -82,13 +82,19 @@ public class GameWorld
         TorsoComponent torsoComponent = new TorsoComponent();
         TextureComponent textureComponent = new TextureComponent();
         TransformComponent transformComponent = new TransformComponent();
+        StateComponent stateComponent = new StateComponent();
+        AnimationComponent animationComponent = new AnimationComponent();
 
         torsoComponent.target = player;
-        textureComponent.textureRegion = Assets.playerTorso;
+        stateComponent.set(PlayerComponent.STATE_STILL);
+        animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerTorsoWalking);
+        animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerTorsoIdle);
 
         entity.add(torsoComponent);
         entity.add(textureComponent);
         entity.add(transformComponent);
+        entity.add(animationComponent);
+        entity.add(stateComponent);
 
         engine.addEntity(entity);
 

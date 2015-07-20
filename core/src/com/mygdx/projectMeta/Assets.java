@@ -19,7 +19,6 @@ public class Assets
 {
     public static Map map;
 
-    public static TextureRegion playerTorso;
     public static TextureRegion couch;
     public static TextureRegion toilet;
 
@@ -27,12 +26,15 @@ public class Assets
     public static Animation bathtubRan;
     public static Animation bathtubDraining;
     public static Animation bathtubRunning;
-    public static Animation playerWalking;
-    public static Animation playerStill;
+    public static Animation playerLegsWalking;
+    public static Animation playerTorsoWalking;
+    public static Animation playerLegsIdle;
+    public static Animation playerTorsoIdle;
     public static Animation tvChannelStatic;
 
     public static Texture playerTexture;
-    public static Texture walkingTexture;
+    public static Texture legsWalkingTexture;
+    public static Texture torsoWalkingTexture;
     public static Texture couchTexture;
     public static Texture toiletTexture;
     public static Texture bathtubTexture;
@@ -60,9 +62,10 @@ public class Assets
         playerTexture = loadTexture("images/pjDude.png");
         couchTexture = loadTexture("images/couch.png");
         toiletTexture = loadTexture("images/toilet.png");
-        walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
+        legsWalkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
         tvChannelTexture = loadTexture("images/tvChannelStatic.png");
+        torsoWalkingTexture = loadTexture("images/torsoWalk.png");
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -78,9 +81,9 @@ public class Assets
         amaticFont = generator1.generateFont(parameter);
         generator1.dispose();
 
-        slipperStepsSound = loadSound("sounds/slipperSteps.wav");
-        bathtubRunningSound = loadSound("sounds/bathtubRunning.wav");
-        bathtubDrainingSound = loadSound("sounds/bathtubDraining.wav");
+        slipperStepsSound = loadSound("sounds/slipperSteps.mp3");
+        bathtubRunningSound = loadSound("sounds/bathtubRunning.mp3");
+        bathtubDrainingSound = loadSound("sounds/bathtubDraining.mp3");
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
@@ -94,19 +97,45 @@ public class Assets
         tvChannelStatic.setPlayMode(Animation.PlayMode.LOOP);
 
         // Player
-        playerTorso = new TextureRegion(playerTexture, playerTexture.getWidth(), playerTexture.getHeight());
-        playerWalking = new Animation(0.18f,
-                new TextureRegion(walkingTexture, 112, 0, 28, 51),
-                new TextureRegion(walkingTexture, 84, 0, 28, 51),
-                new TextureRegion(walkingTexture, 56, 0, 28, 51),
-                new TextureRegion(walkingTexture, 28, 0, 28, 51),
-                new TextureRegion(walkingTexture, 0, 0, 28, 51),
-                new TextureRegion(walkingTexture, 0, 51, 28, 51),
-                new TextureRegion(walkingTexture, 28, 51, 28, 51),
-                new TextureRegion(walkingTexture, 56, 51, 28, 51),
-                new TextureRegion(walkingTexture, 84, 51, 28, 51));
-        playerWalking.setPlayMode(Animation.PlayMode.LOOP);
-        playerStill = new Animation(0.2f, new TextureRegion(walkingTexture, 112, 0, 28, 51));
+        playerLegsWalking = new Animation(0.14f,
+                new TextureRegion(legsWalkingTexture, 112, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 84, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 56, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 28, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 0, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 28, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 56, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 84, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 112, 0, 28, 51),
+                new TextureRegion(legsWalkingTexture, 0, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 28, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 56, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 84, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 56, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 28, 51, 28, 51),
+                new TextureRegion(legsWalkingTexture, 0, 51, 28, 51));
+        playerLegsWalking.setPlayMode(Animation.PlayMode.LOOP);
+        playerLegsIdle = new Animation(0.2f, new TextureRegion(legsWalkingTexture, 112, 0, 28, 51));
+
+        playerTorsoWalking = new Animation(0.14f,
+                new TextureRegion(torsoWalkingTexture, 0, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 40, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 80, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 120, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 160, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 120, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 80, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 40, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 0, 0, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 0, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 40, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 80, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 120, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 80, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 40, 28, 40, 28),
+                new TextureRegion(torsoWalkingTexture, 0, 28, 40, 28));
+        playerTorsoWalking.setPlayMode(Animation.PlayMode.LOOP);
+        playerTorsoIdle = new Animation(0.2f, new TextureRegion(torsoWalkingTexture, 0, 0, 39, 27));
 
         // Bathtub
         bathtubRunning = new Animation(1f,
@@ -148,7 +177,8 @@ public class Assets
         map.dispose();
         playerTexture.dispose();
         toiletTexture.dispose();
-        walkingTexture.dispose();
+        legsWalkingTexture.dispose();
+        torsoWalkingTexture.dispose();
         couchTexture.dispose();
         toiletTexture.dispose();
         tvChannelTexture.dispose();

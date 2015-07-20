@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.projectMeta.components.AnimationComponent;
+import com.mygdx.projectMeta.components.StateComponent;
 import com.mygdx.projectMeta.components.TorsoComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
 import com.mygdx.projectMeta.utils.Constants;
@@ -12,18 +14,20 @@ import com.mygdx.projectMeta.utils.Constants;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class TorsoMovementSystem extends IteratingSystem
+public class TorsoSystem extends IteratingSystem
 {
 
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<TorsoComponent> cm;
+    private ComponentMapper<StateComponent> stateMapper;
 
-    public TorsoMovementSystem()
+    public TorsoSystem()
     {
-        super(Family.getFor(TorsoComponent.class, TransformComponent.class));
+        super(Family.getFor(TorsoComponent.class, TransformComponent.class, StateComponent.class));
 
         tm = ComponentMapper.getFor(TransformComponent.class);
         cm = ComponentMapper.getFor(TorsoComponent.class);
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
     }
 
     @Override
@@ -31,12 +35,17 @@ public class TorsoMovementSystem extends IteratingSystem
     {
         TransformComponent positionComponent = tm.get(entity);
         TorsoComponent torsoComponent = cm.get(entity);
+        StateComponent stateComponent = stateMapper.get(entity);
 
         Entity target = torsoComponent.target;
 
         if (tm.has(target))
         {
             TransformComponent targetPositionComponent = tm.get(target);
+            StateComponent targetStateComponent = stateMapper.get(target);
+
+            if (stateComponent.get() != targetStateComponent.get())
+                stateComponent.set(targetStateComponent.get());
 
             float totalRotation = targetPositionComponent.desiredRotation - positionComponent.rotation;
             while ( totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
