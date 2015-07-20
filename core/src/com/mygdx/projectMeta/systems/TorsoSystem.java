@@ -55,7 +55,7 @@ public class TorsoSystem extends IteratingSystem
 
             newAngle = MathUtils.clamp(newAngle, targetPositionComponent.rotation - Constants.PLAYER_TORSO_DIFFERENCE, targetPositionComponent.rotation + Constants.PLAYER_TORSO_DIFFERENCE);
 
-            positionComponent.position.set(targetPositionComponent.position);
+            positionComponent.position.set(targetPositionComponent.position.x, targetPositionComponent.position.y, positionComponent.position.z);
             positionComponent.rotation = newAngle;
         }
     }

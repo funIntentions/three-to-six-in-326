@@ -40,6 +40,14 @@ public class Constants
     public static final float TV_DENSITY = 0.5f;
     public static final float TV_LINEAR_FORCE = 1f;
 
+    public static final float DUCKY_X = 20;
+    public static final float DUCKY_Y = 16;
+    public static final float DUCKY_HEIGHT = 0.4f;
+    public static final float DUCKY_WIDTH = 0.4f;
+    public static final float DUCKY_DAMPING = 5f;
+    public static final float DUCKY_DENSITY = 0.1f;
+    public static final float DUCKY_LINEAR_FORCE = 1f;
+
     public static final float TOILET_X = 6;
     public static final float TOILET_Y = 15;
     public static final float TOILET_HEIGHT = 1f;

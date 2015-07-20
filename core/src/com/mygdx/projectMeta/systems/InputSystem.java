@@ -49,11 +49,6 @@ public class InputSystem extends IteratingSystem
                     startMoving(Constants.RIGHT);
                 }
 
-                if (keycode == Input.Keys.E)
-                {
-                    actionPressed = true;
-                }
-
                 return super.keyDown(keycode);
             }
 
@@ -75,13 +70,9 @@ public class InputSystem extends IteratingSystem
                     stopMoving(Constants.RIGHT);
                 }
 
-                if (keycode == Input.Keys.E)
-                {
-                    actionPressed = false;
-                }
-
                 return super.keyUp(keycode);
             }
+
         });
     }
 
@@ -94,9 +85,10 @@ public class InputSystem extends IteratingSystem
     public void processEntity(Entity entity, float deltaTime) {
         InputComponent inputComponent = mm.get(entity);
 
+        actionPressed = (Gdx.input.isKeyPressed(Input.Keys.E));
+
         Vector3 point = new Vector3();
         camera.unproject(point.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
         faceThis.set(point.x, point.y);
 
         inputComponent.faceThis = faceThis;

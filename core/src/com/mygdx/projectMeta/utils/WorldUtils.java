@@ -101,6 +101,29 @@ public class WorldUtils {
         return body;
     }
 
+    public static Body createDucky (World world)
+    {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.DUCKY_WIDTH, Constants.DUCKY_HEIGHT);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(new Vector2(Constants.DUCKY_X, Constants.DUCKY_Y));
+        bodyDef.linearDamping = Constants.DUCKY_DAMPING;
+        bodyDef.angularDamping = Constants.DUCKY_DAMPING;
+        Body body = world.createBody(bodyDef);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = Constants.DUCKY_DENSITY;
+        fixtureDef.friction = Constants.FRICTION_FORCE;
+        body.createFixture(fixtureDef);
+        body.resetMassData();
+        body.setUserData(new RunnerUserData());
+        shape.dispose();
+
+        return body;
+    }
+
     public static Body createStaticFurniture(World world, float x, float y, float width, float height)
     {
         PolygonShape shape = new PolygonShape();

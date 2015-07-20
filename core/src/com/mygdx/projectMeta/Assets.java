@@ -21,6 +21,7 @@ public class Assets
 
     public static TextureRegion couch;
     public static TextureRegion toilet;
+    public static TextureRegion ducky;
 
     public static Animation bathtubDrained;
     public static Animation bathtubRan;
@@ -39,6 +40,8 @@ public class Assets
     public static Texture toiletTexture;
     public static Texture bathtubTexture;
     public static Texture tvChannelTexture;
+    public static Texture duckyTexture;
+    public static Texture grabTexture;
 
     public static Sound slipperStepsSound;
     public static Sound bathtubRunningSound;
@@ -59,13 +62,14 @@ public class Assets
 
     public static void load()
     {
-        playerTexture = loadTexture("images/pjDude.png");
         couchTexture = loadTexture("images/couch.png");
         toiletTexture = loadTexture("images/toilet.png");
-        legsWalkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
+        legsWalkingTexture = loadTexture("images/pjLegsWalk.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
         tvChannelTexture = loadTexture("images/tvChannelStatic.png");
         torsoWalkingTexture = loadTexture("images/torsoWalk.png");
+        duckyTexture = loadTexture("images/ducky.png");
+        grabTexture = loadTexture("images/grabV1.png");
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -87,6 +91,7 @@ public class Assets
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
+        ducky = new TextureRegion(duckyTexture, duckyTexture.getWidth(), duckyTexture.getHeight());
 
         // TV
         tvChannelStatic = new Animation(0.2f,

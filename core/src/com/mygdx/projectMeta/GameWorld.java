@@ -3,6 +3,7 @@ package com.mygdx.projectMeta;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
 import com.mygdx.projectMeta.components.*;
@@ -35,6 +36,7 @@ public class GameWorld
         createTV();
         createToilet();
         createBathtub(player, actionText);
+        createDucky(player);
 
         createCamera(player);
     }
@@ -86,6 +88,7 @@ public class GameWorld
         AnimationComponent animationComponent = new AnimationComponent();
 
         torsoComponent.target = player;
+        transformComponent.position.set(Constants.PLAYER_X, Constants.PLAYER_Y, -1);
         stateComponent.set(PlayerComponent.STATE_STILL);
         animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerTorsoWalking);
         animationComponent.animations.put(PlayerComponent.STATE_STILL, Assets.playerTorsoIdle);
@@ -210,6 +213,37 @@ public class GameWorld
         entity.add(triggerComponent);
         entity.add(inputComponent);
         entity.add(soundComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
+    private Entity createDucky(Entity triggerEntity)
+    {
+        Entity entity = new Entity();
+
+        TextureComponent textureComponent = new TextureComponent();
+        TransformComponent transformComponent = new TransformComponent();
+        PhysicsComponent physicsComponent = new PhysicsComponent();
+        FurnitureComponent furnitureComponent = new FurnitureComponent();
+        TriggerComponent triggerComponent = new TriggerComponent();
+        HoldableComponent holdableComponent = new HoldableComponent();
+        InputComponent inputComponent = new InputComponent();
+
+        physicsComponent.body = WorldUtils.createDucky(world);
+        textureComponent.textureRegion = Assets.ducky;
+        triggerComponent.triggerer = triggerEntity;
+        triggerComponent.range = 2f;
+        holdableComponent.holder = triggerEntity;
+
+        entity.add(transformComponent);
+        entity.add(physicsComponent);
+        entity.add(textureComponent);
+        entity.add(furnitureComponent);
+        entity.add(triggerComponent);
+        entity.add(holdableComponent);
+        entity.add(inputComponent);
 
         engine.addEntity(entity);
 
