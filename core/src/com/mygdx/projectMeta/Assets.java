@@ -22,7 +22,6 @@ public class Assets
     public static TextureRegion playerTorso;
     public static TextureRegion couch;
     public static TextureRegion toilet;
-    public static TextureRegion tv;
 
     public static Animation bathtubDrained;
     public static Animation bathtubRan;
@@ -30,13 +29,14 @@ public class Assets
     public static Animation bathtubRunning;
     public static Animation playerWalking;
     public static Animation playerStill;
+    public static Animation tvChannelStatic;
 
     public static Texture playerTexture;
     public static Texture walkingTexture;
     public static Texture couchTexture;
     public static Texture toiletTexture;
-    public static Texture tvTexture;
     public static Texture bathtubTexture;
+    public static Texture tvChannelTexture;
 
     public static Sound slipperStepsSound;
     public static Sound bathtubRunningSound;
@@ -60,9 +60,9 @@ public class Assets
         playerTexture = loadTexture("images/pjDude.png");
         couchTexture = loadTexture("images/couch.png");
         toiletTexture = loadTexture("images/toilet.png");
-        tvTexture = loadTexture("images/tv.png");
         walkingTexture = loadTexture("images/pjLegsSnug.png"); // 28 x 51
         bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
+        tvChannelTexture = loadTexture("images/tvChannelStatic.png");
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -84,7 +84,14 @@ public class Assets
 
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
-        tv = new TextureRegion(tvTexture, tvTexture.getWidth(), tvTexture.getHeight());
+
+        // TV
+        tvChannelStatic = new Animation(0.2f,
+                new TextureRegion(tvChannelTexture, 0, 0, 41, 42),
+                new TextureRegion(tvChannelTexture, 41, 0, 41, 42),
+                new TextureRegion(tvChannelTexture, 0, 42, 41, 42),
+                new TextureRegion(tvChannelTexture, 41, 42, 41, 42));
+        tvChannelStatic.setPlayMode(Animation.PlayMode.LOOP);
 
         // Player
         playerTorso = new TextureRegion(playerTexture, playerTexture.getWidth(), playerTexture.getHeight());
@@ -144,7 +151,7 @@ public class Assets
         walkingTexture.dispose();
         couchTexture.dispose();
         toiletTexture.dispose();
-        tvTexture.dispose();
+        tvChannelTexture.dispose();
         bathtubTexture.dispose();
 
         slipperStepsSound.dispose();

@@ -125,14 +125,19 @@ public class GameWorld
         TransformComponent transformComponent = new TransformComponent();
         PhysicsComponent physicsComponent = new PhysicsComponent();
         FurnitureComponent furnitureComponent = new FurnitureComponent();
+        StateComponent stateComponent = new StateComponent();
+        AnimationComponent animationComponent = new AnimationComponent();
 
         physicsComponent.body = WorldUtils.createTV(world);
-        textureComponent.textureRegion = Assets.tv;
+        stateComponent.set(TvComponent.STATE_STATIC_CHANNEL);
+        animationComponent.animations.put(TvComponent.STATE_STATIC_CHANNEL, Assets.tvChannelStatic);
 
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
         entity.add(furnitureComponent);
+        entity.add(stateComponent);
+        entity.add(animationComponent);
 
         engine.addEntity(entity);
 
