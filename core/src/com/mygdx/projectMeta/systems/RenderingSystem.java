@@ -2,17 +2,19 @@ package com.mygdx.projectMeta.systems;
 
 import java.util.Comparator;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,6 +35,7 @@ public class RenderingSystem extends IteratingSystem {
 
     private SpriteBatch batch;
     private World world;
+    private RayHandler rayHandler;
     private Array<Entity> renderQueue;
     private Comparator<Entity> comparator;
     private OrthographicCamera camera;
@@ -42,12 +45,13 @@ public class RenderingSystem extends IteratingSystem {
     private TextureRegion frameBufferRegion;
     private SpriteBatch fbBatch;
     private ShaderProgram shaderProgram;
+    private PointLight testLight;
     private float time;
 
     private ComponentMapper<TextureComponent> textureM;
     private ComponentMapper<TransformComponent> transformM;
 
-    public RenderingSystem(SpriteBatch batch, World world) {
+    public RenderingSystem(SpriteBatch batch, World world, RayHandler rayHandler) {
         super(Family.getFor(TransformComponent.class, TextureComponent.class));
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
@@ -67,6 +71,7 @@ public class RenderingSystem extends IteratingSystem {
 
         this.batch = batch;
         this.world = world;
+        this.rayHandler = rayHandler;
 
         frameBufferObject = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), true);
@@ -84,7 +89,8 @@ public class RenderingSystem extends IteratingSystem {
 
         setupCamera();
 
-
+        testLight = new PointLight(rayHandler, 128, new Color(0.85f, 0.85f, 0.85f,1), 16, 15, 15);
+        rayHandler.setAmbientLight(0f, 0f, 0f, 0.5f);
     }
 
     private void setupCamera() {
@@ -156,7 +162,7 @@ public class RenderingSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        frameBufferObject.begin();
+        //frameBufferObject.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderQueue.sort(comparator);
@@ -194,23 +200,28 @@ public class RenderingSystem extends IteratingSystem {
                     MathUtils.radiansToDegrees * transform.rotation);
 
         }
-
         batch.end();
-        frameBufferObject.end();
+
+        rayHandler.setCombinedMatrix(camera.combined);
+        rayHandler.updateAndRender();
+
+        //frameBufferObject.end();
 
         renderQueue.clear();
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        /*Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         time += deltaTime;
         shaderProgram.begin();
-        shaderProgram.setUniformf("time", time);
+        shaderProgram.setUniformf("xOffset", 0);
+        shaderProgram.setUniformf("yOffset", 0);
+        //shaderProgram.setUniformf("time", time);
         shaderProgram.end();
 
         // draw for real
         fbBatch.setShader(shaderProgram);
         fbBatch.begin();
         fbBatch.draw(frameBufferRegion, 0, 0);
-        fbBatch.end();
+        fbBatch.end();*/
 
         physicsDebugRenderer.render(world, camera.combined);
     }

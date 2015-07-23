@@ -1,5 +1,6 @@
 package com.mygdx.projectMeta;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
@@ -15,12 +16,14 @@ import com.mygdx.projectMeta.utils.WorldUtils;
 public class PhysicsEngine implements ContactListener
 {
     private World world;
+    private RayHandler rayHandler;
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
 
     public PhysicsEngine() {
         world = WorldUtils.createWorld();
         world.setContactListener(this);
+        rayHandler = new RayHandler(world);
 
         MapBodyManager mapBodyManager = new MapBodyManager(world, Constants.PIXELS_PER_UNIT, null, 1);
         mapBodyManager.createPhysics(Assets.map, "physics");
@@ -39,6 +42,11 @@ public class PhysicsEngine implements ContactListener
         return world;
     }
 
+    public RayHandler getRayHandler()
+    {
+        return rayHandler;
+    }
+
     public void beginContact(Contact contact) {
 
     }
@@ -53,5 +61,11 @@ public class PhysicsEngine implements ContactListener
 
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public void dispose()
+    {
+        rayHandler.dispose();
+        world.dispose();
     }
 }

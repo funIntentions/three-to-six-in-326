@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
         physicsEngine = new PhysicsEngine();
         gameEngine = new Engine();
 
-        gameEngine.addSystem(new RenderingSystem(batch, physicsEngine.getWorld()));
+        gameEngine.addSystem(new RenderingSystem(batch, physicsEngine.getWorld(), physicsEngine.getRayHandler()));
         gameEngine.addSystem(new TextRenderingSystem(batch));
         gameEngine.addSystem(new TextSystem());
         gameEngine.addSystem(new CameraSystem());
@@ -103,5 +103,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         Assets.dispose();
+        physicsEngine.dispose();
     }
 }
