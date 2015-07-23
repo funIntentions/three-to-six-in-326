@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Constants
 {
-    public static final int APP_WIDTH = 800;
-    public static final int APP_HEIGHT = 480;
+    public static final int APP_WIDTH = 1200;
+    public static final int APP_HEIGHT = 930;
     public static final int VIEWPORT_WIDTH = 20;
     public static final int PIXELS_PER_UNIT = 16;
-    public static final float CAMERA_ZOOM = 1.8f;
+    public static final float CAMERA_ZOOM = 1.9f;
     public static final float SCALE = 1.0f/ Constants.PIXELS_PER_UNIT;
 
     public static final Vector2 WORLD_GRAVITY = new Vector2(0,0);

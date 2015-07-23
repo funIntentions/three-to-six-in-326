@@ -7,8 +7,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -18,15 +24,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.Assets;
-import com.mygdx.projectMeta.components.TextComponent;
 import com.mygdx.projectMeta.components.TextureComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
+
 import com.mygdx.projectMeta.utils.Constants;
 
 public class RenderingSystem extends IteratingSystem {
-    //static final float FRUSTUM_WIDTH = 10;
-    //static final float FRUSTUM_HEIGHT = 15;
-    //static final float PIXELS_TO_METRES = 1.0f / 32.0f;
 
     private SpriteBatch batch;
     private World world;
@@ -35,6 +38,11 @@ public class RenderingSystem extends IteratingSystem {
     private OrthographicCamera camera;
     private TiledMapRenderer tiledMapRenderer;
     private Box2DDebugRenderer physicsDebugRenderer;
+    private FrameBuffer frameBufferObject;
+    private TextureRegion frameBufferRegion;
+    private SpriteBatch fbBatch;
+    private ShaderProgram shaderProgram;
+    private float time;
 
     private ComponentMapper<TextureComponent> textureM;
     private ComponentMapper<TransformComponent> transformM;
@@ -60,7 +68,23 @@ public class RenderingSystem extends IteratingSystem {
         this.batch = batch;
         this.world = world;
 
+        frameBufferObject = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight(), true);
+
+        frameBufferRegion = new TextureRegion(frameBufferObject.getColorBufferTexture(), 0, 0,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //frameBufferRegion.flip(false, true);
+
+        fbBatch = new SpriteBatch();
+
+        batch.setShader(createDefaultShader());
+        shaderProgram = createShader();
+        fbBatch.setShader(shaderProgram);
+        time = 0;
+
         setupCamera();
+
+
     }
 
     private void setupCamera() {
@@ -72,9 +96,68 @@ public class RenderingSystem extends IteratingSystem {
         camera.zoom = Constants.CAMERA_ZOOM;
     }
 
+    static public ShaderProgram createDefaultShader () {
+        String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "uniform mat4 u_projTrans;\n" //
+                + "varying vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "\n" //
+                + "void main()\n" //
+                + "{\n" //
+                + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "}\n";
+        String fragmentShader = "#ifdef GL_ES\n" //
+                + "#define LOWP lowp\n" //
+                + "precision mediump float;\n" //
+                + "#else\n" //
+                + "#define LOWP \n" //
+                + "#endif\n" //
+                + "varying LOWP vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "uniform sampler2D u_texture;\n" //
+                + "void main()\n"//
+                + "{\n" //
+                + "  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n" //
+                + "}";
+
+        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (shader.isCompiled() == false) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        return shader;
+    }
+
+    static public ShaderProgram createShader () {
+        String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "uniform mat4 u_projTrans;\n" //
+                + "varying vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "\n" //
+                + "void main()\n" //
+                + "{\n" //
+                + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "}\n";
+        String fragmentShader = Assets.fragmentShader;
+
+        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (shader.isCompiled() == false) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        return shader;
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        frameBufferObject.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderQueue.sort(comparator);
         camera.update();
@@ -113,7 +196,21 @@ public class RenderingSystem extends IteratingSystem {
         }
 
         batch.end();
+        frameBufferObject.end();
+
         renderQueue.clear();
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        time += deltaTime;
+        shaderProgram.begin();
+        shaderProgram.setUniformf("time", time);
+        shaderProgram.end();
+
+        // draw for real
+        fbBatch.setShader(shaderProgram);
+        fbBatch.begin();
+        fbBatch.draw(frameBufferRegion, 0, 0);
+        fbBatch.end();
 
         physicsDebugRenderer.render(world, camera.combined);
     }

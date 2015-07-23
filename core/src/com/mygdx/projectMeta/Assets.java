@@ -1,8 +1,11 @@
 package com.mygdx.projectMeta;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.projectMeta.utils.Constants;
+
+import javax.xml.soap.Text;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -51,6 +56,11 @@ public class Assets
     public static BitmapFont journalFont;
     public static BitmapFont amaticFont;
 
+    public static String vertexShader;
+    public static String fragmentShader;
+
+    private static AssetManager assetManager = new AssetManager();
+
     private static Texture loadTexture(String file)
     {
         return new Texture(Gdx.files.internal(file));
@@ -63,14 +73,41 @@ public class Assets
 
     public static void load()
     {
-        couchTexture = loadTexture("images/couch.png");
-        toiletTexture = loadTexture("images/toilet.png");
-        legsWalkingTexture = loadTexture("images/pjLegsWalk.png"); // 28 x 51
-        bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
-        tvChannelTexture = loadTexture("images/tvChannelStatic.png");
-        torsoWalkingTexture = loadTexture("images/torsoWalk.png");
-        duckyTexture = loadTexture("images/ducky.png");
-        grabTexture = loadTexture("images/grabV1.png");
+        TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+        textureParameter.magFilter = Texture.TextureFilter.Nearest;
+        textureParameter.minFilter = Texture.TextureFilter.Nearest;
+
+        assetManager.load("images/couch.png", Texture.class, textureParameter);
+        assetManager.load("images/toilet.png", Texture.class, textureParameter);
+        assetManager.load("images/pjLegsWalk.png", Texture.class, textureParameter);
+        assetManager.load("images/bathtubFilling.png", Texture.class, textureParameter);
+        assetManager.load("images/tvChannelStatic.png", Texture.class, textureParameter);
+        assetManager.load("images/torsoWalk.png", Texture.class, textureParameter);
+        assetManager.load("images/ducky.png", Texture.class, textureParameter);
+        assetManager.load("images/grabV1.png", Texture.class, textureParameter);
+
+        assetManager.finishLoading();
+
+        couchTexture = assetManager.get("images/couch.png");
+        toiletTexture = assetManager.get("images/toilet.png");
+        legsWalkingTexture = assetManager.get("images/pjLegsWalk.png");
+        bathtubTexture = assetManager.get("images/bathtubFilling.png");
+        tvChannelTexture = assetManager.get("images/tvChannelStatic.png");
+        torsoWalkingTexture = assetManager.get("images/torsoWalk.png");
+        duckyTexture = assetManager.get("images/ducky.png");
+        grabTexture = assetManager.get("images/grabV1.png");
+
+        vertexShader = Gdx.files.internal("shaders/test.vertex").readString();
+        fragmentShader = Gdx.files.internal("shaders/test.fragment").readString();
+
+//        couchTexture = loadTexture("images/couch.png");
+//        toiletTexture = loadTexture("images/toilet.png");
+//        legsWalkingTexture = loadTexture("images/pjLegsWalk.png"); // 28 x 51
+//        bathtubTexture = loadTexture("images/bathtubFilling.png"); // 135 x 51
+//        tvChannelTexture = loadTexture("images/tvChannelStatic.png");
+//        torsoWalkingTexture = loadTexture("images/torsoWalk.png");
+//        duckyTexture = loadTexture("images/ducky.png");
+//        grabTexture = loadTexture("images/grabV1.png");
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/journal.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
