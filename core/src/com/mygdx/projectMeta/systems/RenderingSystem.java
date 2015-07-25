@@ -89,8 +89,8 @@ public class RenderingSystem extends IteratingSystem {
 
         setupCamera();
 
-        testLight = new PointLight(rayHandler, 128, new Color(0.85f, 0.85f, 0.85f,1), 16, 15, 15);
-        rayHandler.setAmbientLight(0f, 0f, 0f, 0.5f);
+        testLight = new PointLight(rayHandler, 128, new Color(255f, 214f, 170f, 0.65f), 16, 15, 15);
+        rayHandler.setAmbientLight(0f, 0f, 0f, 0.1f);
     }
 
     private void setupCamera() {

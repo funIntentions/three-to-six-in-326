@@ -26,6 +26,7 @@ public class HoldingSystem extends IteratingSystem
     private ComponentMapper<PhysicsComponent> physicsMapper;
     private ComponentMapper<TriggerComponent> triggerMapper;
     private ComponentMapper<InputComponent> inputMapper;
+    private float throwingStrength = 5;
 
     public HoldingSystem(World world) {
         super(Family.getFor(PhysicsComponent.class, HoldableComponent.class, TriggerComponent.class, InputComponent.class));
@@ -52,7 +53,7 @@ public class HoldingSystem extends IteratingSystem
         {
             PhysicsComponent holdersPhysicsComponent = physicsMapper.get(triggerComponent.triggerer);
 
-            if (holdableComponent.distanceJoint == null)
+            if (!holdableComponent.held)
             {
 
                 PrismaticJointDef jointDef = new PrismaticJointDef();
@@ -73,12 +74,29 @@ public class HoldingSystem extends IteratingSystem
                 jointDef.enableMotor = true;
 
                 holdableComponent.distanceJoint = world.createJoint(jointDef);
+                holdableComponent.held = true;
             }
-            else
+            else // Drop
             {
                 world.destroyJoint(holdableComponent.distanceJoint);
                 holdableComponent.distanceJoint = null;
+                holdableComponent.held = false;
             }
+        }
+
+        if (holdableComponent.holder != null
+                && holdableComponent.held
+                && Gdx.input.isKeyJustPressed(Input.Keys.F)) // Throw
+        {
+            world.destroyJoint(holdableComponent.distanceJoint);
+            holdableComponent.distanceJoint = null;
+            holdableComponent.held = false;
+
+            PhysicsComponent holdersPhysicsComponent = physicsMapper.get(triggerComponent.triggerer);
+            Vector2 force = new Vector2(0,1).rotateRad(holdersPhysicsComponent.body.getAngle());
+            force.scl(throwingStrength);
+
+            physicsComponent.body.applyLinearImpulse(force, physicsComponent.body.getWorldCenter(), true);
         }
     }
 }
