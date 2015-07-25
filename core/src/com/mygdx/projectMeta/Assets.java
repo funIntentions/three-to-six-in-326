@@ -27,6 +27,7 @@ public class Assets
     public static TextureRegion couch;
     public static TextureRegion toilet;
     public static TextureRegion ducky;
+    public static TextureRegion demonV1;
 
     public static Animation bathtubDrained;
     public static Animation bathtubRan;
@@ -48,6 +49,7 @@ public class Assets
     public static Texture tvChannelTexture;
     public static Texture duckyTexture;
     public static Texture grabTexture;
+    public static Texture demonV1Texture;
 
     public static Sound slipperStepsSound;
     public static Sound bathtubRunningSound;
@@ -85,6 +87,10 @@ public class Assets
         assetManager.load("images/torsoWalk.png", Texture.class, textureParameter);
         assetManager.load("images/ducky.png", Texture.class, textureParameter);
         assetManager.load("images/grabV1.png", Texture.class, textureParameter);
+        assetManager.load("images/demonV1.png", Texture.class, textureParameter);
+
+        vertexShader = Gdx.files.internal("shaders/test.vertex").readString();
+        fragmentShader = Gdx.files.internal("shaders/test.fragment").readString();
 
         assetManager.finishLoading();
 
@@ -96,9 +102,7 @@ public class Assets
         torsoWalkingTexture = assetManager.get("images/torsoWalk.png");
         duckyTexture = assetManager.get("images/ducky.png");
         grabTexture = assetManager.get("images/grabV1.png");
-
-        vertexShader = Gdx.files.internal("shaders/test.vertex").readString();
-        fragmentShader = Gdx.files.internal("shaders/test.fragment").readString();
+        demonV1Texture = assetManager.get("images/demonV1.png");
 
 //        couchTexture = loadTexture("images/couch.png");
 //        toiletTexture = loadTexture("images/toilet.png");
@@ -130,6 +134,7 @@ public class Assets
         couch = new TextureRegion(couchTexture, couchTexture.getWidth(), couchTexture.getHeight());
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
         ducky = new TextureRegion(duckyTexture, duckyTexture.getWidth(), duckyTexture.getHeight());
+        demonV1 = new TextureRegion(demonV1Texture, demonV1Texture.getWidth(), duckyTexture.getHeight());
 
         // TV
         tvChannelStatic = new Animation(0.2f,

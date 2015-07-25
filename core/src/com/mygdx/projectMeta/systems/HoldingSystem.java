@@ -58,21 +58,35 @@ public class HoldingSystem extends IteratingSystem
 
                 PrismaticJointDef jointDef = new PrismaticJointDef();
 
-                jointDef.bodyA = holdersPhysicsComponent.body;
-                jointDef.bodyB = physicsComponent.body;
-                jointDef.localAnchorA.set(0.6f,0.8f);
-                jointDef.localAnchorB.set(0,0);
-                jointDef.localAxisA.set(1,0);
-                jointDef.referenceAngle = 0;
+                jointDef.initialize(holdersPhysicsComponent.body, physicsComponent.body, holdersPhysicsComponent.body.getWorldCenter(), new Vector2(1,0));
 
-                jointDef.referenceAngle = 0;
-                jointDef.lowerTranslation = 0.0f;
-                jointDef.upperTranslation = 0.0f;
+                jointDef.lowerTranslation = 0f;
+
+                jointDef.upperTranslation = 0f;
+
                 jointDef.enableLimit = true;
+
                 jointDef.maxMotorForce = 1.0f;
-                jointDef.motorSpeed = 0.25f;
+
+                jointDef.motorSpeed = 0.0f;
+
                 jointDef.enableMotor = true;
 
+//                jointDef.bodyA = holdersPhysicsComponent.body;
+//                jointDef.bodyB = physicsComponent.body;
+//                jointDef.localAnchorA.set(0.6f,0.8f);
+//                jointDef.localAnchorB.set(0,0);
+//                jointDef.localAxisA.set(1,0);
+//                jointDef.referenceAngle = 0;
+//
+//                jointDef.referenceAngle = 0;
+//                jointDef.lowerTranslation = 0.0f;
+//                jointDef.upperTranslation = 0.0f;
+//                jointDef.enableLimit = true;
+//                jointDef.maxMotorForce = 1.0f;
+//                jointDef.motorSpeed = 0.25f;
+//                jointDef.enableMotor = true;
+//
                 holdableComponent.distanceJoint = world.createJoint(jointDef);
                 holdableComponent.held = true;
             }

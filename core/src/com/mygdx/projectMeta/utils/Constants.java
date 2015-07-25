@@ -52,17 +52,22 @@ public class Constants
     public static final float TOILET_Y = 15;
     public static final float TOILET_HEIGHT = 1f;
     public static final float TOILET_WIDTH = 1f;
-    public static final float TOILET_DAMPING = 5f;
-    public static final float TOILET_DENSITY = 0.5f;
-    public static final float TOILET_LINEAR_FORCE = 1f;
 
     public static final float PLAYER_X = 10;
     public static final float PLAYER_Y = 10;
     public static final float PLAYER_WIDTH = 2.3f;
     public static final float PLAYER_HEIGHT = 1.7f;
+    public static final float PLAYER_DAMPING = 5f;
     public static final float PLAYER_DENSITY = 0.5f;
     public static final float PLAYER_LINEAR_FORCE = 1f;
-    public static final float PLAYER_DAMPING = 5f;
+
+    public static final float DEMON_X = 10;
+    public static final float DEMON_Y = 16;
+    public static final float DEMON_WIDTH = 2.3f;
+    public static final float DEMON_HEIGHT = 1.7f;
+    public static final float DEMON_DAMPING = 5f;
+    public static final float DEMON_DENSITY = 0.5f;
+    public static final float DEMON_LINEAR_FORCE = 1f;
 
     public static final float PLAYER_LEGS_ANGULAR_CHANGE = 4f; // degree rotation per time step
     public static final float PLAYER_TORSO_ANGULAR_CHANGE = 6.5f; // degree rotation per time step

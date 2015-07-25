@@ -36,6 +36,7 @@ public class GameWorld
         createTV();
         createToilet();
         createBathtub(player, actionText);
+        createDemon();
         createDucky(player);
 
         createCamera(player);
@@ -148,6 +149,28 @@ public class GameWorld
         entity.add(furnitureComponent);
         entity.add(stateComponent);
         entity.add(animationComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
+
+    private Entity createDemon()
+    {
+        Entity entity = new Entity();
+
+        TextureComponent textureComponent = new TextureComponent();
+        TransformComponent transformComponent = new TransformComponent();
+        PhysicsComponent physicsComponent = new PhysicsComponent();
+
+        physicsComponent.body = WorldUtils.createDemon(world);
+        textureComponent.textureRegion = Assets.demonV1;
+        transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
+
+        entity.add(transformComponent);
+        entity.add(physicsComponent);
+        entity.add(textureComponent);
 
         engine.addEntity(entity);
 
