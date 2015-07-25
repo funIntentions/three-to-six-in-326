@@ -36,7 +36,7 @@ public class GameWorld
         createTV();
         createToilet();
         createBathtub(player, actionText);
-        createDemon();
+        createDemon(player);
         createDucky(player);
 
         createCamera(player);
@@ -156,21 +156,25 @@ public class GameWorld
     }
 
 
-    private Entity createDemon()
+    private Entity createDemon(Entity target)
     {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
         TransformComponent transformComponent = new TransformComponent();
         PhysicsComponent physicsComponent = new PhysicsComponent();
+        SteeringComponent steeringComponent = new SteeringComponent();
 
         physicsComponent.body = WorldUtils.createDemon(world);
         textureComponent.textureRegion = Assets.demonV1;
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
+        steeringComponent.target = target;
+        steeringComponent.seekOn = true;
 
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
+        entity.add(steeringComponent);
 
         engine.addEntity(entity);
 
