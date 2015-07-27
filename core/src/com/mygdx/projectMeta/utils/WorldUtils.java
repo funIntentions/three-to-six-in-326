@@ -1,14 +1,8 @@
 package com.mygdx.projectMeta.utils;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.projectMeta.box2d.RunnerUserData;
-import com.mygdx.projectMeta.components.FurnitureComponent;
-import com.mygdx.projectMeta.components.TextComponent;
-import com.mygdx.projectMeta.components.TransformComponent;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 /**
  * Created by Dan on 4/22/2015.
