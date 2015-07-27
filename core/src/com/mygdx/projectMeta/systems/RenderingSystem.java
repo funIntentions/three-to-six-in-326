@@ -17,15 +17,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.Assets;
+import com.mygdx.projectMeta.Ray;
+import com.mygdx.projectMeta.components.SteeringComponent;
 import com.mygdx.projectMeta.components.TextureComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
 
@@ -41,6 +45,7 @@ public class RenderingSystem extends IteratingSystem {
     private OrthographicCamera camera;
     private TiledMapRenderer tiledMapRenderer;
     private Box2DDebugRenderer physicsDebugRenderer;
+    private ShapeRenderer debugShapeRenderer;
     private FrameBuffer frameBufferObject;
     private TextureRegion frameBufferRegion;
     private SpriteBatch fbBatch;
@@ -50,14 +55,17 @@ public class RenderingSystem extends IteratingSystem {
 
     private ComponentMapper<TextureComponent> textureM;
     private ComponentMapper<TransformComponent> transformM;
+    private ComponentMapper<SteeringComponent> steeringMapper;
 
     public RenderingSystem(SpriteBatch batch, World world, RayHandler rayHandler) {
         super(Family.getFor(TransformComponent.class, TextureComponent.class));
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
+        steeringMapper = ComponentMapper.getFor(SteeringComponent.class);
         tiledMapRenderer = new OrthogonalTiledMapRenderer((TiledMap)Assets.map, Constants.SCALE);
         physicsDebugRenderer = new Box2DDebugRenderer();
+        debugShapeRenderer = new ShapeRenderer();
 
         renderQueue = new Array<Entity>();
 
@@ -204,6 +212,26 @@ public class RenderingSystem extends IteratingSystem {
 
         rayHandler.setCombinedMatrix(camera.combined);
         rayHandler.updateAndRender();
+
+        debugShapeRenderer.setProjectionMatrix(camera.combined);
+        debugShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugShapeRenderer.setColor(0, 0, 1, 1);
+        for (Entity entity : renderQueue)
+        {
+            if (steeringMapper.has(entity))
+            {
+                SteeringComponent steeringComponent = steeringMapper.get(entity);
+
+                for (Ray ray : steeringComponent.feelers)
+                {
+                    Vector2 p1 = new Vector2(ray.position);
+                    Vector2 p2 = new Vector2(ray.position).add((new Vector2(ray.direction).scl(ray.length)));
+                    debugShapeRenderer.line(p1.x, p1.y, p2.x, p2.y);
+                }
+            }
+
+        }
+        debugShapeRenderer.end();
 
         //frameBufferObject.end();
 

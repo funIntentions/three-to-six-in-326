@@ -46,36 +46,41 @@ public class SteeringSystem extends IteratingSystem
         TransformComponent transformComponent = transformMapper.get(entity);
         SteeringComponent steeringComponent = steeringMapper.get(entity);
 
-        transformComponent.position.set(
-                physicsComponent.body.getPosition().x,
-                physicsComponent.body.getPosition().y,
-                transformComponent.position.z);
-        transformComponent.rotation = physicsComponent.body.getAngle();
-
         if (steeringComponent.seekOn)
         {
             PhysicsComponent targetPhysicsComponent = physicsMapper.get(steeringComponent.target);
 
-            //SteeringOutput steeringOutput = seek(targetPhysicsComponent.body.getPosition(), physicsComponent.body.getPosition());
-            SteeringOutput steeringOutput = avoidThings(world, physicsComponent, steeringComponent);
-            physicsComponent.body.applyForce(steeringOutput.linear, physicsComponent.body.getWorldCenter(), true);
+            SteeringOutput seekOutput = seek(targetPhysicsComponent.body.getPosition(), physicsComponent.body.getPosition());
+            SteeringOutput avoidOutput = avoidThings(world, physicsComponent, steeringComponent);
+            SteeringOutput total = new SteeringOutput();
+            total.linear.add(seekOutput.linear);
+            total.angular += seekOutput.angular;
+            total.linear.add(avoidOutput.linear);
+            total.angular += avoidOutput.angular;
+            total.linear.scl(0.5f);
+            physicsComponent.body.applyForce(total.linear, physicsComponent.body.getWorldCenter(), true);
 
-            Vector2 faceThis = new Vector2(physicsComponent.body.getPosition()).add(steeringOutput.linear);
+            Vector2 faceThis = new Vector2(targetPhysicsComponent.body.getPosition());
             faceThis(faceThis, physicsComponent);
-
-
         }
+
+        transformComponent.position.set(
+                physicsComponent.body.getPosition().x,
+                physicsComponent.body.getPosition().y,
+                transformComponent.position.z);
+
+        transformComponent.rotation = physicsComponent.body.getAngle();
     }
 
     class SteeringOutput
     {
-        public Vector2 linear;
-        public float angular;
+        public Vector2 linear = new Vector2(0,0);
+        public float angular = 0;
     }
 
     public SteeringOutput seek(Vector2 target, Vector2 agentPos)
     {
-        float force = 400;
+        float force = 300;
         SteeringOutput steering = new SteeringOutput();
 
         Vector2 toTarget = target;
@@ -99,46 +104,53 @@ public class SteeringSystem extends IteratingSystem
         float desiredAngle = (float) Math.atan2(-toTarget.x, toTarget.y);
 
         float bodyAngle = physicsComponent.body.getAngle();
-        float totalRotation = desiredAngle - bodyAngle;
+        float nextAngle = bodyAngle + physicsComponent.body.getAngularVelocity() / 60.0f;
+        float totalRotation = desiredAngle - nextAngle;
         while ( totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
         while ( totalRotation >  180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
-        float change = Constants.PLAYER_LEGS_ANGULAR_CHANGE * MathUtils.degreesToRadians; // TODO: Remove the player angular constant
-        float newAngle = bodyAngle + Math.min(change, Math.max(-change, totalRotation));
-        physicsComponent.body.setTransform(physicsComponent.body.getPosition(), newAngle); // TODO: Could I do this be applying a torque instead?
+        float desiredAngularVelocity = totalRotation * 60f;
+        float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f/60f);
+        physicsComponent.body.applyTorque(torque, true);
     }
 
     private void CreateFeelers(PhysicsComponent agentPhysics, SteeringComponent agentSteering)
     {
-        //feeler pointing straight in front
-        //Ray front = new Ray(agentPos.GetPosition(), agentkinematic.heading);
-        //agentSteering.feelers[0].Position = agentPos.GetPosition();
-        //agentSteering.feelers[0].Direction = agentkinematic.heading;
 
-        ////feeler to left
-        Vector2 heading = new Vector2(1,0).rotateRad(agentPhysics.body.getAngle());
+        agentSteering.feelers.clear();
+
+        // feeler straight ahead
+        Vector2 heading = new Vector2(0,1).rotateRad(agentPhysics.body.getAngle());
+        Vector2 frontFeelerDirection = new Vector2(heading);
+
+        Ray frontRay = new Ray();
+
+        frontRay.position = new Vector2(agentPhysics.body.getPosition());
+        frontRay.direction = new Vector2(frontFeelerDirection);
+        frontRay.length = 2.5f;
+
+        agentSteering.feelers.add(frontRay);
+
+        // feeler to left
         Vector2 leftFeelerDirection = new Vector2(heading);
         leftFeelerDirection.rotateRad((float) (Math.PI / 3f));
 
         Ray leftRay = new Ray();
 
-        leftRay.position.set(agentPhysics.body.getPosition());
-        leftRay.direction.set(leftFeelerDirection);
-        leftRay.length = 4.0f;
+        leftRay.position = new Vector2(agentPhysics.body.getPosition());
+        leftRay.direction = new Vector2(leftFeelerDirection);
+        leftRay.length = 2.5f;
 
         agentSteering.feelers.add(leftRay);
 
-        ////feeler to right
-        //temp = agentkinematic.heading;
-        //temp = Util.Vec3RotateAroundOrigin(temp, (float)(Math.PI / 2) * 0.5f);
-        //agentSteering.feelers.Add(agentPos.GetPosition() + (agentSteering.feelerLength / 2.0f * temp));
-        Vector2 rightFeelerDirection =  new Vector2(heading);
+        // feeler to right
+        Vector2 rightFeelerDirection = new Vector2(heading);
         rightFeelerDirection.rotateRad(-(float)(Math.PI / 3f));
 
         Ray rightRay = new Ray();
 
-        rightRay.position.set(agentPhysics.body.getPosition());
-        rightRay.direction.set(rightFeelerDirection);
-        rightRay.length = 4.0f;
+        rightRay.position = new Vector2(agentPhysics.body.getPosition());
+        rightRay.direction = new Vector2(rightFeelerDirection);
+        rightRay.length = 2.5f;
 
         agentSteering.feelers.add(rightRay);
     }
@@ -162,7 +174,7 @@ public class SteeringSystem extends IteratingSystem
 
     public SteeringOutput avoidThings(World world, PhysicsComponent agentPhysics, SteeringComponent agentSteering)
     {
-        float force = 400;
+        float force = 300;
         SteeringOutput steering = new SteeringOutput();
 
         CreateFeelers(agentPhysics, agentSteering);
@@ -170,8 +182,9 @@ public class SteeringSystem extends IteratingSystem
         for (Ray whiskerRay : agentSteering.feelers)
         {
             AvoidanceCallBack avoidanceCallBack = new AvoidanceCallBack();
+            avoidanceCallBack.fixture = null;
 
-            world.rayCast(avoidanceCallBack, whiskerRay.position, new Vector2(whiskerRay.position).add(new Vector2(whiskerRay.direction).scl(whiskerRay.length)));
+            world.rayCast(avoidanceCallBack, whiskerRay.position, new Vector2(whiskerRay.position).add((new Vector2(whiskerRay.direction).scl(whiskerRay.length))));
 
             if (avoidanceCallBack.fixture != null)
             {

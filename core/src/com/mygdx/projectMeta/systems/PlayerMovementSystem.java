@@ -80,12 +80,16 @@ public class PlayerMovementSystem extends IteratingSystem {
         }
 
         bodyAngle = physicsComponent.body.getAngle();
-        float totalRotation = desiredAngle - bodyAngle;
+        float nextAngle = bodyAngle + physicsComponent.body.getAngularVelocity() / 60.0f;
+        float totalRotation = desiredAngle - nextAngle;
         while ( totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
         while ( totalRotation >  180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
-        float change = Constants.PLAYER_LEGS_ANGULAR_CHANGE * MathUtils.degreesToRadians;
-        float newAngle = bodyAngle + Math.min(change, Math.max(-change, totalRotation));
-        physicsComponent.body.setTransform(physicsComponent.body.getPosition(), newAngle);
+        float desiredAngularVelocity = totalRotation * 60f;
+        float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f/60f);
+        physicsComponent.body.applyTorque(torque, true);
+        //float change = Constants.PLAYER_LEGS_ANGULAR_CHANGE * MathUtils.degreesToRadians;
+        //float newAngle = bodyAngle + Math.min(change, Math.max(-change, totalRotation));
+        //physicsComponent.body.setTransform(physicsComponent.body.getPosition(), newAngle);
 
         positionComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0);
         positionComponent.rotation = physicsComponent.body.getAngle();

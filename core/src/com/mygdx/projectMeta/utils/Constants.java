@@ -61,7 +61,7 @@ public class Constants
     public static final float PLAYER_DENSITY = 0.5f;
     public static final float PLAYER_LINEAR_FORCE = 1f;
 
-    public static final float DEMON_X = 10;
+    public static final float DEMON_X = 12;
     public static final float DEMON_Y = 16;
     public static final float DEMON_WIDTH = 3f;
     public static final float DEMON_HEIGHT = 3f;
