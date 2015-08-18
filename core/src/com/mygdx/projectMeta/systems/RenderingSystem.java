@@ -90,9 +90,9 @@ public class RenderingSystem extends IteratingSystem {
 
         fbBatch = new SpriteBatch();
 
-        batch.setShader(createDefaultShader());
-        shaderProgram = createShader();
-        fbBatch.setShader(shaderProgram);
+        //batch.setShader(createDefaultShader());
+        //shaderProgram = createShader();
+        //fbBatch.setShader(shaderProgram);
         time = 0;
 
         setupCamera();
@@ -167,7 +167,8 @@ public class RenderingSystem extends IteratingSystem {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update(float deltaTime)
+    {
         super.update(deltaTime);
 
         //frameBufferObject.begin();

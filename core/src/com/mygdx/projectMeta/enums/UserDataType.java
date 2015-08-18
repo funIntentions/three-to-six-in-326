@@ -1,6 +1,7 @@
 package com.mygdx.projectMeta.enums;
 
 public enum UserDataType {
-    GROUND,
-    RUNNER
+    HAND,
+    PLAYER,
+    ENTITY
 }

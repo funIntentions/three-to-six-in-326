@@ -10,5 +10,4 @@ import com.mygdx.projectMeta.box2d.UserData;
 public class PhysicsComponent extends Component
 {
     public Body body;
-    public UserData userData;
 }

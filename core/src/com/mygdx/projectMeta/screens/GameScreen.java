@@ -49,6 +49,10 @@ public class GameScreen implements Screen {
         gameEngine.addSystem(new HoldingSystem(physicsEngine.getWorld()));
         gameEngine.addSystem(new SteeringSystem(physicsEngine.getWorld()));
 
+        ContactSystem contactSystem = new ContactSystem(physicsEngine.getWorld());
+        physicsEngine.getWorld().setContactListener(contactSystem);
+        gameEngine.addSystem(contactSystem);
+
         gameEngine.getSystem(InputSystem.class).setCamera(gameEngine.getSystem(RenderingSystem.class).getCamera());
 
         gameWorld = new GameWorld(gameEngine, physicsEngine.getWorld());

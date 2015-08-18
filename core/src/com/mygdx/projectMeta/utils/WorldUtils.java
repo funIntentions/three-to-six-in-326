@@ -1,8 +1,12 @@
 package com.mygdx.projectMeta.utils;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.projectMeta.box2d.RunnerUserData;
+import com.mygdx.projectMeta.box2d.EntityUserData;
+import com.mygdx.projectMeta.box2d.HandUserData;
+import com.mygdx.projectMeta.box2d.PlayerUserData;
+import com.mygdx.projectMeta.box2d.UserData;
 
 /**
  * Created by Dan on 4/22/2015.
@@ -14,7 +18,19 @@ public class WorldUtils {
 
     public static Body createPlayer (World world)
     {
-        return createDynamicOvalBody(world, Constants.PLAYER_X, Constants.PLAYER_Y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT, Constants.PLAYER_DAMPING, Constants.PLAYER_DENSITY);
+        Body mainBody = createDynamicOvalBody(world, Constants.PLAYER_X, Constants.PLAYER_Y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT, Constants.PLAYER_DAMPING, Constants.PLAYER_DENSITY);
+
+        PolygonShape hand = new PolygonShape();
+        hand.setAsBox(0.3f, 0.3f, new Vector2(0.9f, 0.85f), 0);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = hand;
+        fixtureDef.density = Constants.PLAYER_DENSITY;
+        fixtureDef.isSensor = true;
+
+        Fixture handSensorFixture = mainBody.createFixture(fixtureDef);
+        handSensorFixture.setUserData(new HandUserData());
+
+        return mainBody;
     }
 
     public static Body createCouch (World world)
@@ -80,12 +96,11 @@ public class WorldUtils {
         fixtureDef.friction = Constants.FRICTION_FORCE;
         body.createFixture(fixtureDef);
         body.resetMassData();
-        body.setUserData(new RunnerUserData());
 
         return body;
     }
 
-    public static Body createDucky (World world)
+    public static Body createDucky (World world, Entity entity)
     {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.DUCKY_WIDTH, Constants.DUCKY_HEIGHT);
@@ -100,9 +115,8 @@ public class WorldUtils {
         fixtureDef.shape = shape;
         fixtureDef.density = Constants.DUCKY_DENSITY;
         fixtureDef.friction = Constants.FRICTION_FORCE;
-        body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef).setUserData(new EntityUserData(entity));
         body.resetMassData();
-        body.setUserData(new RunnerUserData());
         shape.dispose();
 
         return body;
@@ -121,7 +135,6 @@ public class WorldUtils {
         fixtureDef.shape = shape;
         body.createFixture(fixtureDef);
         body.resetMassData();
-        body.setUserData(new RunnerUserData());
         shape.dispose();
 
         return body;

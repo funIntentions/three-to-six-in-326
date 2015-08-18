@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.projectMeta.box2d.RunnerUserData;
+import com.mygdx.projectMeta.box2d.PlayerUserData;
 import com.mygdx.projectMeta.components.InputComponent;
 import com.mygdx.projectMeta.components.PhysicsComponent;
 import com.mygdx.projectMeta.components.PlayerComponent;
@@ -67,7 +67,7 @@ public class PlayerMovementSystem extends IteratingSystem {
         }
 
         movement = movement.nor();
-        movement.scl(((RunnerUserData) physicsComponent.userData).getLinearForce()); // TODO: remove cast to runner...
+        movement.scl(((PlayerUserData) physicsComponent.body.getUserData()).getLinearForce());
 
         physicsComponent.body.applyLinearImpulse(movement, physicsComponent.body.getWorldCenter(), true);
 

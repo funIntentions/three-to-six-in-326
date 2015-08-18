@@ -2,16 +2,13 @@ package com.mygdx.projectMeta;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.projectMeta.box2d.RunnerUserData;
+import com.mygdx.projectMeta.box2d.EntityUserData;
+import com.mygdx.projectMeta.box2d.PlayerUserData;
 import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.systems.RenderingSystem;
 import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.WorldUtils;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -37,7 +34,7 @@ public class GameWorld
         createToilet();
         createBathtub(player, actionText);
         createDemon(player);
-        createDucky(player);
+        createDucky();
 
         createCamera(player);
     }
@@ -56,7 +53,7 @@ public class GameWorld
         SoundComponent soundComponent = new SoundComponent();
 
         physicsComponent.body = WorldUtils.createPlayer(world);
-        physicsComponent.userData = new RunnerUserData();
+        physicsComponent.body.setUserData(new PlayerUserData());
 
         stateComponent.set(PlayerComponent.STATE_STILL);
         animationComponent.animations.put(PlayerComponent.STATE_WALKING, Assets.playerLegsWalking);
@@ -116,6 +113,8 @@ public class GameWorld
         FurnitureComponent furnitureComponent = new FurnitureComponent();
 
         physicsComponent.body = WorldUtils.createCouch(world);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
+
         textureComponent.textureRegion = Assets.couch;
 
         entity.add(transformComponent);
@@ -140,6 +139,8 @@ public class GameWorld
         AnimationComponent animationComponent = new AnimationComponent();
 
         physicsComponent.body = WorldUtils.createTV(world);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
+
         stateComponent.set(TvComponent.STATE_STATIC_CHANNEL);
         animationComponent.animations.put(TvComponent.STATE_STATIC_CHANNEL, Assets.tvChannelStatic);
 
@@ -155,7 +156,6 @@ public class GameWorld
         return entity;
     }
 
-
     private Entity createDemon(Entity target)
     {
         Entity entity = new Entity();
@@ -166,6 +166,7 @@ public class GameWorld
         SteeringComponent steeringComponent = new SteeringComponent();
 
         physicsComponent.body = WorldUtils.createDemon(world);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
         textureComponent.textureRegion = Assets.demonV1;
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
         steeringComponent.target = target;
@@ -191,6 +192,7 @@ public class GameWorld
         FurnitureComponent furnitureComponent = new FurnitureComponent();
 
         physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.TOILET_X, Constants.TOILET_Y, Constants.TOILET_WIDTH, Constants.TOILET_HEIGHT);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
         textureComponent.textureRegion = Assets.toilet;
 
         entity.add(transformComponent);
@@ -222,6 +224,7 @@ public class GameWorld
         triggerComponent.triggerer = triggerEntity;
         triggerComponent.actionTextEntity = actionText;
         physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.BATHTUB_X, Constants.BATHTUB_Y, Constants.BATHTUB_WIDTH, Constants.BATHTUB_HEIGHT);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
         stateComponent.set(BathtubComponent.STATE_DRAINED);
         animationComponent.animations.put(BathtubComponent.STATE_RUNNING, Assets.bathtubRunning);
         animationComponent.animations.put(BathtubComponent.STATE_DRAINING, Assets.bathtubDraining);
@@ -247,7 +250,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createDucky(Entity triggerEntity)
+    private Entity createDucky()
     {
         Entity entity = new Entity();
 
@@ -257,21 +260,16 @@ public class GameWorld
         FurnitureComponent furnitureComponent = new FurnitureComponent();
         TriggerComponent triggerComponent = new TriggerComponent();
         HoldableComponent holdableComponent = new HoldableComponent();
-        InputComponent inputComponent = new InputComponent();
 
-        physicsComponent.body = WorldUtils.createDucky(world);
+        physicsComponent.body = WorldUtils.createDucky(world, entity);
         textureComponent.textureRegion = Assets.ducky;
-        triggerComponent.triggerer = triggerEntity;
         triggerComponent.range = 2f;
-        holdableComponent.holder = triggerEntity;
 
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
         entity.add(furnitureComponent);
-        entity.add(triggerComponent);
         entity.add(holdableComponent);
-        entity.add(inputComponent);
 
         engine.addEntity(entity);
 

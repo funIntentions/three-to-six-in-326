@@ -13,7 +13,7 @@ import com.mygdx.projectMeta.utils.WorldUtils;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class PhysicsEngine implements ContactListener
+public class PhysicsEngine
 {
     private World world;
     private RayHandler rayHandler;
@@ -22,7 +22,6 @@ public class PhysicsEngine implements ContactListener
 
     public PhysicsEngine() {
         world = WorldUtils.createWorld();
-        world.setContactListener(this);
         rayHandler = new RayHandler(world);
 
         MapBodyManager mapBodyManager = new MapBodyManager(world, Constants.PIXELS_PER_UNIT, null, 1);
@@ -45,22 +44,6 @@ public class PhysicsEngine implements ContactListener
     public RayHandler getRayHandler()
     {
         return rayHandler;
-    }
-
-    public void beginContact(Contact contact) {
-
-    }
-
-    public void endContact(Contact contact) {
-
-    }
-
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
     }
 
     public void dispose()

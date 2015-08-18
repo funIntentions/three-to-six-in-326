@@ -9,6 +9,5 @@ import com.badlogic.gdx.physics.box2d.Joint;
  */
 public class HoldableComponent extends Component {
     public Joint distanceJoint = null;
-    public Entity holder = null;
     public Boolean held = false;
 }
