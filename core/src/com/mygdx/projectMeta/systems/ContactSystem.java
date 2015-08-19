@@ -68,7 +68,7 @@ public class ContactSystem extends IteratingSystem implements ContactListener
             HandUserData handUserData = (HandUserData)fixtureUserDataA;
             EntityUserData entityUserData = (EntityUserData)fixtureUserDataB;
 
-            if (handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
+            if (handUserData.getEntityTouching() != null && handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
                 handUserData.setEntityTouching(null);
 
         } else if (fixtureUserDataB.getUserDataType() == UserDataType.HAND && fixtureUserDataA.getUserDataType() == UserDataType.ENTITY) {
@@ -76,7 +76,7 @@ public class ContactSystem extends IteratingSystem implements ContactListener
             HandUserData handUserData = (HandUserData)fixtureUserDataB;
             EntityUserData entityUserData = (EntityUserData)fixtureUserDataA;
 
-            if (handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
+            if (handUserData.getEntityTouching() != null && handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
                 handUserData.setEntityTouching(null);
         }
     }

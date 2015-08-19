@@ -27,15 +27,15 @@ import java.util.List;
 public class HoldingSystem extends IteratingSystem
 {
     private World world;
-    private ComponentMapper<HoldableComponent> holdableMapper;
     private ComponentMapper<PhysicsComponent> physicsMapper;
+    private ComponentMapper<HandComponent> handMapper;
     private float throwingStrength = 5;
 
     public HoldingSystem(World world) {
-        super(Family.getFor(PhysicsComponent.class, PlayerComponent.class, InputComponent.class));
+        super(Family.getFor(PhysicsComponent.class, PlayerComponent.class, InputComponent.class, HandComponent.class));
 
-        holdableMapper = ComponentMapper.getFor(HoldableComponent.class);
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
+        handMapper = ComponentMapper.getFor(HandComponent.class);
 
         this.world = world;
     }
@@ -44,8 +44,9 @@ public class HoldingSystem extends IteratingSystem
     public void processEntity(Entity entity, float deltaTime)
     {
         PhysicsComponent holdersPhysicsComponent = physicsMapper.get(entity);
-        Array<Fixture> fixtures = holdersPhysicsComponent.body.getFixtureList();
+        HandComponent handComponent = handMapper.get(entity);
 
+        Array<Fixture> fixtures = holdersPhysicsComponent.body.getFixtureList();
         Entity touching = null;
 
         for (Fixture fixture : fixtures)
@@ -56,16 +57,11 @@ public class HoldingSystem extends IteratingSystem
             }
         }
 
-        if (touching == null || !holdableMapper.has(touching) || !physicsMapper.has(touching))
-            return;
-
-        HoldableComponent holdableComponent = holdableMapper.get(touching);
-        PhysicsComponent physicsComponent = physicsMapper.get(touching);
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) // TODO: refactor Input Component... It's not performing very well
         {
-            if (!holdableComponent.held)
+            if (touching != null && handComponent.entityBeingHeld == null)
             {
+                PhysicsComponent physicsComponent = physicsMapper.get(touching);
 
                 PrismaticJointDef jointDef = new PrismaticJointDef();
 
@@ -83,38 +79,25 @@ public class HoldingSystem extends IteratingSystem
 
                 jointDef.enableMotor = true;
 
-//                jointDef.bodyA = holdersPhysicsComponent.body;
-//                jointDef.bodyB = physicsComponent.body;
-//                jointDef.localAnchorA.set(0.6f,0.8f);
-//                jointDef.localAnchorB.set(0,0);
-//                jointDef.localAxisA.set(1,0);
-//                jointDef.referenceAngle = 0;
-//
-//                jointDef.referenceAngle = 0;
-//                jointDef.lowerTranslation = 0.0f;
-//                jointDef.upperTranslation = 0.0f;
-//                jointDef.enableLimit = true;
-//                jointDef.maxMotorForce = 1.0f;
-//                jointDef.motorSpeed = 0.25f;
-//                jointDef.enableMotor = true;
-//
-                holdableComponent.distanceJoint = world.createJoint(jointDef);
-                holdableComponent.held = true;
+                handComponent.distanceJoint = world.createJoint(jointDef);
+                handComponent.entityBeingHeld = touching;
             }
-            else // Drop
+            else if (handComponent.entityBeingHeld != null)
             {
-                world.destroyJoint(holdableComponent.distanceJoint);
-                holdableComponent.distanceJoint = null;
-                holdableComponent.held = false;
+                world.destroyJoint(handComponent.distanceJoint);
+                handComponent.distanceJoint = null;
+                handComponent.entityBeingHeld = null;
             }
         }
 
-        if (holdableComponent.held
+        if (handComponent.entityBeingHeld != null
                 && Gdx.input.isKeyJustPressed(Input.Keys.F)) // Throw
         {
-            world.destroyJoint(holdableComponent.distanceJoint);
-            holdableComponent.distanceJoint = null;
-            holdableComponent.held = false;
+            PhysicsComponent physicsComponent = physicsMapper.get(handComponent.entityBeingHeld);
+
+            world.destroyJoint(handComponent.distanceJoint);
+            handComponent.distanceJoint = null;
+            handComponent.entityBeingHeld = null;
 
             Vector2 force = new Vector2(0,1).rotateRad(holdersPhysicsComponent.body.getAngle());
             force.scl(throwingStrength);

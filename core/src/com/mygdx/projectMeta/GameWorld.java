@@ -51,8 +51,9 @@ public class GameWorld
         StateComponent stateComponent = new StateComponent();
         PlayerComponent playerComponent = new PlayerComponent();
         SoundComponent soundComponent = new SoundComponent();
+        HandComponent handComponent = new HandComponent();
 
-        physicsComponent.body = WorldUtils.createPlayer(world);
+        physicsComponent.body = WorldUtils.createPlayer(world, entity);
         physicsComponent.body.setUserData(new PlayerUserData());
 
         stateComponent.set(PlayerComponent.STATE_STILL);
@@ -69,6 +70,7 @@ public class GameWorld
         entity.add(stateComponent);
         entity.add(playerComponent);
         entity.add(soundComponent);
+        entity.add(handComponent);
 
         engine.addEntity(entity);
 
@@ -112,7 +114,7 @@ public class GameWorld
         PhysicsComponent physicsComponent = new PhysicsComponent();
         FurnitureComponent furnitureComponent = new FurnitureComponent();
 
-        physicsComponent.body = WorldUtils.createCouch(world);
+        physicsComponent.body = WorldUtils.createCouch(world, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
 
         textureComponent.textureRegion = Assets.couch;
@@ -138,7 +140,7 @@ public class GameWorld
         StateComponent stateComponent = new StateComponent();
         AnimationComponent animationComponent = new AnimationComponent();
 
-        physicsComponent.body = WorldUtils.createTV(world);
+        physicsComponent.body = WorldUtils.createTV(world, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
 
         stateComponent.set(TvComponent.STATE_STATIC_CHANNEL);
@@ -165,7 +167,7 @@ public class GameWorld
         PhysicsComponent physicsComponent = new PhysicsComponent();
         SteeringComponent steeringComponent = new SteeringComponent();
 
-        physicsComponent.body = WorldUtils.createDemon(world);
+        physicsComponent.body = WorldUtils.createDemon(world, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
         textureComponent.textureRegion = Assets.demonV1;
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);

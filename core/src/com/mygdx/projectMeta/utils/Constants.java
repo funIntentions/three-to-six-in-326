@@ -29,7 +29,8 @@ public class Constants
     public static final float COUCH_HEIGHT = 1.4f;
     public static final float COUCH_WIDTH = 3.6f;
     public static final float COUCH_DAMPING = 5f;
-    public static final float COUCH_DENSITY = 0.5f;
+    public static final float COUCH_ANGULAR_DAMPING = 75f;
+    public static final float COUCH_DENSITY = 1f;
     public static final float COUCH_LINEAR_FORCE = 1f;
 
     public static final float TV_X = 16;
@@ -37,7 +38,8 @@ public class Constants
     public static final float TV_HEIGHT = 1.1f;
     public static final float TV_WIDTH = 1.1f;
     public static final float TV_DAMPING = 5f;
-    public static final float TV_DENSITY = 0.5f;
+    public static final float TV_ANGULAR_DAMPING = 500f;
+    public static final float TV_DENSITY = 1f;
     public static final float TV_LINEAR_FORCE = 1f;
 
     public static final float DUCKY_X = 20;
@@ -58,6 +60,7 @@ public class Constants
     public static final float PLAYER_WIDTH = 2.3f;
     public static final float PLAYER_HEIGHT = 1.7f;
     public static final float PLAYER_DAMPING = 5f;
+    public static final float PLAYER_ANGULAR_DAMPING = 100f;
     public static final float PLAYER_DENSITY = 0.5f;
     public static final float PLAYER_LINEAR_FORCE = 1f;
 
@@ -65,6 +68,7 @@ public class Constants
     public static final float DEMON_Y = 16;
     public static final float DEMON_WIDTH = 3f;
     public static final float DEMON_HEIGHT = 3f;
+    public static final float DEMON_ANGULAR_DAMPING = 5f;
     public static final float DEMON_DAMPING = 5f;
     public static final float DEMON_DENSITY = 0.5f;
     public static final float DEMON_LINEAR_FORCE = 1f;
