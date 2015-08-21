@@ -6,16 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Created by Dan on 4/22/2015.
  */
-public class Constants
-{
+public class Constants {
     public static final int APP_WIDTH = 1200;
     public static final int APP_HEIGHT = 930;
     public static final int VIEWPORT_WIDTH = 20;
     public static final int PIXELS_PER_UNIT = 16;
     public static final float CAMERA_ZOOM = 1.9f;
-    public static final float SCALE = 1.0f/ Constants.PIXELS_PER_UNIT;
+    public static final float SCALE = 1.0f / Constants.PIXELS_PER_UNIT;
 
-    public static final Vector2 WORLD_GRAVITY = new Vector2(0,0);
+    public static final Vector2 WORLD_GRAVITY = new Vector2(0, 0);
 
     public static final float FRICTION_FORCE = 0.5f;
 
@@ -75,7 +74,7 @@ public class Constants
 
     public static final float PLAYER_LEGS_ANGULAR_CHANGE = 4f; // degree rotation per time step
     public static final float PLAYER_TORSO_ANGULAR_CHANGE = 6.5f; // degree rotation per time step
-    public static final float PLAYER_TORSO_DIFFERENCE = MathUtils.PI/4.0f;
+    public static final float PLAYER_TORSO_DIFFERENCE = MathUtils.PI / 4.0f;
 
     public static final int FORWARD = 1;
     public static final int BACKWARD = 1 << 2;

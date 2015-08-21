@@ -7,8 +7,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.projectMeta.components.StateComponent;
 import com.mygdx.projectMeta.components.TextComponent;
 
-import javax.xml.soap.Text;
-
 /**
  * Created by Dan on 7/19/2015.
  */
@@ -29,10 +27,8 @@ public class TextSystem extends IteratingSystem {
         TextComponent text = textMapper.get(entity);
         StateComponent state = stateMapper.get(entity);
 
-        if (state.get() == TextComponent.STATE_DISPLAYING)
-        {
-            if (state.time > text.displayTime)
-            {
+        if (state.get() == TextComponent.STATE_DISPLAYING) {
+            if (state.time > text.displayTime) {
                 state.set(TextComponent.STATE_HIDDEN);
             }
         }

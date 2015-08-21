@@ -2,7 +2,6 @@ package com.mygdx.projectMeta.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.projectMeta.Ray;
 
 import java.util.ArrayList;
@@ -11,8 +10,7 @@ import java.util.List;
 /**
  * Created by Dan on 7/25/2015.
  */
-public class SteeringComponent extends Component
-{
+public class SteeringComponent extends Component {
     public Entity target = null;
     /*public Vector2 wanderTarget = null;
     public float wanderOffset = 0;

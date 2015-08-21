@@ -1,7 +1,5 @@
 package com.mygdx.projectMeta.systems;
 
-import java.util.Comparator;
-
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -32,8 +30,9 @@ import com.mygdx.projectMeta.Ray;
 import com.mygdx.projectMeta.components.SteeringComponent;
 import com.mygdx.projectMeta.components.TextureComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
-
 import com.mygdx.projectMeta.utils.Constants;
+
+import java.util.Comparator;
 
 public class RenderingSystem extends IteratingSystem {
 
@@ -63,7 +62,7 @@ public class RenderingSystem extends IteratingSystem {
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
         steeringMapper = ComponentMapper.getFor(SteeringComponent.class);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer((TiledMap)Assets.map, Constants.SCALE);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer((TiledMap) Assets.map, Constants.SCALE);
         physicsDebugRenderer = new Box2DDebugRenderer();
         debugShapeRenderer = new ShapeRenderer();
 
@@ -72,7 +71,7 @@ public class RenderingSystem extends IteratingSystem {
         comparator = new Comparator<Entity>() {
             @Override
             public int compare(Entity entityA, Entity entityB) {
-                return (int)Math.signum(transformM.get(entityB).position.z -
+                return (int) Math.signum(transformM.get(entityB).position.z -
                         transformM.get(entityA).position.z);
             }
         };
@@ -110,7 +109,7 @@ public class RenderingSystem extends IteratingSystem {
         camera.zoom = Constants.CAMERA_ZOOM;
     }
 
-    static public ShaderProgram createDefaultShader () {
+    static public ShaderProgram createDefaultShader() {
         String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -140,11 +139,12 @@ public class RenderingSystem extends IteratingSystem {
                 + "}";
 
         ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
-        if (shader.isCompiled() == false) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        if (shader.isCompiled() == false)
+            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         return shader;
     }
 
-    static public ShaderProgram createShader () {
+    static public ShaderProgram createShader() {
         String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -162,13 +162,13 @@ public class RenderingSystem extends IteratingSystem {
         String fragmentShader = Assets.fragmentShader;
 
         ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
-        if (shader.isCompiled() == false) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        if (shader.isCompiled() == false)
+            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         return shader;
     }
 
     @Override
-    public void update(float deltaTime)
-    {
+    public void update(float deltaTime) {
         super.update(deltaTime);
 
         //frameBufferObject.begin();
@@ -217,14 +217,11 @@ public class RenderingSystem extends IteratingSystem {
         debugShapeRenderer.setProjectionMatrix(camera.combined);
         debugShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugShapeRenderer.setColor(0, 0, 1, 1);
-        for (Entity entity : renderQueue)
-        {
-            if (steeringMapper.has(entity))
-            {
+        for (Entity entity : renderQueue) {
+            if (steeringMapper.has(entity)) {
                 SteeringComponent steeringComponent = steeringMapper.get(entity);
 
-                for (Ray ray : steeringComponent.feelers)
-                {
+                for (Ray ray : steeringComponent.feelers) {
                     Vector2 p1 = new Vector2(ray.position);
                     Vector2 p2 = new Vector2(ray.position).add((new Vector2(ray.direction).scl(ray.length)));
                     debugShapeRenderer.line(p1.x, p1.y, p2.x, p2.y);

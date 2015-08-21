@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.projectMeta.box2d.EntityUserData;
 import com.mygdx.projectMeta.box2d.HandUserData;
-import com.mygdx.projectMeta.box2d.PlayerUserData;
-import com.mygdx.projectMeta.box2d.UserData;
 
 /**
  * Created by Dan on 4/22/2015.
@@ -16,8 +14,7 @@ public class WorldUtils {
         return new World(Constants.WORLD_GRAVITY, true);
     }
 
-    public static Body createPlayer (World world, Entity entity)
-    {
+    public static Body createPlayer(World world, Entity entity) {
         Body mainBody = createDynamicOvalBody(world, Constants.PLAYER_X, Constants.PLAYER_Y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT, Constants.PLAYER_DAMPING, Constants.PLAYER_ANGULAR_DAMPING, Constants.PLAYER_DENSITY, entity);
 
         PolygonShape hand = new PolygonShape();
@@ -33,33 +30,28 @@ public class WorldUtils {
         return mainBody;
     }
 
-    public static Body createCouch (World world, Entity entity)
-    {
+    public static Body createCouch(World world, Entity entity) {
         return createDynamicBoxBody(world, Constants.COUCH_X, Constants.COUCH_Y, Constants.COUCH_WIDTH, Constants.COUCH_HEIGHT, Constants.COUCH_DAMPING, Constants.COUCH_ANGULAR_DAMPING, Constants.COUCH_DENSITY, entity);
     }
 
-    public static Body createTV (World world, Entity entity)
-    {
+    public static Body createTV(World world, Entity entity) {
         return createDynamicBoxBody(world, Constants.TV_X, Constants.TV_Y, Constants.TV_WIDTH, Constants.TV_HEIGHT, Constants.TV_DAMPING, Constants.TV_ANGULAR_DAMPING, Constants.TV_DENSITY, entity);
     }
 
-    public static Body createDemon(World world, Entity entity)
-    {
+    public static Body createDemon(World world, Entity entity) {
         return createDynamicOvalBody(world, Constants.DEMON_X, Constants.DEMON_Y, Constants.DEMON_WIDTH, Constants.DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING, Constants.DEMON_DENSITY, entity);
     }
 
-    public static Body createDynamicOvalBody(World world, float x, float y, float width, float height, float damping, float angularDamping, float density, Entity entity)
-    {
+    public static Body createDynamicOvalBody(World world, float x, float y, float width, float height, float damping, float angularDamping, float density, Entity entity) {
         int segments = 8; //(the more the more precise shape is, but the more time it takes to do collision detection)
-        float segment = (float)(2.0f * Math.PI / (float)segments);
+        float segment = (float) (2.0f * Math.PI / (float) segments);
 
         Vector2 vertices[] = new Vector2[segments];
-        float halfWidth = width/2.0f;
-        float halfHeight = height/2.0f;
+        float halfWidth = width / 2.0f;
+        float halfHeight = height / 2.0f;
 
-        for (int i = 0; i < segments; i++)
-        {
-            vertices[i] = new Vector2((float)(halfWidth * Math.cos(segment * i)),(float)(halfHeight * Math.sin(segment * i)));
+        for (int i = 0; i < segments; i++) {
+            vertices[i] = new Vector2((float) (halfWidth * Math.cos(segment * i)), (float) (halfHeight * Math.sin(segment * i)));
         }
 
         PolygonShape shape = new PolygonShape();
@@ -71,8 +63,7 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createDynamicBoxBody(World world, float x, float y, float width, float height, float damping, float angularDamping, float density, Entity entity)
-    {
+    public static Body createDynamicBoxBody(World world, float x, float y, float width, float height, float damping, float angularDamping, float density, Entity entity) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 
@@ -82,8 +73,7 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createDynamicBody(World world, Shape shape, float x, float y, float damping, float angularDamping, float density, Entity entity)
-    {
+    public static Body createDynamicBody(World world, Shape shape, float x, float y, float damping, float angularDamping, float density, Entity entity) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
@@ -100,8 +90,7 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createDucky (World world, Entity entity)
-    {
+    public static Body createDucky(World world, Entity entity) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.DUCKY_WIDTH, Constants.DUCKY_HEIGHT);
 
@@ -122,8 +111,7 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createStaticFurniture(World world, float x, float y, float width, float height)
-    {
+    public static Body createStaticFurniture(World world, float x, float y, float width, float height) {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width, height);
 

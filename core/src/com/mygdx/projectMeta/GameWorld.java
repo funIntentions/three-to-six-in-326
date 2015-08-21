@@ -13,19 +13,16 @@ import com.mygdx.projectMeta.utils.WorldUtils;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class GameWorld
-{
+public class GameWorld {
     Engine engine;
     World world;
 
-    public GameWorld(Engine engine, World world)
-    {
+    public GameWorld(Engine engine, World world) {
         this.engine = engine;
         this.world = world;
     }
 
-    public void createWorld()
-    {
+    public void createWorld() {
         Entity actionText = createActionTextEntity();
         Entity player = createPlayer();
         createPlayerTorso(player);
@@ -39,8 +36,7 @@ public class GameWorld
         createCamera(player);
     }
 
-    private Entity createPlayer()
-    {
+    private Entity createPlayer() {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -77,8 +73,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createPlayerTorso(Entity player)
-    {
+    private Entity createPlayerTorso(Entity player) {
         Entity entity = new Entity();
 
         TorsoComponent torsoComponent = new TorsoComponent();
@@ -105,8 +100,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createCouch()
-    {
+    private Entity createCouch() {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -129,8 +123,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createTV()
-    {
+    private Entity createTV() {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -158,8 +151,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createDemon(Entity target)
-    {
+    private Entity createDemon(Entity target) {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -184,8 +176,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createToilet()
-    {
+    private Entity createToilet() {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -207,8 +198,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createBathtub(Entity triggerEntity, Entity actionText)
-    {
+    private Entity createBathtub(Entity triggerEntity, Entity actionText) {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -252,8 +242,7 @@ public class GameWorld
         return entity;
     }
 
-    private Entity createDucky()
-    {
+    private Entity createDucky() {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -278,8 +267,7 @@ public class GameWorld
         return entity;
     }
 
-    public Entity createActionTextEntity()
-    {
+    public Entity createActionTextEntity() {
         Entity entity = new Entity();
 
         TransformComponent transformComponent = new TransformComponent();
@@ -301,8 +289,7 @@ public class GameWorld
         return entity;
     }
 
-    private void createCamera(Entity target)
-    {
+    private void createCamera(Entity target) {
         Entity entity = new Entity();
 
         CameraComponent cameraComponent = new CameraComponent();

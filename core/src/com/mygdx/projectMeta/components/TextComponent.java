@@ -1,13 +1,12 @@
 package com.mygdx.projectMeta.components;
 
-import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 /**
  * Created by Dan on 7/19/2015.
  */
-public class TextComponent extends Component
-{
+public class TextComponent extends Component {
     public static int STATE_DISPLAYING = 0;
     public static int STATE_HIDDEN = 1;
 

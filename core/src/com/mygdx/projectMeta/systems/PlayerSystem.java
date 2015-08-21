@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.audio.Sound;
 import com.mygdx.projectMeta.components.*;
 
 /**
@@ -40,22 +39,17 @@ public class PlayerSystem extends IteratingSystem {
         SoundComponent soundComponent = soundMapper.get(entity);
 
         if (stateComponent.get() == PlayerComponent.STATE_WALKING
-                && inputComponent.movementInput == 0)
-        {
+                && inputComponent.movementInput == 0) {
             stateComponent.set(PlayerComponent.STATE_STILL);
 
-            if (!soundComponent.sound.isEmpty())
-            {
+            if (!soundComponent.sound.isEmpty()) {
                 soundComponent.sound.get(0).stop();
             }
-        }
-        else if (stateComponent.get() != PlayerComponent.STATE_WALKING
-                && inputComponent.movementInput != 0)
-        {
+        } else if (stateComponent.get() != PlayerComponent.STATE_WALKING
+                && inputComponent.movementInput != 0) {
             stateComponent.set(PlayerComponent.STATE_WALKING);
 
-            if (!soundComponent.sound.isEmpty())
-            {
+            if (!soundComponent.sound.isEmpty()) {
                 soundComponent.sound.get(0).loop();
             }
         }

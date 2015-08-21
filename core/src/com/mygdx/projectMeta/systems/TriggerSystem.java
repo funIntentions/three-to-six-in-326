@@ -1,26 +1,24 @@
 package com.mygdx.projectMeta.systems;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.projectMeta.components.*;
+import com.mygdx.projectMeta.components.StateComponent;
+import com.mygdx.projectMeta.components.TextComponent;
+import com.mygdx.projectMeta.components.TransformComponent;
+import com.mygdx.projectMeta.components.TriggerComponent;
 
 /**
  * Created by Dan on 7/19/2015.
  */
-public class TriggerSystem extends IteratingSystem
-{
+public class TriggerSystem extends IteratingSystem {
     private ComponentMapper<TriggerComponent> triggerMapper;
     private ComponentMapper<TransformComponent> transformMapper;
     private ComponentMapper<StateComponent> stateMapper;
 
-    public TriggerSystem()
-    {
+    public TriggerSystem() {
         super(Family.getFor(TriggerComponent.class,
                 TransformComponent.class));
 
@@ -29,13 +27,11 @@ public class TriggerSystem extends IteratingSystem
         stateMapper = ComponentMapper.getFor(StateComponent.class);
     }
 
-    public void processEntity(Entity entity, float deltaTime)
-    {
+    public void processEntity(Entity entity, float deltaTime) {
         TransformComponent transformComponent = transformMapper.get(entity);
         TriggerComponent triggerComponent = triggerMapper.get(entity);
 
-        if (triggerComponent.triggerer != null)
-        {
+        if (triggerComponent.triggerer != null) {
             TransformComponent triggererTransformComponent = transformMapper.get(triggerComponent.triggerer);
 
             Vector3 pos1 = transformComponent.position;
@@ -45,8 +41,7 @@ public class TriggerSystem extends IteratingSystem
 
             triggerComponent.triggered = (distance <= triggerComponent.range);
 
-            if (triggerComponent.triggered && triggerComponent.actionTextEntity != null)
-            {
+            if (triggerComponent.triggered && triggerComponent.actionTextEntity != null) {
                 TransformComponent textTransformComponent = transformMapper.get(triggerComponent.actionTextEntity);
                 StateComponent textStateComponent = stateMapper.get(triggerComponent.actionTextEntity);
                 textTransformComponent.position.set(pos2.x + 1, pos2.y, textTransformComponent.position.z);

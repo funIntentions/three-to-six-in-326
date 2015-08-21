@@ -14,16 +14,14 @@ import com.mygdx.projectMeta.utils.Constants;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class TorsoSystem extends IteratingSystem
-{
+public class TorsoSystem extends IteratingSystem {
     private int previousState;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<TorsoComponent> cm;
     private ComponentMapper<StateComponent> stateMapper;
     private ComponentMapper<AnimationComponent> animationMapper;
 
-    public TorsoSystem()
-    {
+    public TorsoSystem() {
         super(Family.getFor(TorsoComponent.class, TransformComponent.class, StateComponent.class, AnimationComponent.class));
 
         tm = ComponentMapper.getFor(TransformComponent.class);
@@ -34,8 +32,7 @@ public class TorsoSystem extends IteratingSystem
     }
 
     @Override
-    public void processEntity(Entity entity, float deltaTime)
-    {
+    public void processEntity(Entity entity, float deltaTime) {
         TransformComponent positionComponent = tm.get(entity);
         TorsoComponent torsoComponent = cm.get(entity);
         StateComponent stateComponent = stateMapper.get(entity);
@@ -45,19 +42,15 @@ public class TorsoSystem extends IteratingSystem
         Entity target = torsoComponent.target;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)
-                && stateComponent.get() != PlayerComponent.STATE_GRAB)
-        {
+                && stateComponent.get() != PlayerComponent.STATE_GRAB) {
             previousState = stateComponent.get();
             stateComponent.set(PlayerComponent.STATE_GRAB);
-        }
-        else if (stateComponent.get() == PlayerComponent.STATE_GRAB
-                && animation.getAnimationDuration() <= stateComponent.time)
-        {
+        } else if (stateComponent.get() == PlayerComponent.STATE_GRAB
+                && animation.getAnimationDuration() <= stateComponent.time) {
             stateComponent.set(previousState);
         }
 
-        if (tm.has(target))
-        {
+        if (tm.has(target)) {
             TransformComponent targetPositionComponent = tm.get(target);
             StateComponent targetStateComponent = stateMapper.get(target);
 
@@ -65,8 +58,8 @@ public class TorsoSystem extends IteratingSystem
                 stateComponent.set(targetStateComponent.get());
 
             float totalRotation = targetPositionComponent.desiredRotation - positionComponent.rotation;
-            while ( totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
-            while ( totalRotation >  180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
+            while (totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
+            while (totalRotation > 180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
             float change = Constants.PLAYER_TORSO_ANGULAR_CHANGE * MathUtils.degreesToRadians;
             float newAngle = positionComponent.rotation + Math.min(change, Math.max(-change, totalRotation));
 

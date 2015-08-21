@@ -40,8 +40,8 @@ public class CameraSystem extends IteratingSystem {
         float lerp = 6f;
         Vector3 position = camera.camera.position;
         //TODO: Bit of a hack, floating point number produced during lerp causes texture bleeding/gaps. Multiplying by a 1000, rounding, then dividing by 1000 fixes this... (just rounding makes the camera lag)
-        position.x += (float)Math.round(1000f * (target.position.x - position.x) * lerp * deltaTime)/1000f;
-        position.y += (float)Math.round(1000f * (target.position.y - position.y) * lerp * deltaTime)/1000f;
+        position.x += (float) Math.round(1000f * (target.position.x - position.x) * lerp * deltaTime) / 1000f;
+        position.y += (float) Math.round(1000f * (target.position.y - position.y) * lerp * deltaTime) / 1000f;
         camera.camera.position.set(position);
         camera.camera.update();
     }

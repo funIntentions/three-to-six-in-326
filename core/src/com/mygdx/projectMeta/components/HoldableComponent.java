@@ -1,7 +1,6 @@
 package com.mygdx.projectMeta.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.Joint;
 
 /**

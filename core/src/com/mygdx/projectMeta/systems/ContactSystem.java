@@ -14,13 +14,11 @@ import com.mygdx.projectMeta.enums.UserDataType;
 /**
  * Created by Dan on 8/17/2015.
  */
-public class ContactSystem extends IteratingSystem implements ContactListener
-{
+public class ContactSystem extends IteratingSystem implements ContactListener {
     private World world;
     private ComponentMapper<PhysicsComponent> physicsMapper;
 
-    public ContactSystem(World world)
-    {
+    public ContactSystem(World world) {
         super(Family.getFor(PhysicsComponent.class));
 
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
@@ -36,21 +34,21 @@ public class ContactSystem extends IteratingSystem implements ContactListener
 
 
     public void beginContact(Contact contact) {
-        UserData fixtureUserDataA = (UserData)contact.getFixtureA().getUserData();
-        UserData fixtureUserDataB = (UserData)contact.getFixtureB().getUserData();
+        UserData fixtureUserDataA = (UserData) contact.getFixtureA().getUserData();
+        UserData fixtureUserDataB = (UserData) contact.getFixtureB().getUserData();
 
         if (fixtureUserDataA == null || fixtureUserDataB == null)
             return;
 
         if (fixtureUserDataA.getUserDataType() == UserDataType.HAND && fixtureUserDataB.getUserDataType() == UserDataType.ENTITY) {
-            HandUserData handUserData = (HandUserData)fixtureUserDataA;
-            EntityUserData entityUserData = (EntityUserData)fixtureUserDataB;
+            HandUserData handUserData = (HandUserData) fixtureUserDataA;
+            EntityUserData entityUserData = (EntityUserData) fixtureUserDataB;
 
             handUserData.setEntityTouching(entityUserData.getEntity());
         } else if (fixtureUserDataB.getUserDataType() == UserDataType.HAND && fixtureUserDataA.getUserDataType() == UserDataType.ENTITY) {
 
-            HandUserData handUserData = (HandUserData)fixtureUserDataB;
-            EntityUserData entityUserData = (EntityUserData)fixtureUserDataA;
+            HandUserData handUserData = (HandUserData) fixtureUserDataB;
+            EntityUserData entityUserData = (EntityUserData) fixtureUserDataA;
 
             handUserData.setEntityTouching(entityUserData.getEntity());
         }
@@ -58,23 +56,23 @@ public class ContactSystem extends IteratingSystem implements ContactListener
 
     public void endContact(Contact contact) {
 
-        UserData fixtureUserDataA = (UserData)contact.getFixtureA().getUserData();
-        UserData fixtureUserDataB = (UserData)contact.getFixtureB().getUserData();
+        UserData fixtureUserDataA = (UserData) contact.getFixtureA().getUserData();
+        UserData fixtureUserDataB = (UserData) contact.getFixtureB().getUserData();
 
         if (fixtureUserDataA == null || fixtureUserDataB == null)
             return;
 
         if (fixtureUserDataA.getUserDataType() == UserDataType.HAND && fixtureUserDataB.getUserDataType() == UserDataType.ENTITY) {
-            HandUserData handUserData = (HandUserData)fixtureUserDataA;
-            EntityUserData entityUserData = (EntityUserData)fixtureUserDataB;
+            HandUserData handUserData = (HandUserData) fixtureUserDataA;
+            EntityUserData entityUserData = (EntityUserData) fixtureUserDataB;
 
             if (handUserData.getEntityTouching() != null && handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
                 handUserData.setEntityTouching(null);
 
         } else if (fixtureUserDataB.getUserDataType() == UserDataType.HAND && fixtureUserDataA.getUserDataType() == UserDataType.ENTITY) {
 
-            HandUserData handUserData = (HandUserData)fixtureUserDataB;
-            EntityUserData entityUserData = (EntityUserData)fixtureUserDataA;
+            HandUserData handUserData = (HandUserData) fixtureUserDataB;
+            EntityUserData entityUserData = (EntityUserData) fixtureUserDataA;
 
             if (handUserData.getEntityTouching() != null && handUserData.getEntityTouching().getId() == entityUserData.getEntity().getId())
                 handUserData.setEntityTouching(null);

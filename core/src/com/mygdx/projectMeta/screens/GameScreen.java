@@ -1,9 +1,7 @@
 package com.mygdx.projectMeta.screens;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
@@ -59,8 +57,7 @@ public class GameScreen implements Screen {
         gameWorld.createWorld();
     }
 
-    private void setupSpriteBatch()
-    {
+    private void setupSpriteBatch() {
         batch = new SpriteBatch();
         Vector3 position = new Vector3(0, 0, 0f);
         Quaternion rotation = new Quaternion();
@@ -74,8 +71,7 @@ public class GameScreen implements Screen {
         update(delta);
     }
 
-    public void update(float delta)
-    {
+    public void update(float delta) {
         physicsEngine.update(delta);
         gameEngine.update(delta);
     }

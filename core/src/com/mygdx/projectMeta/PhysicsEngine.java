@@ -1,11 +1,7 @@
 package com.mygdx.projectMeta;
 
 import box2dLight.RayHandler;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.projectMeta.utils.BodyUtils;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.MapBodyManager;
 import com.mygdx.projectMeta.utils.WorldUtils;
@@ -13,8 +9,7 @@ import com.mygdx.projectMeta.utils.WorldUtils;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class PhysicsEngine
-{
+public class PhysicsEngine {
     private World world;
     private RayHandler rayHandler;
     private final float TIME_STEP = 1 / 300f;
@@ -41,13 +36,11 @@ public class PhysicsEngine
         return world;
     }
 
-    public RayHandler getRayHandler()
-    {
+    public RayHandler getRayHandler() {
         return rayHandler;
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         rayHandler.dispose();
         world.dispose();
     }

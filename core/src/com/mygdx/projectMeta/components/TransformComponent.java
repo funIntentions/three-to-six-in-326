@@ -7,8 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class TransformComponent extends Component
-{
+public class TransformComponent extends Component {
     public final Vector3 position = new Vector3();
     public final Vector2 scale = new Vector2(1.0f, 1.0f);
     public float rotation = 0.0f;

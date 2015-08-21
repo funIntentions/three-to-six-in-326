@@ -12,8 +12,7 @@ import com.mygdx.projectMeta.components.TransformComponent;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class FurnitureMovementSystem extends IteratingSystem
-{
+public class FurnitureMovementSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<PhysicsComponent> pm;
 
@@ -25,8 +24,7 @@ public class FurnitureMovementSystem extends IteratingSystem
     }
 
     @Override
-    public void processEntity(Entity entity, float deltaTime)
-    {
+    public void processEntity(Entity entity, float deltaTime) {
         PhysicsComponent physicsComponent = pm.get(entity);
         TransformComponent transformComponent = tm.get(entity);
 

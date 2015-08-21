@@ -1,54 +1,30 @@
 package com.mygdx.projectMeta.utils;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.PolylineMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.maps.*;
+import com.badlogic.gdx.maps.objects.*;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.JsonValue.JsonIterator;
+
+import java.util.Iterator;
 
 /**
  * @author David Saltares Márquez david.saltares at gmail.com
  * @brief Populates box2D world with static bodies using data from a map object
- *
+ * <p/>
  * It uses a JSON formatted materials file to assign properties to the static
  * bodies it creates. To assign a material to a shape add a "material" custom
  * property to the shape in question using your editor of choice (Tiled, Gleed,
  * Tide...). Such file uses the following structure:
-
- @code
- [
- { "name" : "ice", "density" : 1.0, "restitution" : 0.0, "friction" : 0.1 },
- { "name" : "elastic", "density" : 1.0, "restitution" : 0.8, "friction" : 0.8 }
- ]
- @endcode
-
-  * In case no material property is found, it'll get a default one.
- *
+ * @code [
+ * { "name" : "ice", "density" : 1.0, "restitution" : 0.0, "friction" : 0.1 },
+ * { "name" : "elastic", "density" : 1.0, "restitution" : 0.8, "friction" : 0.8 }
+ * ]
+ * @endcode In case no material property is found, it'll get a default one.
  */
 public class MapBodyManager {
     private Logger logger;
@@ -58,10 +34,10 @@ public class MapBodyManager {
     private ObjectMap<String, FixtureDef> materials = new ObjectMap<String, FixtureDef>();
 
     /**
-     * @param world box2D world to work with.
+     * @param world         box2D world to work with.
      * @param unitsPerPixel conversion ratio from pixel units to box2D metres.
      * @param materialsFile json file with specific physics properties to be assigned to newly created bodies.
-     * @param loggingLevel verbosity of the embedded logger.
+     * @param loggingLevel  verbosity of the embedded logger.
      */
     public MapBodyManager(World world, float unitsPerPixel, FileHandle materialsFile, int loggingLevel) {
         logger = new Logger("MapBodyManager", loggingLevel);
@@ -91,7 +67,7 @@ public class MapBodyManager {
     }
 
     /**
-     * @param map map to be used to create the static bodies.
+     * @param map       map to be used to create the static bodies.
      * @param layerName name of the layer that contains the shapes.
      */
     public void createPhysics(Map map, String layerName) {
@@ -105,43 +81,36 @@ public class MapBodyManager {
         MapObjects objects = layer.getObjects();
         Iterator<MapObject> objectIt = objects.iterator();
 
-        while(objectIt.hasNext()) {
+        while (objectIt.hasNext()) {
             MapObject object = objectIt.next();
 
-            if (object instanceof TextureMapObject){
+            if (object instanceof TextureMapObject) {
                 continue;
             }
 
             Shape shape;
             BodyDef bodyDef = new BodyDef();
 
-            String bodyType = (String)object.getProperties().get("Body");
+            String bodyType = (String) object.getProperties().get("Body");
 
-            if (bodyType != null && (bodyType.equalsIgnoreCase("dynamic")))
-            {
+            if (bodyType != null && (bodyType.equalsIgnoreCase("dynamic"))) {
                 bodyDef.type = BodyDef.BodyType.DynamicBody;
                 bodyDef.linearDamping = Constants.COUCH_DAMPING;
                 bodyDef.angularDamping = Constants.COUCH_DAMPING;
-            }
-            else
-            {
+            } else {
                 bodyDef.type = BodyDef.BodyType.StaticBody;
             }
 
             if (object instanceof RectangleMapObject) {
-                RectangleMapObject rectangle = (RectangleMapObject)object;
+                RectangleMapObject rectangle = (RectangleMapObject) object;
                 shape = getRectangle(rectangle);
-            }
-            else if (object instanceof PolygonMapObject) {
-                shape = getPolygon((PolygonMapObject)object);
-            }
-            else if (object instanceof PolylineMapObject) {
-                shape = getPolyline((PolylineMapObject)object);
-            }
-            else if (object instanceof CircleMapObject) {
-                shape = getCircle((CircleMapObject)object);
-            }
-            else {
+            } else if (object instanceof PolygonMapObject) {
+                shape = getPolygon((PolygonMapObject) object);
+            } else if (object instanceof PolylineMapObject) {
+                shape = getPolyline((PolylineMapObject) object);
+            } else if (object instanceof CircleMapObject) {
+                shape = getCircle((CircleMapObject) object);
+            } else {
                 logger.error("non suported shape " + object);
                 continue;
             }
@@ -222,7 +191,7 @@ public class MapBodyManager {
         Rectangle rectangle = rectangleObject.getRectangle();
         PolygonShape polygon = new PolygonShape();
         Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / units,
-                (rectangle.y + rectangle.height * 0.5f ) / units);
+                (rectangle.y + rectangle.height * 0.5f) / units);
         polygon.setAsBox(rectangle.width * 0.5f / units,
                 rectangle.height * 0.5f / units,
                 size,

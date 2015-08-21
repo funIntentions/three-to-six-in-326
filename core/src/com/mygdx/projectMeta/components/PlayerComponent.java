@@ -5,8 +5,7 @@ import com.badlogic.ashley.core.Component;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class PlayerComponent extends Component
-{
+public class PlayerComponent extends Component {
     public static final int STATE_WALKING = 0;
     public static final int STATE_STILL = 1;
     public static final int STATE_GRAB = 2;

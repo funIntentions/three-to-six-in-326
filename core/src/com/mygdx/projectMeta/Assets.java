@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,15 +12,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.mygdx.projectMeta.utils.Constants;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by Dan on 7/18/2015.
  */
-public class Assets
-{
+public class Assets {
     public static Map map;
 
     public static TextureRegion couch;
@@ -63,18 +58,15 @@ public class Assets
 
     private static AssetManager assetManager = new AssetManager();
 
-    private static Texture loadTexture(String file)
-    {
+    private static Texture loadTexture(String file) {
         return new Texture(Gdx.files.internal(file));
     }
 
-    private static Sound loadSound(String file)
-    {
+    private static Sound loadSound(String file) {
         return Gdx.audio.newSound(Gdx.files.internal(file));
     }
 
-    public static void load()
-    {
+    public static void load() {
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.magFilter = Texture.TextureFilter.Nearest;
         textureParameter.minFilter = Texture.TextureFilter.Nearest;
@@ -227,8 +219,7 @@ public class Assets
         map = new TmxMapLoader().load("apartment.tmx");
     }
 
-    public static void dispose()
-    {
+    public static void dispose() {
         map.dispose();
         playerTexture.dispose();
         toiletTexture.dispose();

@@ -42,8 +42,7 @@ public class PlayerMovementSystem extends IteratingSystem {
         Vector2 currentVelocity = physicsComponent.body.getLinearVelocity();
         float currentVelocitySqr = currentVelocity.len2();
 
-        if (currentVelocitySqr > Constants.MAX_VELOCITY_SQR)
-        {
+        if (currentVelocitySqr > Constants.MAX_VELOCITY_SQR) {
             float factor = Constants.MAX_VELOCITY_SQR / currentVelocitySqr;
             currentVelocity.scl(factor);
             physicsComponent.body.setLinearVelocity(currentVelocity);
@@ -82,10 +81,10 @@ public class PlayerMovementSystem extends IteratingSystem {
         bodyAngle = physicsComponent.body.getAngle();
         float nextAngle = bodyAngle + physicsComponent.body.getAngularVelocity() / 60.0f;
         float totalRotation = desiredAngle - nextAngle;
-        while ( totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
-        while ( totalRotation >  180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
+        while (totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
+        while (totalRotation > 180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
         float desiredAngularVelocity = totalRotation * 60f;
-        float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f/60f);
+        float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f / 60f);
         physicsComponent.body.applyTorque(torque, true);
         //float change = Constants.PLAYER_LEGS_ANGULAR_CHANGE * MathUtils.degreesToRadians;
         //float newAngle = bodyAngle + Math.min(change, Math.max(-change, totalRotation));
@@ -97,13 +96,13 @@ public class PlayerMovementSystem extends IteratingSystem {
     }
 
     public Vector2 getFacingDirection() {
-        Vector2 facing = new Vector2(0, 1).rotate(bodyAngle * (float)(180/Math.PI));
+        Vector2 facing = new Vector2(0, 1).rotate(bodyAngle * (float) (180 / Math.PI));
         return facing;
     }
 
 
     public Vector2 getRightDirection() {
-        Vector2 right = new Vector2(1, 0).rotate(bodyAngle * (float)(180/Math.PI));
+        Vector2 right = new Vector2(1, 0).rotate(bodyAngle * (float) (180 / Math.PI));
         return right;
     }
 }

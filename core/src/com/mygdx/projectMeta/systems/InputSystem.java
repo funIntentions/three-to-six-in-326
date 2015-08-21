@@ -16,11 +16,10 @@ import com.mygdx.projectMeta.utils.Constants;
 /**
  * Created by Dan on 7/18/2015.
  */
-public class InputSystem extends IteratingSystem
-{
+public class InputSystem extends IteratingSystem {
     private boolean actionPressed;
     private int movementInput = 0;
-    private Vector2 faceThis = new Vector2(0,0);
+    private Vector2 faceThis = new Vector2(0, 0);
     private Camera camera = null;
 
     private ComponentMapper<InputComponent> mm;
@@ -33,11 +32,11 @@ public class InputSystem extends IteratingSystem
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int keycode) {
 
-                if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+                if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
                     startMoving(Constants.BACKWARD);
                 }
 
-                if(keycode == Input.Keys.UP || keycode == Input.Keys.W) {
+                if (keycode == Input.Keys.UP || keycode == Input.Keys.W) {
                     startMoving(Constants.FORWARD);
                 }
 
@@ -54,11 +53,11 @@ public class InputSystem extends IteratingSystem
 
             public boolean keyUp(int keycode) {
 
-                if(keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
+                if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
                     stopMoving(Constants.BACKWARD);
                 }
 
-                if(keycode == Input.Keys.UP || keycode == Input.Keys.W) {
+                if (keycode == Input.Keys.UP || keycode == Input.Keys.W) {
                     stopMoving(Constants.FORWARD);
                 }
 
@@ -76,8 +75,7 @@ public class InputSystem extends IteratingSystem
         });
     }
 
-    public void setCamera(Camera camera)
-    {
+    public void setCamera(Camera camera) {
         this.camera = camera;
     }
 
@@ -96,15 +94,12 @@ public class InputSystem extends IteratingSystem
         inputComponent.actionInput = actionPressed;
     }
 
-    public void startMoving(int input)
-    {
+    public void startMoving(int input) {
         movementInput |= input;
     }
 
-    public void stopMoving(int input)
-    {
-        if ((movementInput & input) != 0)
-        {
+    public void stopMoving(int input) {
+        if ((movementInput & input) != 0) {
             movementInput ^= input;
         }
     }

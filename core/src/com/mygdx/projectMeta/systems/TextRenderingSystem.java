@@ -4,28 +4,18 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.projectMeta.Assets;
 import com.mygdx.projectMeta.components.StateComponent;
 import com.mygdx.projectMeta.components.TextComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
 import com.mygdx.projectMeta.utils.Constants;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
 /**
  * Created by Dan on 7/19/2015.
  */
-public class TextRenderingSystem extends IteratingSystem
-{
+public class TextRenderingSystem extends IteratingSystem {
     private SpriteBatch batch;
     private Array<Entity> renderQueue;
 

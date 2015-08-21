@@ -1,14 +1,11 @@
 package com.mygdx.projectMeta.systems;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.projectMeta.components.*;
-
-import javax.swing.plaf.nimbus.State;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -21,8 +18,7 @@ public class BathtubSystem extends IteratingSystem {
     private ComponentMapper<AnimationComponent> am;
     private ComponentMapper<SoundComponent> soundMapper;
 
-    public BathtubSystem()
-    {
+    public BathtubSystem() {
         super(Family.getFor(BathtubComponent.class,
                 StateComponent.class,
                 TriggerComponent.class,
@@ -38,8 +34,7 @@ public class BathtubSystem extends IteratingSystem {
     }
 
     @Override
-    public void processEntity(Entity entity, float deltaTime)
-    {
+    public void processEntity(Entity entity, float deltaTime) {
         StateComponent stateComponent = sm.get(entity);
         TriggerComponent triggerComponent = tm.get(entity);
         InputComponent inputComponent = im.get(entity);
@@ -48,14 +43,10 @@ public class BathtubSystem extends IteratingSystem {
 
         Animation animation = animationComponent.animations.get(stateComponent.get());
 
-        if (animation.getAnimationDuration() <= stateComponent.time)
-        {
-            if (stateComponent.get() == BathtubComponent.STATE_RUNNING)
-            {
+        if (animation.getAnimationDuration() <= stateComponent.time) {
+            if (stateComponent.get() == BathtubComponent.STATE_RUNNING) {
                 stateComponent.set(BathtubComponent.STATE_RAN);
-            }
-            else if (stateComponent.get() == BathtubComponent.STATE_DRAINING)
-            {
+            } else if (stateComponent.get() == BathtubComponent.STATE_DRAINING) {
                 stateComponent.set(BathtubComponent.STATE_DRAINED);
             }
         }
@@ -63,23 +54,18 @@ public class BathtubSystem extends IteratingSystem {
         if (triggerComponent.triggered
                 && stateComponent.get() != BathtubComponent.STATE_RUNNING
                 && stateComponent.get() != BathtubComponent.STATE_DRAINING
-                && inputComponent.actionInput)
-        {
-            if (stateComponent.get() == BathtubComponent.STATE_RAN)
-            {
+                && inputComponent.actionInput) {
+            if (stateComponent.get() == BathtubComponent.STATE_RAN) {
                 stateComponent.set(BathtubComponent.STATE_DRAINING);
 
-                if (!soundComponent.sound.isEmpty());
+                if (!soundComponent.sound.isEmpty()) ;
                 {
                     soundComponent.sound.get(0).play();
                 }
-            }
-            else
-            {
+            } else {
                 stateComponent.set(BathtubComponent.STATE_RUNNING);
 
-                if (!soundComponent.sound.isEmpty())
-                {
+                if (!soundComponent.sound.isEmpty()) {
                     soundComponent.sound.get(1).play();
                 }
             }
