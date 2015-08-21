@@ -2,11 +2,13 @@ package com.mygdx.projectMeta;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.EntityUserData;
 import com.mygdx.projectMeta.box2d.PlayerUserData;
 import com.mygdx.projectMeta.components.*;
 import com.mygdx.projectMeta.systems.RenderingSystem;
+import com.mygdx.projectMeta.systems.ThreeOClockVisitorSystem;
 import com.mygdx.projectMeta.utils.Constants;
 import com.mygdx.projectMeta.utils.WorldUtils;
 
@@ -301,4 +303,46 @@ public class GameWorld {
         engine.addEntity(entity);
     }
 
+    public Entity createPortal()
+    {
+        Entity entity = new Entity();
+
+        TransformComponent transformComponent = new TransformComponent();
+        transformComponent.position.set(new Vector3(Constants.TV_X, Constants.TV_Y, 0));
+
+        entity.add(transformComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
+
+    public Entity createThreeOClockVisitor(Entity portal) {
+        Entity entity = new Entity();
+
+        TextureComponent textureComponent = new TextureComponent();
+        TransformComponent transformComponent = new TransformComponent();
+        PhysicsComponent physicsComponent = new PhysicsComponent();
+        ThreeOClockVisitorComponent threeOClockVisitorComponent = new ThreeOClockVisitorComponent();
+        TriggerComponent triggerComponent = new TriggerComponent();
+        FurnitureComponent furnitureComponent = new FurnitureComponent();
+
+        physicsComponent.body = WorldUtils.createDemon(world, entity);
+        physicsComponent.body.setUserData(new EntityUserData(entity));
+        textureComponent.textureRegion = Assets.demonV1;
+        transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
+        triggerComponent.triggerer = portal;
+        triggerComponent.range = 4;
+
+        entity.add(transformComponent);
+        entity.add(physicsComponent);
+        entity.add(textureComponent);
+        entity.add(threeOClockVisitorComponent);
+        entity.add(triggerComponent);
+        entity.add(furnitureComponent);
+
+        engine.addEntity(entity);
+
+        return entity;
+    }
 }

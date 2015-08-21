@@ -22,6 +22,9 @@ public class GameScreen implements Screen {
     private Engine gameEngine;
     private SpriteBatch batch;
     private SpriteBatch textBatch;
+    private float time = 0;
+
+    ThreeOClockVisitorSystem threeOClockVisitorSystem;
 
     public GameScreen() {
 
@@ -55,6 +58,9 @@ public class GameScreen implements Screen {
 
         gameWorld = new GameWorld(gameEngine, physicsEngine.getWorld());
         gameWorld.createWorld();
+
+        threeOClockVisitorSystem = new ThreeOClockVisitorSystem(gameWorld);
+        gameEngine.addSystem(threeOClockVisitorSystem);
     }
 
     private void setupSpriteBatch() {
@@ -72,8 +78,15 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
+        time += delta;
+
         physicsEngine.update(delta);
         gameEngine.update(delta);
+
+        if (threeOClockVisitorSystem.haveVisit(time))
+        {
+            System.out.println("Phase Complete!");
+        }
     }
 
     @Override

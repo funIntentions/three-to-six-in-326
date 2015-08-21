@@ -98,6 +98,8 @@ public class RenderingSystem extends IteratingSystem {
 
         testLight = new PointLight(rayHandler, 128, new Color(255f, 197f, 143f, 0.8f), 16, 15, 15);
         rayHandler.setAmbientLight(0f, 0f, 0f, 0.1f);
+        rayHandler.setBlur(true);
+        rayHandler.setBlurNum(3);
     }
 
     private void setupCamera() {
@@ -235,19 +237,19 @@ public class RenderingSystem extends IteratingSystem {
 
         renderQueue.clear();
 
-        /*Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        time += deltaTime;
-        shaderProgram.begin();
-        shaderProgram.setUniformf("xOffset", 0);
-        shaderProgram.setUniformf("yOffset", 0);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //time += deltaTime;
+        //shaderProgram.begin();
+        //shaderProgram.setUniformf("xOffset", 0);
+        //shaderProgram.setUniformf("yOffset", 0);
         //shaderProgram.setUniformf("time", time);
-        shaderProgram.end();
+        //shaderProgram.end();
 
         // draw for real
-        fbBatch.setShader(shaderProgram);
-        fbBatch.begin();
-        fbBatch.draw(frameBufferRegion, 0, 0);
-        fbBatch.end();*/
+        //fbBatch.setShader(shaderProgram);
+        //fbBatch.begin();
+        //fbBatch.draw(frameBufferRegion, 0, 0);
+        //fbBatch.end();
 
         physicsDebugRenderer.render(world, camera.combined);
     }
