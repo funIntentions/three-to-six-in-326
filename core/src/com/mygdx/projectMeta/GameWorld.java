@@ -326,10 +326,14 @@ public class GameWorld {
         ThreeOClockVisitorComponent threeOClockVisitorComponent = new ThreeOClockVisitorComponent();
         TriggerComponent triggerComponent = new TriggerComponent();
         FurnitureComponent furnitureComponent = new FurnitureComponent();
+        AnimationComponent animationComponent = new AnimationComponent();
+        StateComponent stateComponent = new StateComponent();
 
+        stateComponent.set(ThreeOClockVisitorComponent.IDLE);
+        animationComponent.animations.put(ThreeOClockVisitorComponent.IDLE, Assets.antIdle);
+        animationComponent.animations.put(ThreeOClockVisitorComponent.MOVING, Assets.antMoving);
         physicsComponent.body = WorldUtils.createDemon(world, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
-        textureComponent.textureRegion = Assets.demonV1;
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
         triggerComponent.triggerer = portal;
         triggerComponent.range = 4;
@@ -340,6 +344,8 @@ public class GameWorld {
         entity.add(threeOClockVisitorComponent);
         entity.add(triggerComponent);
         entity.add(furnitureComponent);
+        entity.add(stateComponent);
+        entity.add(animationComponent);
 
         engine.addEntity(entity);
 

@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import javafx.animation.AnimationTimer;
 
 /**
  * Created by Dan on 7/18/2015.
@@ -23,6 +25,10 @@ public class Assets {
     public static TextureRegion toilet;
     public static TextureRegion ducky;
     public static TextureRegion demonV1;
+
+    public static TextureAtlas antShadowAtlas;
+    public static Animation antMoving;
+    public static Animation antIdle;
 
     public static Animation bathtubDrained;
     public static Animation bathtubRan;
@@ -215,6 +221,10 @@ public class Assets {
 
         bathtubDrained = new Animation(0.1f, new TextureRegion(bathtubTexture, 0, 0, 135, 51));
         bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
+
+        antShadowAtlas = new TextureAtlas(Gdx.files.internal("images/antShadowAtlas.pack"));
+        antMoving = new Animation(0.2f, antShadowAtlas.findRegion("moving"));
+        antIdle = new Animation(0.2f, antShadowAtlas.findRegion("idle"));
 
         map = new TmxMapLoader().load("apartment.tmx");
     }

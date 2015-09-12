@@ -26,6 +26,7 @@ public class WorldUtils {
 
         Fixture handSensorFixture = mainBody.createFixture(fixtureDef);
         handSensorFixture.setUserData(new HandUserData());
+        hand.dispose();
 
         return mainBody;
     }

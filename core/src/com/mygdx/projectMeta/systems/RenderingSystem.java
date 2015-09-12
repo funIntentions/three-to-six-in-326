@@ -213,8 +213,8 @@ public class RenderingSystem extends IteratingSystem {
         }
         batch.end();
 
-        rayHandler.setCombinedMatrix(camera.combined);
-        rayHandler.updateAndRender();
+        //rayHandler.setCombinedMatrix(camera.combined);
+        //rayHandler.updateAndRender();
 
         debugShapeRenderer.setProjectionMatrix(camera.combined);
         debugShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
