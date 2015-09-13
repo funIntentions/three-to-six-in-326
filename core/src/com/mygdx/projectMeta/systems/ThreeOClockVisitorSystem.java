@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.GameWorld;
 import com.mygdx.projectMeta.components.ThreeOClockVisitorComponent;
@@ -15,8 +16,10 @@ import com.mygdx.projectMeta.components.TriggerComponent;
 public class ThreeOClockVisitorSystem extends IteratingSystem {
     private ComponentMapper<TriggerComponent> triggerMapper;
     private Array<Entity> visitorsInPortal = new Array<Entity>();
-    private final int numberOfVisitors = 1;
+    private final int numberOfVisitors = 4;
+    private int visitorCount = 0;
     private GameWorld gameWorld;
+    private Entity portal;
 
     public ThreeOClockVisitorSystem (GameWorld gameWorld) {
         super(Family.getFor(ThreeOClockVisitorComponent.class, TriggerComponent.class));
@@ -25,8 +28,7 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
 
         this.gameWorld = gameWorld;
 
-        Entity portal = gameWorld.createPortal();
-        gameWorld.createThreeOClockVisitor(portal);
+        portal = gameWorld.createPortal();
     }
 
     @Override
@@ -47,24 +49,32 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
 
         if (triggerComponent.triggered && captured < 0)
         {
-            System.out.println("Captured!");
+            System.out.println(entity.getId() + " Captured!");
             visitorsInPortal.add(entity);
         }
         else if (!triggerComponent.triggered && captured >= 0)
         {
-            System.out.println("Released!");
+            System.out.println(entity.getId() + "Released!");
             visitorsInPortal.removeIndex(captured);
         }
     }
 
     public boolean haveVisit(float time)
     {
-        if (time > 15 && time < 20)
-        {
-            if (visitorsInPortal.size == numberOfVisitors)
-            {
-                return true;
-            }
+        if (visitorsInPortal.size == numberOfVisitors) {
+            return true;
+        } else if (visitorCount < 1 && time > 2) {
+            ++visitorCount;
+            gameWorld.createThreeOClockVisitor(portal, new Vector2(20, 20));
+        } else if (visitorCount < 2 && time > 3) {
+            ++visitorCount;
+            gameWorld.createThreeOClockVisitor(portal , new Vector2(10, 10));
+        } else if (visitorCount < 3 && time > 4) {
+            ++visitorCount;
+            gameWorld.createThreeOClockVisitor(portal, new Vector2(20, 5));
+        } else if (visitorCount < 4 && time > 5) {
+            ++visitorCount;
+            gameWorld.createThreeOClockVisitor(portal, new Vector2(5, 24));
         }
 
         return false;

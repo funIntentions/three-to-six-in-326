@@ -11,7 +11,7 @@ public class Utils {
 
     public static double randomClamped()
     {
-        return (MathUtils.random() - MathUtils.random());
+        return (MathUtils.random() + MathUtils.random() - 1);
     }
 
     public static Vector3 pointToWorldSpace(Vector3 point, Vector3 heading, Vector3 side, Vector3 pos)

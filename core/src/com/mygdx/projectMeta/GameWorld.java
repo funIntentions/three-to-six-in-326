@@ -2,6 +2,7 @@ package com.mygdx.projectMeta;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.projectMeta.box2d.EntityUserData;
@@ -317,7 +318,7 @@ public class GameWorld {
         return entity;
     }
 
-    public Entity createThreeOClockVisitor(Entity portal) {
+    public Entity createThreeOClockVisitor(Entity portal, Vector2 position) {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -330,11 +331,11 @@ public class GameWorld {
         SteeringComponent steeringComponent = new SteeringComponent();
 
         steeringComponent.wanderOn = true;
-        steeringComponent.force = 200f;
+        steeringComponent.force = 250f;
         stateComponent.set(ThreeOClockVisitorComponent.MOVING);
         animationComponent.animations.put(ThreeOClockVisitorComponent.IDLE, Assets.antIdle);
         animationComponent.animations.put(ThreeOClockVisitorComponent.MOVING, Assets.antMoving);
-        physicsComponent.body = WorldUtils.createDynamicOvalBody(world, 10, 10, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING * 100, Constants.DEMON_DENSITY, entity);
+        physicsComponent.body = WorldUtils.createDynamicOvalBody(world, position.x, position.y, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING * 100, Constants.DEMON_DENSITY, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
         triggerComponent.triggerer = portal;

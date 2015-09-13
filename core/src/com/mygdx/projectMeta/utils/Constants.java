@@ -83,6 +83,6 @@ public class Constants {
     public static final int LEFT = 1 << 3;
     public static final int RIGHT = 1 << 4;
 
-    public static final float MAX_VELOCITY = 4f;
+    public static final float MAX_VELOCITY = 4.8f;
     public static final float MAX_VELOCITY_SQR = MAX_VELOCITY * MAX_VELOCITY;
 }
