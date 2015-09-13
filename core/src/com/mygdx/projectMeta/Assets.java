@@ -223,7 +223,8 @@ public class Assets {
         bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
 
         antShadowAtlas = new TextureAtlas(Gdx.files.internal("images/antShadowAtlas.pack"));
-        antMoving = new Animation(0.2f, antShadowAtlas.findRegion("moving"));
+        antMoving = new Animation(0.2f, antShadowAtlas.findRegions("moving"));
+        antMoving.setPlayMode(Animation.PlayMode.LOOP);
         antIdle = new Animation(0.2f, antShadowAtlas.findRegion("idle"));
 
         map = new TmxMapLoader().load("apartment.tmx");

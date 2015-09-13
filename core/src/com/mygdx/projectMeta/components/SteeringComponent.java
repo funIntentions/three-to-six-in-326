@@ -2,6 +2,7 @@ package com.mygdx.projectMeta.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.projectMeta.Ray;
 
 import java.util.ArrayList;
@@ -12,11 +13,12 @@ import java.util.List;
  */
 public class SteeringComponent extends Component {
     public Entity target = null;
-    /*public Vector2 wanderTarget = null;
-    public float wanderOffset = 0;
-    public float wanderRadius = 0;
-    public float wanderJitter = 0;
-    public boolean wanderOn = false;*/
+    public Vector2 wanderTarget = new Vector2();
+    public float force = 300;
+    public float wanderOffset = 3f;
+    public float wanderRadius = 6f;
+    public float wanderJitter = 10f;
+    public boolean wanderOn = false;
     public List<Ray> feelers = new ArrayList<Ray>();
     public boolean seekOn = false;
 }

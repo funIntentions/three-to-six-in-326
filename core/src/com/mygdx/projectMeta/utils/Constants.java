@@ -71,6 +71,8 @@ public class Constants {
     public static final float DEMON_DAMPING = 5f;
     public static final float DEMON_DENSITY = 0.5f;
     public static final float DEMON_LINEAR_FORCE = 1f;
+    public static final float ANT_DEMON_WIDTH = 1.5f;
+    public static final float ANT_DEMON_HEIGHT = 1.5f;
 
     public static final float PLAYER_LEGS_ANGULAR_CHANGE = 4f; // degree rotation per time step
     public static final float PLAYER_TORSO_ANGULAR_CHANGE = 6.5f; // degree rotation per time step

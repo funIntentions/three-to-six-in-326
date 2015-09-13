@@ -27,6 +27,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.Assets;
 import com.mygdx.projectMeta.Ray;
+import com.mygdx.projectMeta.components.PhysicsComponent;
 import com.mygdx.projectMeta.components.SteeringComponent;
 import com.mygdx.projectMeta.components.TextureComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
@@ -55,6 +56,7 @@ public class RenderingSystem extends IteratingSystem {
     private ComponentMapper<TextureComponent> textureM;
     private ComponentMapper<TransformComponent> transformM;
     private ComponentMapper<SteeringComponent> steeringMapper;
+    private ComponentMapper<PhysicsComponent> physicsMapper;
 
     public RenderingSystem(SpriteBatch batch, World world, RayHandler rayHandler) {
         super(Family.getFor(TransformComponent.class, TextureComponent.class));
@@ -62,6 +64,7 @@ public class RenderingSystem extends IteratingSystem {
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
         steeringMapper = ComponentMapper.getFor(SteeringComponent.class);
+        physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
         tiledMapRenderer = new OrthogonalTiledMapRenderer((TiledMap) Assets.map, Constants.SCALE);
         physicsDebugRenderer = new Box2DDebugRenderer();
         debugShapeRenderer = new ShapeRenderer();
@@ -222,12 +225,21 @@ public class RenderingSystem extends IteratingSystem {
         for (Entity entity : renderQueue) {
             if (steeringMapper.has(entity)) {
                 SteeringComponent steeringComponent = steeringMapper.get(entity);
+                PhysicsComponent physicsComponent = physicsMapper.get(entity);
 
                 for (Ray ray : steeringComponent.feelers) {
                     Vector2 p1 = new Vector2(ray.position);
                     Vector2 p2 = new Vector2(ray.position).add((new Vector2(ray.direction).scl(ray.length)));
                     debugShapeRenderer.line(p1.x, p1.y, p2.x, p2.y);
                 }
+
+                Vector2 targetOnCircle = new Vector2(steeringComponent.wanderTarget).scl(steeringComponent.wanderRadius);
+
+                Vector2 targetLocal = new Vector2(targetOnCircle).add(new Vector2(steeringComponent.wanderOffset, 0));
+
+                Vector2 targetWorld = physicsComponent.body.getWorldPoint(targetLocal);
+
+                debugShapeRenderer.circle(targetWorld.x, targetWorld.y, 0.3f);
             }
 
         }

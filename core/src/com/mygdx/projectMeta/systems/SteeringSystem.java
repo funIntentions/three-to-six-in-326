@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
@@ -13,6 +14,8 @@ import com.mygdx.projectMeta.Ray;
 import com.mygdx.projectMeta.components.PhysicsComponent;
 import com.mygdx.projectMeta.components.SteeringComponent;
 import com.mygdx.projectMeta.components.TransformComponent;
+import com.mygdx.projectMeta.utils.Constants;
+import com.mygdx.projectMeta.utils.Utils;
 
 /**
  * Created by Dan on 7/25/2015.
@@ -48,18 +51,32 @@ public class SteeringSystem extends IteratingSystem {
             total.linear.add(avoidOutput.linear);
             total.angular += avoidOutput.angular;
             total.linear.scl(0.5f);
-            physicsComponent.body.applyForce(total.linear, physicsComponent.body.getWorldCenter(), true);
+            physicsComponent.body.applyForce(total.linear.scl(steeringComponent.force), physicsComponent.body.getWorldCenter(), true);
 
             Vector2 faceThis = new Vector2(targetPhysicsComponent.body.getPosition());
             faceThis(faceThis, physicsComponent);
+
+            transformComponent.position.set(
+                    physicsComponent.body.getPosition().x,
+                    physicsComponent.body.getPosition().y,
+                    transformComponent.position.z);
+
+            transformComponent.rotation = physicsComponent.body.getAngle();
+
+        } else if (steeringComponent.wanderOn) {
+            SteeringOutput wanderOutput = wander(physicsComponent.body, steeringComponent, deltaTime);
+            physicsComponent.body.applyForce(wanderOutput.linear.scl(steeringComponent.force), physicsComponent.body.getWorldCenter(), true);
+
+            Vector2 faceThis = new Vector2(physicsComponent.body.getPosition().x + physicsComponent.body.getLinearVelocity().x, physicsComponent.body.getPosition().y + physicsComponent.body.getLinearVelocity().y);
+
+            transformComponent.position.set(
+                    physicsComponent.body.getPosition().x,
+                    physicsComponent.body.getPosition().y,
+                    transformComponent.position.z);
+
+            transformComponent.rotation = faceThis2(faceThis, transformComponent);
         }
 
-        transformComponent.position.set(
-                physicsComponent.body.getPosition().x,
-                physicsComponent.body.getPosition().y,
-                transformComponent.position.z);
-
-        transformComponent.rotation = physicsComponent.body.getAngle();
     }
 
     class SteeringOutput {
@@ -68,7 +85,6 @@ public class SteeringSystem extends IteratingSystem {
     }
 
     public SteeringOutput seek(Vector2 target, Vector2 agentPos) {
-        float force = 300;
         SteeringOutput steering = new SteeringOutput();
 
         Vector2 toTarget = target;
@@ -77,11 +93,48 @@ public class SteeringSystem extends IteratingSystem {
         steering.linear = toTarget;
 
         steering.linear.nor();
-        steering.linear.scl(force);
 
         steering.angular = 0;
 
         return steering;
+    }
+
+    public SteeringOutput wander(Body body, SteeringComponent agentSteering, double timeElapsed)
+    {
+        SteeringOutput steering = new SteeringOutput();
+
+        double jitterThisFrame = agentSteering.wanderJitter * timeElapsed;
+
+        agentSteering.wanderTarget.add(new Vector2((float) (Utils.randomClamped() * jitterThisFrame), (float) (Utils.randomClamped() * jitterThisFrame)));
+
+        agentSteering.wanderTarget.nor();
+
+        Vector2 targetOnCircle = new Vector2(agentSteering.wanderTarget).scl(agentSteering.wanderRadius);
+
+        Vector2 targetLocal = new Vector2(targetOnCircle).add(new Vector2(agentSteering.wanderOffset, 0));
+
+        Vector2 targetWorld = body.getWorldPoint(targetLocal);// Utils.pointToWorldSpace(targetLocal, agentkinematic.Heading, agentkinematic.Side, body.getPosition());
+
+        steering = seek(targetWorld, body.getPosition());
+
+        return steering;
+    }
+
+    public void faceThisLerp(Vector2 faceThis, PhysicsComponent physicsComponent) {
+        Vector2 toTarget = new Vector2(
+                faceThis.x - physicsComponent.body.getPosition().x,
+                faceThis.y - physicsComponent.body.getPosition().y);
+        float desiredAngle = (float) Math.atan2(-toTarget.x, toTarget.y);
+        desiredAngle = MathUtils.lerp(physicsComponent.body.getAngle(), desiredAngle, 0.1f);
+
+        float bodyAngle = physicsComponent.body.getAngle();
+        float nextAngle = bodyAngle + physicsComponent.body.getAngularVelocity() / 60.0f;
+        float totalRotation = desiredAngle - nextAngle;
+        while (totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
+        while (totalRotation > 180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
+        float desiredAngularVelocity = totalRotation * 60f;
+        float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f / 60f);
+        physicsComponent.body.applyTorque(torque, true);
     }
 
     public void faceThis(Vector2 faceThis, PhysicsComponent physicsComponent) {
@@ -99,6 +152,22 @@ public class SteeringSystem extends IteratingSystem {
         float torque = physicsComponent.body.getInertia() * desiredAngularVelocity / (1f / 60f);
         physicsComponent.body.applyTorque(torque, true);
     }
+
+    public float faceThis2(Vector2 faceThis, TransformComponent transformComponent) {
+        Vector2 toTarget = new Vector2(
+                faceThis.x - transformComponent.position.x,
+                faceThis.y - transformComponent.position.y);
+        float desiredAngle = (float) Math.atan2(-toTarget.x, toTarget.y);
+
+        /*float totalRotation = desiredAngle - transformComponent.rotation;
+        while (totalRotation < -180 * MathUtils.degreesToRadians) totalRotation += 360 * MathUtils.degreesToRadians;
+        while (totalRotation > 180 * MathUtils.degreesToRadians) totalRotation -= 360 * MathUtils.degreesToRadians;
+        float change = Constants.PLAYER_TORSO_ANGULAR_CHANGE * MathUtils.degreesToRadians;
+        float newAngle = transformComponent.rotation + Math.min(change, Math.max(-change, totalRotation));*/
+
+        return desiredAngle;
+    }
+
 
     private void CreateFeelers(PhysicsComponent agentPhysics, SteeringComponent agentSteering) {
 
@@ -157,7 +226,6 @@ public class SteeringSystem extends IteratingSystem {
     }
 
     public SteeringOutput avoidThings(World world, PhysicsComponent agentPhysics, SteeringComponent agentSteering) {
-        float force = 300;
         SteeringOutput steering = new SteeringOutput();
 
         CreateFeelers(agentPhysics, agentSteering);
@@ -169,7 +237,7 @@ public class SteeringSystem extends IteratingSystem {
             world.rayCast(avoidanceCallBack, whiskerRay.position, new Vector2(whiskerRay.position).add((new Vector2(whiskerRay.direction).scl(whiskerRay.length))));
 
             if (avoidanceCallBack.fixture != null) {
-                steering.linear.add(avoidanceCallBack.normal.scl(force));
+                steering.linear.add(avoidanceCallBack.normal);
             }
         }
 

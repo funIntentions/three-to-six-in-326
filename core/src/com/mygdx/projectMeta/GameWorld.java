@@ -28,11 +28,11 @@ public class GameWorld {
         Entity actionText = createActionTextEntity();
         Entity player = createPlayer();
         createPlayerTorso(player);
-        createCouch();
-        createTV();
+        //createCouch();
+        //createTV();
         createToilet();
         createBathtub(player, actionText);
-        createDemon(player);
+        //createDemon(player);
         createDucky();
 
         createCamera(player);
@@ -325,14 +325,16 @@ public class GameWorld {
         PhysicsComponent physicsComponent = new PhysicsComponent();
         ThreeOClockVisitorComponent threeOClockVisitorComponent = new ThreeOClockVisitorComponent();
         TriggerComponent triggerComponent = new TriggerComponent();
-        FurnitureComponent furnitureComponent = new FurnitureComponent();
         AnimationComponent animationComponent = new AnimationComponent();
         StateComponent stateComponent = new StateComponent();
+        SteeringComponent steeringComponent = new SteeringComponent();
 
-        stateComponent.set(ThreeOClockVisitorComponent.IDLE);
+        steeringComponent.wanderOn = true;
+        steeringComponent.force = 200f;
+        stateComponent.set(ThreeOClockVisitorComponent.MOVING);
         animationComponent.animations.put(ThreeOClockVisitorComponent.IDLE, Assets.antIdle);
         animationComponent.animations.put(ThreeOClockVisitorComponent.MOVING, Assets.antMoving);
-        physicsComponent.body = WorldUtils.createDemon(world, entity);
+        physicsComponent.body = WorldUtils.createDynamicOvalBody(world, 10, 10, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING, Constants.DEMON_DENSITY, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
         triggerComponent.triggerer = portal;
@@ -343,9 +345,9 @@ public class GameWorld {
         entity.add(textureComponent);
         entity.add(threeOClockVisitorComponent);
         entity.add(triggerComponent);
-        entity.add(furnitureComponent);
         entity.add(stateComponent);
         entity.add(animationComponent);
+        entity.add(steeringComponent);
 
         engine.addEntity(entity);
 
