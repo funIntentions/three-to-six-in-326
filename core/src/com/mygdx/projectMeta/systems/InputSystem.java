@@ -21,6 +21,7 @@ public class InputSystem extends IteratingSystem {
     private int movementInput = 0;
     private Vector2 faceThis = new Vector2(0, 0);
     private Camera camera = null;
+    private InputAdapter inputAdapter;
 
     private ComponentMapper<InputComponent> mm;
 
@@ -29,7 +30,7 @@ public class InputSystem extends IteratingSystem {
 
         mm = ComponentMapper.getFor(InputComponent.class);
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        inputAdapter = (new InputAdapter() {
             public boolean keyDown(int keycode) {
 
                 if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
@@ -102,5 +103,9 @@ public class InputSystem extends IteratingSystem {
         if ((movementInput & input) != 0) {
             movementInput ^= input;
         }
+    }
+
+    public InputAdapter getInputAdapter() {
+        return inputAdapter;
     }
 }

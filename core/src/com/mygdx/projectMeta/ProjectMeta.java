@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.projectMeta.screens.GameScreen;
+import com.mygdx.projectMeta.screens.MainMenuScreen;
 
 public class ProjectMeta extends Game {
 
@@ -13,7 +14,7 @@ public class ProjectMeta extends Game {
     public void create() {
         Assets.load();
         Texture.setAssetManager(assets);
-        setScreen(new GameScreen());
+        setScreen(new MainMenuScreen());
     }
 
     @Override

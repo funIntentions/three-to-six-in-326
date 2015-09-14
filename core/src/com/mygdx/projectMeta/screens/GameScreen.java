@@ -1,11 +1,24 @@
 package com.mygdx.projectMeta.screens;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.projectMeta.Assets;
 import com.mygdx.projectMeta.GameWorld;
 import com.mygdx.projectMeta.PhysicsEngine;
@@ -17,11 +30,26 @@ import com.mygdx.projectMeta.utils.Constants;
  */
 public class GameScreen implements Screen {
 
+    private Stage stage = new Stage(new FitViewport(Constants.APP_WIDTH, Constants.APP_HEIGHT));
+    private Table table = new Table();
+    private Viewport viewport;
+
+    private Skin skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
+            new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
+
+    private TextButton buttonResume = new TextButton("Resume", skin),
+            buttonExit = new TextButton("Menu", skin);
+
+    private Label title = new Label("Pause", skin);
+
     private GameWorld gameWorld;
     private PhysicsEngine physicsEngine;
+    private RenderingSystem renderingSystem;
+    private InputSystem inputSystem;
     private Engine gameEngine;
     private SpriteBatch batch;
     private SpriteBatch textBatch;
+    private boolean paused = false;
     private float time = 0;
 
     ThreeOClockVisitorSystem threeOClockVisitorSystem;
@@ -34,11 +62,13 @@ public class GameScreen implements Screen {
         physicsEngine = new PhysicsEngine();
         gameEngine = new Engine();
 
-        gameEngine.addSystem(new RenderingSystem(batch, physicsEngine.getWorld(), physicsEngine.getRayHandler()));
+        renderingSystem = new RenderingSystem(batch, physicsEngine.getWorld(), physicsEngine.getRayHandler());
+        inputSystem = new InputSystem();
+        gameEngine.addSystem(renderingSystem);
         gameEngine.addSystem(new TextRenderingSystem(batch));
         gameEngine.addSystem(new TextSystem());
         gameEngine.addSystem(new CameraSystem());
-        gameEngine.addSystem(new InputSystem());
+        gameEngine.addSystem(inputSystem);
         gameEngine.addSystem(new PlayerMovementSystem());
         gameEngine.addSystem(new AnimationSystem());
         gameEngine.addSystem(new StateSystem());
@@ -54,13 +84,16 @@ public class GameScreen implements Screen {
         physicsEngine.getWorld().setContactListener(contactSystem);
         gameEngine.addSystem(contactSystem);
 
-        gameEngine.getSystem(InputSystem.class).setCamera(gameEngine.getSystem(RenderingSystem.class).getCamera());
+        gameEngine.getSystem(InputSystem.class).setCamera(renderingSystem.getCamera());
 
         gameWorld = new GameWorld(gameEngine, physicsEngine.getWorld());
         gameWorld.createWorld();
 
         threeOClockVisitorSystem = new ThreeOClockVisitorSystem(gameWorld);
         gameEngine.addSystem(threeOClockVisitorSystem);
+
+        viewport = new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH,renderingSystem.getCamera());
+        Gdx.input.setInputProcessor(inputSystem.getInputAdapter());
     }
 
     private void setupSpriteBatch() {
@@ -78,25 +111,55 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
-        time += delta;
 
-        physicsEngine.update(delta);
-        gameEngine.update(delta);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            pause();
 
-        if (threeOClockVisitorSystem.haveVisit(time))
-        {
-            System.out.println("Phase Complete!");
+        if (!paused) {
+            time += delta;
+
+            physicsEngine.update(delta);
+            gameEngine.update(delta);
+
+            if (threeOClockVisitorSystem.haveVisit(time)) {
+                System.out.println("Phase Complete!");
+            }
+
+        } else {
+            renderingSystem.update(delta);
+            stage.act(delta);
+            stage.draw();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override
     public void show() {
+        buttonResume.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                resume();
+            }
+        });
 
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+            }
+        });
+
+        table.add(title).padBottom(40).row();
+        table.add(buttonResume).size(150, 60).padBottom(20).row();
+        table.add(buttonExit).size(150, 60).padBottom(20).row();
+
+        table.setFillParent(true);
+        stage.addActor(table);
     }
 
     @Override
@@ -106,12 +169,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+        paused = true;
+        Gdx.input.setInputProcessor(stage);
 
     }
 
     @Override
     public void resume() {
-
+        paused = false;
+        Gdx.input.setInputProcessor(inputSystem.getInputAdapter());
     }
 
     @Override

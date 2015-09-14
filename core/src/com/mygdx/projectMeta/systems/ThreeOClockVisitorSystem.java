@@ -54,7 +54,7 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
         }
         else if (!triggerComponent.triggered && captured >= 0)
         {
-            System.out.println(entity.getId() + "Released!");
+            System.out.println(entity.getId() + " Released!");
             visitorsInPortal.removeIndex(captured);
         }
     }

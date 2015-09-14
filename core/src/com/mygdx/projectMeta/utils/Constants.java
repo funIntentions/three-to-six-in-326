@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
  * Created by Dan on 4/22/2015.
  */
 public class Constants {
-    public static final int APP_WIDTH = 1200;
-    public static final int APP_HEIGHT = 930;
+    public static final int APP_WIDTH = 900;
+    public static final int APP_HEIGHT = 900;
     public static final int VIEWPORT_WIDTH = 20;
     public static final int PIXELS_PER_UNIT = 16;
     public static final float CAMERA_ZOOM = 1.9f;
