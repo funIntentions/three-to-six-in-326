@@ -93,8 +93,8 @@ public class RenderingSystem extends IteratingSystem {
         fbBatch = new SpriteBatch();
 
         //batch.setShader(createDefaultShader());
-        //shaderProgram = createShader();
-        //fbBatch.setShader(shaderProgram);
+        shaderProgram = createShader();
+        fbBatch.setShader(shaderProgram);
         time = 0;
 
         setupCamera();
@@ -150,7 +150,8 @@ public class RenderingSystem extends IteratingSystem {
     }
 
     static public ShaderProgram createShader() {
-        String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+        String vertexShader = "#version 120" + "\n" +
+                "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
                 + "uniform mat4 u_projTrans;\n" //
@@ -176,7 +177,7 @@ public class RenderingSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        //frameBufferObject.begin();
+        frameBufferObject.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderQueue.sort(comparator);
@@ -216,9 +217,6 @@ public class RenderingSystem extends IteratingSystem {
         }
         batch.end();
 
-        //rayHandler.setCombinedMatrix(camera.combined);
-        //rayHandler.updateAndRender();
-
         debugShapeRenderer.setProjectionMatrix(camera.combined);
         debugShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugShapeRenderer.setColor(0, 0, 1, 1);
@@ -245,23 +243,23 @@ public class RenderingSystem extends IteratingSystem {
         }
         debugShapeRenderer.end();
 
-        //frameBufferObject.end();
+        frameBufferObject.end();
 
         renderQueue.clear();
 
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //time += deltaTime;
-        //shaderProgram.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        time += deltaTime;
+        shaderProgram.begin();
         //shaderProgram.setUniformf("xOffset", 0);
         //shaderProgram.setUniformf("yOffset", 0);
-        //shaderProgram.setUniformf("time", time);
-        //shaderProgram.end();
+        shaderProgram.setUniformf("time", time);
+        shaderProgram.end();
 
         // draw for real
-        //fbBatch.setShader(shaderProgram);
-        //fbBatch.begin();
-        //fbBatch.draw(frameBufferRegion, 0, 0);
-        //fbBatch.end();
+        fbBatch.setShader(shaderProgram);
+        fbBatch.begin();
+        fbBatch.draw(frameBufferRegion, 0, 0);
+        fbBatch.end();
 
         physicsDebugRenderer.render(world, camera.combined);
     }

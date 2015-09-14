@@ -30,7 +30,7 @@ public class MainMenuScreen implements Screen {
 
     private TextButton buttonPlay = new TextButton("Play", skin),
             buttonExit = new TextButton("Exit", skin),
-            buttonFullScreen = new TextButton(windowed, skin);
+            buttonFullScreen = new TextButton(fullScreen, skin);
 
     private Label title = new Label("3:00 to 6:00 in 326", skin);
 
@@ -76,9 +76,9 @@ public class MainMenuScreen implements Screen {
                 Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
 
                 if (Gdx.graphics.isFullscreen()) {
-                    buttonFullScreen.setText(fullScreen);
-                } else {
                     buttonFullScreen.setText(windowed);
+                } else {
+                    buttonFullScreen.setText(fullScreen);
                 }
             }
         });
