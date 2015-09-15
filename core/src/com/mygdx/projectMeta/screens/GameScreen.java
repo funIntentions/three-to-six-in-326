@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
@@ -48,6 +49,7 @@ public class GameScreen implements Screen {
     private InputSystem inputSystem;
     private Engine gameEngine;
     private SpriteBatch batch;
+    private OrthographicCamera camera;
     private SpriteBatch textBatch;
     private boolean paused = false;
     private float time = 0;
@@ -57,12 +59,14 @@ public class GameScreen implements Screen {
     public GameScreen() {
 
         setupSpriteBatch();
+        setupCamera();
         textBatch = new SpriteBatch();
+        viewport = new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH, camera);
 
         physicsEngine = new PhysicsEngine();
         gameEngine = new Engine();
 
-        renderingSystem = new RenderingSystem(batch, physicsEngine.getWorld(), physicsEngine.getRayHandler());
+        renderingSystem = new RenderingSystem(batch, camera, physicsEngine.getWorld(), physicsEngine.getRayHandler());
         inputSystem = new InputSystem();
         gameEngine.addSystem(renderingSystem);
         gameEngine.addSystem(new TextRenderingSystem(batch));
@@ -84,7 +88,7 @@ public class GameScreen implements Screen {
         physicsEngine.getWorld().setContactListener(contactSystem);
         gameEngine.addSystem(contactSystem);
 
-        gameEngine.getSystem(InputSystem.class).setCamera(renderingSystem.getCamera());
+        gameEngine.getSystem(InputSystem.class).setCamera(camera);
 
         gameWorld = new GameWorld(gameEngine, physicsEngine.getWorld());
         gameWorld.createWorld();
@@ -92,7 +96,6 @@ public class GameScreen implements Screen {
         threeOClockVisitorSystem = new ThreeOClockVisitorSystem(gameWorld);
         gameEngine.addSystem(threeOClockVisitorSystem);
 
-        viewport = new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH,renderingSystem.getCamera());
         Gdx.input.setInputProcessor(inputSystem.getInputAdapter());
     }
 
@@ -103,6 +106,15 @@ public class GameScreen implements Screen {
         Vector3 scaleVec = new Vector3(Constants.SCALE, Constants.SCALE, 1);
         Matrix4 transform = new Matrix4(position, rotation, scaleVec);
         batch.setTransformMatrix(transform);
+    }
+
+    private void setupCamera() {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH * (h / w));
+        Vector3 position = new Vector3(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
+        camera.translate(position);
+        camera.zoom = Constants.CAMERA_ZOOM;
     }
 
     @Override
@@ -136,6 +148,8 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width, height);
+        viewport.apply();
+        renderingSystem.resize();
     }
 
     @Override

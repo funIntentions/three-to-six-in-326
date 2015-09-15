@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.height = Constants.APP_HEIGHT;
         config.width = Constants.APP_WIDTH;
+        config.title = "3:00 to 6:00 in 326";
 		new LwjglApplication(new ProjectMeta(), config);
 	}
 }

@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -58,7 +59,7 @@ public class RenderingSystem extends IteratingSystem {
     private ComponentMapper<SteeringComponent> steeringMapper;
     private ComponentMapper<PhysicsComponent> physicsMapper;
 
-    public RenderingSystem(SpriteBatch batch, World world, RayHandler rayHandler) {
+    public RenderingSystem(SpriteBatch batch, OrthographicCamera camera, World world, RayHandler rayHandler) {
         super(Family.getFor(TransformComponent.class, TextureComponent.class));
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
@@ -80,14 +81,15 @@ public class RenderingSystem extends IteratingSystem {
         };
 
         this.batch = batch;
+        this.camera = camera;
         this.world = world;
         this.rayHandler = rayHandler;
 
         frameBufferObject = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight(), true);
+                Gdx.graphics.getHeight(), false);
 
         frameBufferRegion = new TextureRegion(frameBufferObject.getColorBufferTexture(), 0, 0,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                camera.viewportWidth, camera.viewportHeight);
         //frameBufferRegion.flip(false, true);
 
         fbBatch = new SpriteBatch();
@@ -97,21 +99,10 @@ public class RenderingSystem extends IteratingSystem {
         fbBatch.setShader(shaderProgram);
         time = 0;
 
-        setupCamera();
-
         testLight = new PointLight(rayHandler, 128, new Color(255f, 197f, 143f, 0.8f), 16, 15, 15);
         rayHandler.setAmbientLight(0f, 0f, 0f, 0.1f);
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(3);
-    }
-
-    private void setupCamera() {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH * (h / w));
-        Vector3 position = new Vector3(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
-        camera.translate(position);
-        camera.zoom = Constants.CAMERA_ZOOM;
     }
 
     static public ShaderProgram createDefaultShader() {
@@ -173,15 +164,18 @@ public class RenderingSystem extends IteratingSystem {
         return shader;
     }
 
+    public void resize() {
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        frameBufferObject.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         renderQueue.sort(comparator);
         camera.update();
+
+        frameBufferObject.begin();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         tiledMapRenderer.setView(camera); // render map
         tiledMapRenderer.render();
@@ -247,11 +241,8 @@ public class RenderingSystem extends IteratingSystem {
 
         renderQueue.clear();
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         time += deltaTime;
         shaderProgram.begin();
-        //shaderProgram.setUniformf("xOffset", 0);
-        //shaderProgram.setUniformf("yOffset", 0);
         shaderProgram.setUniformf("time", time);
         shaderProgram.end();
 
