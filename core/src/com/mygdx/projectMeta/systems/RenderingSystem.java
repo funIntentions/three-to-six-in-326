@@ -228,7 +228,7 @@ public class RenderingSystem extends IteratingSystem {
 
                 Vector2 targetOnCircle = new Vector2(steeringComponent.wanderTarget).scl(steeringComponent.wanderRadius);
 
-                Vector2 targetLocal = new Vector2(targetOnCircle).add(new Vector2(steeringComponent.wanderOffset, 0));
+                Vector2 targetLocal = new Vector2(targetOnCircle).add(0,steeringComponent.wanderOffset);
 
                 Vector2 targetWorld = physicsComponent.body.getWorldPoint(targetLocal);
 

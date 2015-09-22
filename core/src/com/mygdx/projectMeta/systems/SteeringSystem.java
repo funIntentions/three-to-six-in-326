@@ -64,7 +64,7 @@ public class SteeringSystem extends IteratingSystem {
 
         } else if (steeringComponent.wanderOn) {
 
-            /*SteeringOutput wanderOutput = wander(physicsComponent.body, steeringComponent, deltaTime);
+            SteeringOutput wanderOutput = wander(physicsComponent.body, steeringComponent, deltaTime);
             SteeringOutput avoidOutput = avoidThings(world, physicsComponent, steeringComponent);
             SteeringOutput total = new SteeringOutput();
             total.linear.add(wanderOutput.linear);
@@ -75,14 +75,14 @@ public class SteeringSystem extends IteratingSystem {
             Vector2 faceThis = new Vector2(physicsComponent.body.getPosition().x + total.linear.x, physicsComponent.body.getPosition().y + total.linear.y);//new Vector2(physicsComponent.body.getPosition().x + physicsComponent.body.getLinearVelocity().x * 20, physicsComponent.body.getPosition().y + physicsComponent.body.getLinearVelocity().y * 20);
 
             System.out.println(physicsComponent.body.getLinearVelocity().len2());
-            if (physicsComponent.body.getLinearVelocity().len2() > 5) {
+            if (physicsComponent.body.getLinearVelocity().len2() > 1) {
                 steeringComponent.heading = new Vector2(physicsComponent.body.getLinearVelocity()).nor();
                 steeringComponent.side = new Vector2(steeringComponent.heading.y, -steeringComponent.heading.x); // perp
 
-                faceThis2(faceThis, physicsComponent.body.getPosition());
+                faceThis(faceThis, physicsComponent);
             }
 
-            total.linear = new Vector2(1,0).rotateRad(physicsComponent.body.getAngle());
+            total.linear = new Vector2(0,1).rotateRad(physicsComponent.body.getAngle());
             physicsComponent.body.applyForce(total.linear.scl(steeringComponent.force), physicsComponent.body.getWorldCenter(), true);
 
             transformComponent.position.set(
@@ -90,27 +90,27 @@ public class SteeringSystem extends IteratingSystem {
                     physicsComponent.body.getPosition().y,
                     transformComponent.position.z);
 
-            transformComponent.rotation = physicsComponent.body.getAngle(); //faceThis2(faceThis, physicsComponent.body.getPosition());*/
+            transformComponent.rotation = physicsComponent.body.getAngle(); //faceThis2(faceThis, physicsComponent.body.getPosition());
 
-            SteeringOutput wanderOutput = wander(physicsComponent.body, steeringComponent, deltaTime);
+            /*SteeringOutput wanderOutput = wander(physicsComponent.body, steeringComponent, deltaTime);
             SteeringOutput avoidOutput = avoidThings(world, physicsComponent, steeringComponent);
             SteeringOutput total = new SteeringOutput();
             total.linear.add(wanderOutput.linear);
             total.direction.add(wanderOutput.direction);
             total.linear.add(avoidOutput.linear);
             total.direction.add(avoidOutput.direction);
-            total.linear.scl(0.5f);
-            physicsComponent.body.applyForce(total.linear.scl(steeringComponent.force), physicsComponent.body.getWorldCenter(), true);
+            total.linear.scl(0.5f);*/
+            //physicsComponent.body.applyForce(total.linear.scl(steeringComponent.force), physicsComponent.body.getWorldCenter(), true);
 
-            Vector2 faceThis = new Vector2(physicsComponent.body.getPosition().x + physicsComponent.body.getLinearVelocity().x, physicsComponent.body.getPosition().y + physicsComponent.body.getLinearVelocity().y);
-            faceThis(faceThis, physicsComponent);
+            //Vector2 faceThis = new Vector2(physicsComponent.body.getPosition().x + total.linear.x, physicsComponent.body.getPosition().y + total.linear.y);
+            /*faceThis(faceThis, physicsComponent);
 
             transformComponent.position.set(
                     physicsComponent.body.getPosition().x,
                     physicsComponent.body.getPosition().y,
-                    transformComponent.position.z);
+                    transformComponent.position.z);*/
 
-            transformComponent.rotation = faceThis2(faceThis, physicsComponent.body.getPosition());
+            //transformComponent.rotation = faceThis2(faceThis, physicsComponent.body.getPosition());
         }
 
     }
@@ -148,7 +148,7 @@ public class SteeringSystem extends IteratingSystem {
 
         Vector2 targetOnCircle = new Vector2(agentSteering.wanderTarget).scl(agentSteering.wanderRadius);
 
-        Vector2 targetLocal = new Vector2(targetOnCircle).add(new Vector2(agentSteering.wanderOffset, 0));
+        Vector2 targetLocal = new Vector2(targetOnCircle).add(0, agentSteering.wanderOffset);
 
         Vector2 targetWorld = body.getWorldPoint(targetLocal);//
         //Vector3 worldTarget = Utils.pointToWorldSpace(targetLocal, agentSteering.heading, agentSteering.side, body.getPosition());

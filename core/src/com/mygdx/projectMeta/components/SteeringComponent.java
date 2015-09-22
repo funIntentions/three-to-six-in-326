@@ -15,9 +15,9 @@ public class SteeringComponent extends Component {
     public Entity target = null;
     public Vector2 wanderTarget = new Vector2();
     public float force = 300;
-    public float wanderOffset = 6f;
-    public float wanderRadius = 2f;
-    public float wanderJitter = 10f;
+    public float wanderOffset = 8f;
+    public float wanderRadius = 0.4f;
+    public float wanderJitter = 40f;
     public boolean wanderOn = false;
     public List<Ray> feelers = new ArrayList<Ray>();
     public boolean seekOn = false;

@@ -66,7 +66,7 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
         } else if (visitorCount < 1 && time > 2) {
             ++visitorCount;
             gameWorld.createThreeOClockVisitor(portal, new Vector2(20, 20));
-        }/* else if (visitorCount < 2 && time > 3) {
+        } else if (visitorCount < 2 && time > 3) {
             ++visitorCount;
             gameWorld.createThreeOClockVisitor(portal , new Vector2(10, 10));
         } else if (visitorCount < 3 && time > 4) {
@@ -75,7 +75,7 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
         } else if (visitorCount < 4 && time > 5) {
             ++visitorCount;
             gameWorld.createThreeOClockVisitor(portal, new Vector2(5, 24));
-        }*/
+        }
 
         return false;
     }
