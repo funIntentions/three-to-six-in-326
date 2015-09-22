@@ -31,7 +31,7 @@ public class GameWorld {
         createPlayerTorso(player);
         //createCouch();
         //createTV();
-        createToilet();
+        createToilet(player);
         createBathtub(player, actionText);
         //createDemon(player);
         createDucky();
@@ -179,18 +179,32 @@ public class GameWorld {
         return entity;
     }
 
-    private Entity createToilet() {
+    private Entity createToilet(Entity triggerEntity) {
         Entity entity = new Entity();
 
+        ToiletComponent toiletComponent = new ToiletComponent();
+        AnimationComponent animationComponent = new AnimationComponent();
+        StateComponent stateComponent = new StateComponent();
+        TriggerComponent triggerComponent = new TriggerComponent();
         TextureComponent textureComponent = new TextureComponent();
         TransformComponent transformComponent = new TransformComponent();
         PhysicsComponent physicsComponent = new PhysicsComponent();
         FurnitureComponent furnitureComponent = new FurnitureComponent();
+        InputComponent inputComponent = new InputComponent();
 
+        stateComponent.set(ToiletComponent.STATE_IDLE);
+        triggerComponent.range = 3;
+        triggerComponent.triggerer = triggerEntity;
         physicsComponent.body = WorldUtils.createStaticFurniture(world, Constants.TOILET_X, Constants.TOILET_Y, Constants.TOILET_WIDTH, Constants.TOILET_HEIGHT);
         physicsComponent.body.setUserData(new EntityUserData(entity));
-        textureComponent.textureRegion = Assets.toilet;
+        animationComponent.animations.put(ToiletComponent.STATE_IDLE, Assets.toiletIdle);
+        animationComponent.animations.put(ToiletComponent.STATE_FLUSHING, Assets.toiletFlush);
 
+        entity.add(inputComponent);
+        entity.add(toiletComponent);
+        entity.add(stateComponent);
+        entity.add(animationComponent);
+        entity.add(triggerComponent);
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
@@ -309,9 +323,13 @@ public class GameWorld {
         Entity entity = new Entity();
 
         TransformComponent transformComponent = new TransformComponent();
+        TextureComponent textureComponent = new TextureComponent();
+
+        textureComponent.textureRegion = Assets.portal;
         transformComponent.position.set(new Vector3(Constants.TV_X, Constants.TV_Y, 0));
 
         entity.add(transformComponent);
+        entity.add(textureComponent);
 
         engine.addEntity(entity);
 

@@ -241,7 +241,7 @@ public class Assets {
         zap = new Animation(0.1f, zapAtlas.findRegions("zap"));
 
         toiletAtlas = new TextureAtlas(Gdx.files.internal("images/toiletAtlas.pack"));
-        toiletFlush = new Animation(0.2f, toiletAtlas.findRegions("toilet"));
+        toiletFlush = new Animation(0.4f, toiletAtlas.findRegions("toilet"));
         toiletIdle = new Animation(0.1f, toiletAtlas.findRegion("idle"));
 
         antShadowAtlas = new TextureAtlas(Gdx.files.internal("images/antShadowAtlas.pack"));
