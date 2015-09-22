@@ -148,6 +148,8 @@ public class Assets {
         toilet = new TextureRegion(toiletTexture, toiletTexture.getWidth(), toiletTexture.getHeight());
         ducky = new TextureRegion(duckyTexture, duckyTexture.getWidth(), duckyTexture.getHeight());
         demonV1 = new TextureRegion(demonV1Texture, demonV1Texture.getWidth(), demonV1Texture.getHeight());
+        bed = new TextureRegion(bedTexture, bedTexture.getWidth(), bedTexture.getHeight());
+        portal = new TextureRegion(portalTexture, portalTexture.getWidth(), portalTexture.getHeight());
 
         // TV
         tvChannelStatic = new Animation(0.2f,

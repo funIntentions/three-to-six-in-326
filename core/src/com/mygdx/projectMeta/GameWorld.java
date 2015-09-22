@@ -33,7 +33,7 @@ public class GameWorld {
         //createTV();
         createToilet(player);
         createBathtub(player, actionText);
-        //createDemon(player);
+        createDemon(player);
         createDucky();
 
         createCamera(player);
@@ -322,12 +322,14 @@ public class GameWorld {
     {
         Entity entity = new Entity();
 
+        PortalComponent portalComponent = new PortalComponent();
         TransformComponent transformComponent = new TransformComponent();
         TextureComponent textureComponent = new TextureComponent();
 
         textureComponent.textureRegion = Assets.portal;
         transformComponent.position.set(new Vector3(Constants.TV_X, Constants.TV_Y, 0));
 
+        entity.add(portalComponent);
         entity.add(transformComponent);
         entity.add(textureComponent);
 
