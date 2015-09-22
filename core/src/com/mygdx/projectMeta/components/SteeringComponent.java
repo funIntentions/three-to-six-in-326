@@ -21,4 +21,6 @@ public class SteeringComponent extends Component {
     public boolean wanderOn = false;
     public List<Ray> feelers = new ArrayList<Ray>();
     public boolean seekOn = false;
+    public Vector2 heading = new Vector2();
+    public Vector2 side = new Vector2();
 }

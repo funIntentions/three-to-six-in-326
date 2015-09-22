@@ -25,6 +25,15 @@ public class Assets {
     public static TextureRegion toilet;
     public static TextureRegion ducky;
     public static TextureRegion demonV1;
+    public static TextureRegion portal;
+    public static TextureRegion bed;
+
+    public static TextureAtlas zapAtlas;
+    public static Animation zap;
+
+    public static TextureAtlas toiletAtlas;
+    public static Animation toiletFlush;
+    public static Animation toiletIdle;
 
     public static TextureAtlas antShadowAtlas;
     public static Animation antMoving;
@@ -51,6 +60,8 @@ public class Assets {
     public static Texture duckyTexture;
     public static Texture grabTexture;
     public static Texture demonV1Texture;
+    public static Texture portalTexture;
+    public static Texture bedTexture;
 
     public static Sound slipperStepsSound;
     public static Sound bathtubRunningSound;
@@ -86,6 +97,8 @@ public class Assets {
         assetManager.load("images/ducky.png", Texture.class, textureParameter);
         assetManager.load("images/grabV1.png", Texture.class, textureParameter);
         assetManager.load("images/demonV1.png", Texture.class, textureParameter);
+        assetManager.load("images/bed.png", Texture.class, textureParameter);
+        assetManager.load("images/portal.png", Texture.class, textureParameter);
 
         vertexShader = Gdx.files.internal("shaders/test.vertex").readString();
         fragmentShader = Gdx.files.internal("shaders/test.fragment").readString();
@@ -101,6 +114,8 @@ public class Assets {
         duckyTexture = assetManager.get("images/ducky.png");
         grabTexture = assetManager.get("images/grabV1.png");
         demonV1Texture = assetManager.get("images/demonV1.png");
+        bedTexture = assetManager.get("images/bed.png");
+        portalTexture = assetManager.get("images/portal.png");
 
 //        couchTexture = loadTexture("images/couch.png");
 //        toiletTexture = loadTexture("images/toilet.png");
@@ -221,6 +236,13 @@ public class Assets {
 
         bathtubDrained = new Animation(0.1f, new TextureRegion(bathtubTexture, 0, 0, 135, 51));
         bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
+
+        zapAtlas = new TextureAtlas(Gdx.files.internal("images/zapAtlas.pack"));
+        zap = new Animation(0.1f, zapAtlas.findRegions("zap"));
+
+        toiletAtlas = new TextureAtlas(Gdx.files.internal("images/toiletAtlas.pack"));
+        toiletFlush = new Animation(0.2f, toiletAtlas.findRegions("toilet"));
+        toiletIdle = new Animation(0.1f, toiletAtlas.findRegion("idle"));
 
         antShadowAtlas = new TextureAtlas(Gdx.files.internal("images/antShadowAtlas.pack"));
         antMoving = new Animation(0.1f, antShadowAtlas.findRegions("moving"));

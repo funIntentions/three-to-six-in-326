@@ -106,7 +106,8 @@ public class RenderingSystem extends IteratingSystem {
     }
 
     static public ShaderProgram createDefaultShader() {
-        String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+        String vertexShader = "#version 120" + "\n" +
+                "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
                 + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
                 + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
                 + "uniform mat4 u_projTrans;\n" //
@@ -174,7 +175,7 @@ public class RenderingSystem extends IteratingSystem {
         renderQueue.sort(comparator);
         camera.update();
 
-        frameBufferObject.begin();
+        //frameBufferObject.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         tiledMapRenderer.setView(camera); // render map
@@ -237,11 +238,11 @@ public class RenderingSystem extends IteratingSystem {
         }
         debugShapeRenderer.end();
 
-        frameBufferObject.end();
+        //frameBufferObject.end();
 
         renderQueue.clear();
 
-        time += deltaTime;
+        /*time += deltaTime;
         shaderProgram.begin();
         shaderProgram.setUniformf("time", time);
         shaderProgram.end();
@@ -250,7 +251,7 @@ public class RenderingSystem extends IteratingSystem {
         fbBatch.setShader(shaderProgram);
         fbBatch.begin();
         fbBatch.draw(frameBufferRegion, 0, 0);
-        fbBatch.end();
+        fbBatch.end();*/
 
         physicsDebugRenderer.render(world, camera.combined);
     }

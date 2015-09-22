@@ -335,7 +335,7 @@ public class GameWorld {
         stateComponent.set(ThreeOClockVisitorComponent.MOVING);
         animationComponent.animations.put(ThreeOClockVisitorComponent.IDLE, Assets.antIdle);
         animationComponent.animations.put(ThreeOClockVisitorComponent.MOVING, Assets.antMoving);
-        physicsComponent.body = WorldUtils.createDynamicOvalBody(world, position.x, position.y, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING * 100, Constants.DEMON_DENSITY, entity);
+        physicsComponent.body = WorldUtils.createDynamicOvalBody(world, position.x, position.y, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING, Constants.DEMON_DENSITY, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
         triggerComponent.triggerer = portal;

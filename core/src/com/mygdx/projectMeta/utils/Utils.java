@@ -2,6 +2,7 @@ package com.mygdx.projectMeta.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -14,19 +15,19 @@ public class Utils {
         return (MathUtils.random() + MathUtils.random() - 1);
     }
 
-    public static Vector3 pointToWorldSpace(Vector3 point, Vector3 heading, Vector3 side, Vector3 pos)
+    public static Vector3 pointToWorldSpace(Vector2 point, Vector2 heading, Vector2 side, Vector2 pos)
     {
         //make a copy of the point
-        Vector3 transPoint = point;
-        float[] matValues = new float[] {heading.x,0,heading.z,
-                                            0,1,0,
-                                            side.x,0,side.z};
+        Vector3 transPoint = new Vector3(point.x, point.y, 0);
+        float[] matValues = new float[] {heading.x, heading.y, 0,
+                                        side.x, side.y, 0,
+                                        0, 0, 1};
 
         //create a transformation matrix
         Matrix3 matTransform = new Matrix3(matValues);
 
         //and translate
-        matTransform.translate(pos.x, pos.z);
+        matTransform.translate(pos.x, pos.y);
 
         //Console.WriteLine("Trans " + matTransform);
 
