@@ -240,7 +240,7 @@ public class Assets {
         bathtubRan = new Animation(0.1f, new TextureRegion(bathtubTexture, 408, 103, 135, 51));
 
         zapAtlas = new TextureAtlas(Gdx.files.internal("images/zapAtlas.pack"));
-        zap = new Animation(0.1f, zapAtlas.findRegions("zap"));
+        zap = new Animation(0.15f, zapAtlas.findRegions("zap"));
 
         toiletAtlas = new TextureAtlas(Gdx.files.internal("images/toiletAtlas.pack"));
         toiletFlush = new Animation(0.4f, toiletAtlas.findRegions("toilet"));

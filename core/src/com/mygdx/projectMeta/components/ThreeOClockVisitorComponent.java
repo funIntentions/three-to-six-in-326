@@ -8,4 +8,5 @@ import com.badlogic.ashley.core.Component;
 public class ThreeOClockVisitorComponent extends Component {
     public static final int IDLE = 0;
     public static final int MOVING = 1;
+    public static final int SPAWNING = 2;
 }

@@ -32,7 +32,8 @@ import com.mygdx.projectMeta.utils.Constants;
 public class GameScreen implements Screen {
 
     private Stage stage = new Stage(new FitViewport(Constants.APP_WIDTH, Constants.APP_HEIGHT));
-    private Table table = new Table();
+    private Table buttonTable = new Table();
+    private Table textTable = new Table();
     private Viewport viewport;
 
     private Skin skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
@@ -42,6 +43,7 @@ public class GameScreen implements Screen {
             buttonExit = new TextButton("Menu", skin);
 
     private Label title = new Label("Pause", skin);
+    private Label timeLabel = new Label("Time" , skin);
 
     private GameWorld gameWorld;
     private PhysicsEngine physicsEngine;
@@ -156,6 +158,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+
+        textTable.add(timeLabel).row();
+        textTable.setFillParent(true);
+        textTable.setVisible(false);
+        stage.addActor(textTable);
+
         buttonResume.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -170,12 +178,13 @@ public class GameScreen implements Screen {
             }
         });
 
-        table.add(title).padBottom(40).row();
-        table.add(buttonResume).size(150, 60).padBottom(20).row();
-        table.add(buttonExit).size(150, 60).padBottom(20).row();
+        buttonTable.add(title).padBottom(40).row();
+        buttonTable.add(buttonResume).size(150, 60).padBottom(20).row();
+        buttonTable.add(buttonExit).size(150, 60).padBottom(20).row();
 
-        table.setFillParent(true);
-        stage.addActor(table);
+        buttonTable.setFillParent(true);
+        buttonTable.setVisible(false);
+        stage.addActor(buttonTable);
     }
 
     @Override
@@ -186,6 +195,7 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         paused = true;
+        buttonTable.setVisible(true);
         Gdx.input.setInputProcessor(stage);
 
     }
@@ -193,6 +203,7 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {
         paused = false;
+        buttonTable.setVisible(false);
         Gdx.input.setInputProcessor(inputSystem.getInputAdapter());
     }
 

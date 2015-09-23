@@ -12,9 +12,9 @@ import com.mygdx.projectMeta.components.*;
  */
 public class ToiletSystem extends IteratingSystem {
 
-    private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TriggerComponent> tm;
     private ComponentMapper<InputComponent> im;
+    private ComponentMapper<StateComponent> sm;
     private ComponentMapper<AnimationComponent> am;
     private ComponentMapper<SoundComponent> soundMapper;
 

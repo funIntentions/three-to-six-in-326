@@ -350,9 +350,9 @@ public class GameWorld {
         StateComponent stateComponent = new StateComponent();
         SteeringComponent steeringComponent = new SteeringComponent();
 
-        steeringComponent.wanderOn = true;
         steeringComponent.force = 250f;
-        stateComponent.set(ThreeOClockVisitorComponent.MOVING);
+        stateComponent.set(ThreeOClockVisitorComponent.SPAWNING);
+        animationComponent.animations.put(ThreeOClockVisitorComponent.SPAWNING, Assets.zap);
         animationComponent.animations.put(ThreeOClockVisitorComponent.IDLE, Assets.antIdle);
         animationComponent.animations.put(ThreeOClockVisitorComponent.MOVING, Assets.antMoving);
         physicsComponent.body = WorldUtils.createDynamicOvalBody(world, position.x, position.y, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING, Constants.DEMON_DENSITY, entity);

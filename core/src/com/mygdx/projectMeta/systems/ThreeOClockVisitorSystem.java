@@ -4,17 +4,20 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.projectMeta.GameWorld;
-import com.mygdx.projectMeta.components.ThreeOClockVisitorComponent;
-import com.mygdx.projectMeta.components.TriggerComponent;
+import com.mygdx.projectMeta.components.*;
 
 /**
  * Created by Dan on 8/20/2015.
  */
 public class ThreeOClockVisitorSystem extends IteratingSystem {
     private ComponentMapper<TriggerComponent> triggerMapper;
+    private ComponentMapper<StateComponent> stateMapper;
+    private ComponentMapper<AnimationComponent> animationMapper;
+    private ComponentMapper<SteeringComponent> steeringMapper;
     private Array<Entity> visitorsInPortal = new Array<Entity>();
     private final int numberOfVisitors = 4;
     private int visitorCount = 0;
@@ -25,6 +28,9 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
         super(Family.getFor(ThreeOClockVisitorComponent.class, TriggerComponent.class));
 
         triggerMapper = ComponentMapper.getFor(TriggerComponent.class);
+        animationMapper = ComponentMapper.getFor(AnimationComponent.class);
+        stateMapper = ComponentMapper.getFor(StateComponent.class);
+        steeringMapper = ComponentMapper.getFor(SteeringComponent.class);
 
         this.gameWorld = gameWorld;
 
@@ -35,6 +41,18 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
 
         TriggerComponent triggerComponent = triggerMapper.get(entity);
+        AnimationComponent animationComponent = animationMapper.get(entity);
+        StateComponent stateComponent = stateMapper.get(entity);
+        SteeringComponent steeringComponent = steeringMapper.get(entity);
+
+        Animation animation = animationComponent.animations.get(stateComponent.get());
+
+        if (animation.getAnimationDuration() <= stateComponent.time) {
+            if (stateComponent.get() == ThreeOClockVisitorComponent.SPAWNING) {
+                steeringComponent.wanderOn = true;
+                stateComponent.set(ThreeOClockVisitorComponent.MOVING);
+            }
+        }
 
         int captured = -1;
 
