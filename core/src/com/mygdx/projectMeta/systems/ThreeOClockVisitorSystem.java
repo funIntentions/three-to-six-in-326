@@ -77,6 +77,10 @@ public class ThreeOClockVisitorSystem extends IteratingSystem {
         }
     }
 
+    public boolean timeToVisit(float time) {
+        return (time > 4 && time < 10);
+    }
+
     public boolean haveVisit(float time)
     {
         if (visitorsInPortal.size == numberOfVisitors) {

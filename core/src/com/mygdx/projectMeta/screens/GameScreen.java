@@ -52,8 +52,10 @@ public class GameScreen implements Screen {
     private Engine gameEngine;
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private SpriteBatch textBatch;
     private boolean paused = false;
+    private float clockDisplayTime = 3;
+    private float timeDisplayed = 0;
+    private boolean displayingTime = false;
     private float time = 0;
 
     ThreeOClockVisitorSystem threeOClockVisitorSystem;
@@ -62,7 +64,6 @@ public class GameScreen implements Screen {
 
         setupSpriteBatch();
         setupCamera();
-        textBatch = new SpriteBatch();
         viewport = new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_WIDTH, camera);
 
         physicsEngine = new PhysicsEngine();
@@ -137,8 +138,29 @@ public class GameScreen implements Screen {
             physicsEngine.update(delta);
             gameEngine.update(delta);
 
-            if (threeOClockVisitorSystem.haveVisit(time)) {
-                System.out.println("Phase Complete!");
+            if (displayingTime) {
+                stage.act(delta);
+                stage.draw();
+                timeDisplayed += delta;
+
+                if (timeDisplayed >= clockDisplayTime) {
+                    timeDisplayed = clockDisplayTime;
+                    timeDisplayed = 0;
+                    textTable.setVisible(false);
+                }
+            }
+
+            if (threeOClockVisitorSystem.timeToVisit(time)) {
+                if (!displayingTime) {
+                    displayingTime = true;
+                    timeDisplayed = 0;
+                    timeLabel.setText("3:00");
+                    textTable.setVisible(true);
+                }
+
+                if (threeOClockVisitorSystem.haveVisit(time)) {
+                    System.out.println("Phase Complete!");
+                }
             }
 
         } else {
