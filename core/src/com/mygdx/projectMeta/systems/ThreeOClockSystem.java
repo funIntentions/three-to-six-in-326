@@ -28,6 +28,8 @@ public class ThreeOClockSystem extends IteratingSystem {
     private Entity portal = null;
     private float portalStrength = 0.0f;
     private float portalRange = 2;
+    private float portalBlastRadius = 15.0f;
+    private float portalBlastStrength = 60.0f;
     private boolean finished = false;
 
     public ThreeOClockSystem (GameWorld gameWorld) {
@@ -117,6 +119,8 @@ public class ThreeOClockSystem extends IteratingSystem {
                 gameWorld.removeEntity(visitor); // TODO: If the player is holding onto the visitor as it is destroyed the game will crash next time the player tries to pick something up.
             }
             visitorsInPortal.clear();
+            TransformComponent portalTransform = transformMapper.get(portal);
+            gameWorld.createBlastImpulseRadius(new Vector2(portalTransform.position.x, portalTransform.position.y), portalBlastRadius, portalBlastStrength);
             gameWorld.removeEntity(portal);
             portal = null;
             finished = true;

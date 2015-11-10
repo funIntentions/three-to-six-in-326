@@ -5,7 +5,11 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.projectMeta.box2d.BodyQueryCallback;
 import com.mygdx.projectMeta.box2d.EntityUserData;
 import com.mygdx.projectMeta.box2d.PlayerUserData;
 import com.mygdx.projectMeta.components.*;
@@ -381,5 +385,39 @@ public class GameWorld {
         engine.addEntity(entity);
 
         return entity;
+    }
+
+    public void createBlastImpulseRadius(Vector2 center, float blastRadius, float blastPower) {
+        //find all bodies with fixtures in blast radius AABB
+        BodyQueryCallback queryCallback = new BodyQueryCallback();
+
+        Vector2 lowerBound = new Vector2(center).sub(new Vector2( blastRadius, blastRadius ));
+        Vector2 upperBound = new Vector2(center).add(new Vector2( blastRadius, blastRadius ));
+        world.QueryAABB(queryCallback, lowerBound.x, lowerBound.y, upperBound.x, upperBound.y);
+
+        //check which of these bodies have their center of mass within the blast radius
+        for (int i = 0; i < queryCallback.foundBodies.size; i++) {
+            Body body = queryCallback.foundBodies.get(i);
+            Vector2 bodyCenter = body.getWorldCenter();
+
+            //ignore bodies outside the blast range
+            if ( (new Vector2(bodyCenter).sub(center)).len() >= blastRadius )
+                continue;
+
+            applyBlastImpulse(body, center, bodyCenter, blastPower );
+        }
+    }
+
+    private void applyBlastImpulse(Body body, Vector2 blastCenter, Vector2 applyPoint, float blastPower) {
+        Vector2 blastDir = new Vector2(applyPoint).sub(blastCenter);
+        float distance = blastDir.len();
+        blastDir.nor();
+        //ignore bodies exactly at the blast point - blast direction is undefined
+        if ( distance == 0 )
+            return;
+        float invDistance = 1 / distance;
+        float impulseMag = blastPower * invDistance * invDistance;
+        blastDir.scl(impulseMag);
+        body.applyLinearImpulse(blastDir, applyPoint, true);
     }
 }
