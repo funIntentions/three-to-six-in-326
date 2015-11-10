@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
     private boolean displayingTime = false;
     private float time = 0;
 
-    ThreeOClockVisitorSystem threeOClockVisitorSystem;
+    ThreeOClockSystem threeOClockSystem;
 
     public GameScreen() {
 
@@ -88,6 +88,7 @@ public class GameScreen implements Screen {
         gameEngine.addSystem(new PortalSystem());
         gameEngine.addSystem(new HoldingSystem(physicsEngine.getWorld()));
         gameEngine.addSystem(new SteeringSystem(physicsEngine.getWorld()));
+        gameEngine.addSystem(new ThreeOClockVisitorSystem());
 
         ContactSystem contactSystem = new ContactSystem(physicsEngine.getWorld());
         physicsEngine.getWorld().setContactListener(contactSystem);
@@ -98,8 +99,8 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(gameEngine, physicsEngine.getWorld());
         gameWorld.createWorld();
 
-        threeOClockVisitorSystem = new ThreeOClockVisitorSystem(gameWorld);
-        gameEngine.addSystem(threeOClockVisitorSystem);
+        threeOClockSystem = new ThreeOClockSystem(gameWorld);
+        gameEngine.addSystem(threeOClockSystem);
 
         Gdx.input.setInputProcessor(inputSystem.getInputAdapter());
     }
@@ -150,7 +151,7 @@ public class GameScreen implements Screen {
                 }
             }
 
-            if (threeOClockVisitorSystem.timeToVisit(time)) {
+            if (threeOClockSystem.timeToVisit(time)) {
                 if (!displayingTime) {
                     displayingTime = true;
                     timeDisplayed = 0;
@@ -158,7 +159,7 @@ public class GameScreen implements Screen {
                     textTable.setVisible(true);
                 }
 
-                threeOClockVisitorSystem.haveVisit(time);
+                threeOClockSystem.haveVisit(time);
             }
 
         } else {
