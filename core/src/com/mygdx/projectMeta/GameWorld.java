@@ -1,5 +1,6 @@
 package com.mygdx.projectMeta;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ import com.mygdx.projectMeta.utils.WorldUtils;
 public class GameWorld {
     Engine engine;
     World world;
+    private ComponentMapper<PhysicsComponent> physicsMapper;
 
     public GameWorld(Engine engine, World world) {
         this.engine = engine;
@@ -37,6 +39,8 @@ public class GameWorld {
         createDucky();
 
         createCamera(player);
+
+        physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
     }
 
     private Entity createPlayer() {
@@ -318,6 +322,14 @@ public class GameWorld {
         engine.addEntity(entity);
     }
 
+    public void removeEntity(Entity entity) {
+        if (physicsMapper.has(entity)) {
+            PhysicsComponent physicsComponent = physicsMapper.get(entity);
+            world.destroyBody(physicsComponent.body);
+        }
+        engine.removeEntity(entity);
+    }
+
     public Entity createPortal()
     {
         Entity entity = new Entity();
@@ -338,14 +350,13 @@ public class GameWorld {
         return entity;
     }
 
-    public Entity createThreeOClockVisitor(Entity portal, Vector2 position) {
+    public Entity createThreeOClockVisitor(Vector2 position) {
         Entity entity = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
         TransformComponent transformComponent = new TransformComponent();
         PhysicsComponent physicsComponent = new PhysicsComponent();
         ThreeOClockVisitorComponent threeOClockVisitorComponent = new ThreeOClockVisitorComponent();
-        TriggerComponent triggerComponent = new TriggerComponent();
         AnimationComponent animationComponent = new AnimationComponent();
         StateComponent stateComponent = new StateComponent();
         SteeringComponent steeringComponent = new SteeringComponent();
@@ -358,14 +369,11 @@ public class GameWorld {
         physicsComponent.body = WorldUtils.createDynamicOvalBody(world, position.x, position.y, Constants.ANT_DEMON_WIDTH, Constants.ANT_DEMON_HEIGHT, Constants.DEMON_DAMPING, Constants.DEMON_ANGULAR_DAMPING, Constants.DEMON_DENSITY, entity);
         physicsComponent.body.setUserData(new EntityUserData(entity));
         transformComponent.position.set(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y, 0.0f);
-        triggerComponent.triggerer = portal;
-        triggerComponent.range = 4;
 
         entity.add(transformComponent);
         entity.add(physicsComponent);
         entity.add(textureComponent);
         entity.add(threeOClockVisitorComponent);
-        entity.add(triggerComponent);
         entity.add(stateComponent);
         entity.add(animationComponent);
         entity.add(steeringComponent);

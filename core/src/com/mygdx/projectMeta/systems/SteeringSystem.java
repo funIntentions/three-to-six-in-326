@@ -74,7 +74,7 @@ public class SteeringSystem extends IteratingSystem {
 
             Vector2 faceThis = new Vector2(physicsComponent.body.getPosition().x + total.linear.x, physicsComponent.body.getPosition().y + total.linear.y);//new Vector2(physicsComponent.body.getPosition().x + physicsComponent.body.getLinearVelocity().x * 20, physicsComponent.body.getPosition().y + physicsComponent.body.getLinearVelocity().y * 20);
 
-            System.out.println(physicsComponent.body.getLinearVelocity().len2());
+            //System.out.println(physicsComponent.body.getLinearVelocity().len2());
             if (physicsComponent.body.getLinearVelocity().len2() > 1) {
                 steeringComponent.heading = new Vector2(physicsComponent.body.getLinearVelocity()).nor();
                 steeringComponent.side = new Vector2(steeringComponent.heading.y, -steeringComponent.heading.x); // perp

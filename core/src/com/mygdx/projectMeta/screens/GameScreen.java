@@ -158,9 +158,7 @@ public class GameScreen implements Screen {
                     textTable.setVisible(true);
                 }
 
-                if (threeOClockVisitorSystem.haveVisit(time)) {
-                    System.out.println("Phase Complete!");
-                }
+                threeOClockVisitorSystem.haveVisit(time);
             }
 
         } else {
