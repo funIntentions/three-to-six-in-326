@@ -27,9 +27,9 @@ public class ThreeOClockSystem extends IteratingSystem {
     private GameWorld gameWorld;
     private Entity portal = null;
     private float portalStrength = 0.0f;
-    private float portalRange = 2;
+    private float portalRange = 3;
     private float portalBlastRadius = 15.0f;
-    private float portalBlastStrength = 60.0f;
+    private float portalBlastStrength = 200.0f;
     private boolean finished = false;
 
     public ThreeOClockSystem (GameWorld gameWorld) {
@@ -58,7 +58,6 @@ public class ThreeOClockSystem extends IteratingSystem {
             toPortal.scl(portalStrength);
         }
 
-        System.out.println(toPortal.len());
         body.applyForce(toPortal, body.getWorldCenter(), true);
     }
 
